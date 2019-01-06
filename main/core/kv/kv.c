@@ -86,8 +86,6 @@ void postinit_kv() {
   sync_ble_str(OTA_SERVER_PORT, IDX_VALUE(OTA_SERVER_PORT));
   sync_ble_str(OTA_VERSION_FILENAME, IDX_VALUE(OTA_VERSION_FILENAME));
   sync_ble_str(OTA_FILENAME, IDX_VALUE(OTA_FILENAME));
-  sync_ble_i(I2C_SDA, IDX_VALUE(I2C_SDA));
-  sync_ble_i(I2C_SCL, IDX_VALUE(I2C_SCL));
 
   /*
    * [/GENERATED]

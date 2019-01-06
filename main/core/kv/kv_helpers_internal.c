@@ -118,7 +118,6 @@ void internal_set_i2c_sda(int value) {
 
   seti(I2C_SDA, value);
 
-  set_attr_value_and_notify(IDX_CHAR_VAL_I2C_SDA, (uint8_t *)&value, sizeof(int));
 
   // TODO: httpd notify
 }
@@ -128,7 +127,6 @@ void internal_set_i2c_scl(int value) {
 
   seti(I2C_SCL, value);
 
-  set_attr_value_and_notify(IDX_CHAR_VAL_I2C_SCL, (uint8_t *)&value, sizeof(int));
 
   // TODO: httpd notify
 }
