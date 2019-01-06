@@ -55,31 +55,32 @@ static void stat_dump_task(void *param) {
     /*
      * [GENERATED]
      */
+
     int value;
     char str[MAX_KVALUE_SIZE] = {0};
     getstr(WIFI_SSID, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", WIFI_SSID, str);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "WIFI_SSID", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(WIFI_PASS, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", WIFI_PASS, str);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "WIFI_PASS", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     value = geti(TIME);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", TIME, value);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "TIME", value);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(OTA_SERVER_IP, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", OTA_SERVER_IP, str);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_IP", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(OTA_SERVER_HOSTNAME, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", OTA_SERVER_HOSTNAME, str);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_HOSTNAME", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(OTA_SERVER_PORT, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", OTA_SERVER_PORT, str);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_PORT", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(OTA_VERSION_FILENAME, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", OTA_VERSION_FILENAME, str);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_VERSION_FILENAME", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(OTA_FILENAME, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", OTA_FILENAME, str);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_FILENAME", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
 
     vTaskDelay(60000 / portTICK_PERIOD_MS);
