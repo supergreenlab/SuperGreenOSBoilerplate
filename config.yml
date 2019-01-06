@@ -27,6 +27,7 @@ modules:
   - core/stat_dump/stat_dump.h
   - core/time/time.h
   - core/mqtt/mqtt.h
+  - core/i2c/i2c.h
 
 keys:
 
@@ -152,3 +153,34 @@ keys:
     http:
       write: true
     default_var: CONFIG_OTA_FILENAME
+
+  - name: i2c_sda
+    caps_name: I2C_SDA
+    integer: true
+    nvs:
+      key: I2C_SDA
+    ble:
+      uuid: "{0x9b,0x6a,0x3b,0xe2,0xaa,0xb4,0x33,0xaa,0x8a,0x4a,0x9e,0xe1,0x4f,0xee,0xf9,0x40}"
+      write: true
+      notify: true
+    http:
+      write: true
+    default_var: DEFAULT_I2C_SDA
+
+  - name: i2c_scl
+    caps_name: I2C_SCL
+    integer: true
+    nvs:
+      key: I2C_SCL
+    ble:
+      uuid: "{0x9b,0x6a,0x3b,0xe2,0xaa,0xb4,0x33,0xaa,0x8a,0x4a,0x9e,0xe1,0x4f,0xee,0xf9,0x40}"
+      write: true
+      notify: true
+    http:
+      write: true
+    default_var: DEFAULT_I2C_SCL
+
+  #
+  # Custom keys
+  #
+

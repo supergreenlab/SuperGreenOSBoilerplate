@@ -39,6 +39,8 @@ const uint8_t OTA_SERVER_HOSTNAME_UUID[ESP_UUID_LEN_128] = {0x3c,0x3d,0xce,0xb9,
 const uint8_t OTA_SERVER_PORT_UUID[ESP_UUID_LEN_128] = {0x6a,0xe5,0xac,0x03,0xe2,0xe0,0x6f,0x79,0x75,0x69,0xe0,0xeb,0x38,0xbd,0x35,0x6c};
 const uint8_t OTA_VERSION_FILENAME_UUID[ESP_UUID_LEN_128] = {0x52,0x7b,0x93,0xa6,0x52,0x22,0x4c,0xb2,0x3f,0xc9,0x16,0x3e,0x7d,0xf5,0xe5,0x1e};
 const uint8_t OTA_FILENAME_UUID[ESP_UUID_LEN_128] = {0x32,0x94,0x27,0x51,0x16,0x02,0x33,0x8b,0xa5,0xff,0x83,0xfd,0x9f,0xfd,0x10,0x3f};
+const uint8_t I2C_SDA_UUID[ESP_UUID_LEN_128] = {0x9b,0x6a,0x3b,0xe2,0xaa,0xb4,0x33,0xaa,0x8a,0x4a,0x9e,0xe1,0x4f,0xee,0xf9,0x40};
+const uint8_t I2C_SCL_UUID[ESP_UUID_LEN_128] = {0x9b,0x6a,0x3b,0xe2,0xaa,0xb4,0x33,0xaa,0x8a,0x4a,0x9e,0xe1,0x4f,0xee,0xf9,0x40};
 
 const esp_gatts_attr_db_t gatt_db[HRS_IDX_NB] = {
 
@@ -60,6 +62,8 @@ const esp_gatts_attr_db_t gatt_db[HRS_IDX_NB] = {
     RW_STR_CHAR(OTA_SERVER_PORT),
     RW_STR_CHAR(OTA_VERSION_FILENAME),
     RW_STR_CHAR(OTA_FILENAME),
+    RW_I_NOTIFIABLE_CHAR(I2C_SDA),
+    RW_I_NOTIFIABLE_CHAR(I2C_SCL),
 
   /*
    * [/GENERATED]
@@ -109,6 +113,14 @@ void on_write(esp_ble_gatts_cb_param_t *param) {
           char value[MAX_KVALUE_SIZE] = {0};
           strncpy(value, (const char *)param->write.value, param->write.len);
           internal_set_ota_filename(value);
+      }
+       else if (param->write.handle == handle_table[IDX_VALUE(I2C_SDA)]) {
+          uint32_t value = *(uint32_t *)(&param->write.value[0]);
+          internal_set_i2c_sda(value);
+      }
+       else if (param->write.handle == handle_table[IDX_VALUE(I2C_SCL)]) {
+          uint32_t value = *(uint32_t *)(&param->write.value[0]);
+          internal_set_i2c_scl(value);
       }
 
   /*

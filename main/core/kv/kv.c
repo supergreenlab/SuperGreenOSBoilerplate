@@ -66,6 +66,8 @@ void preinit_kv() {
   defaultstr(OTA_SERVER_PORT, CONFIG_OTA_SERVER_PORT);
   defaultstr(OTA_VERSION_FILENAME, CONFIG_OTA_VERSION_FILENAME);
   defaultstr(OTA_FILENAME, CONFIG_OTA_FILENAME);
+  defaulti(I2C_SDA, DEFAULT_I2C_SDA);
+  defaulti(I2C_SCL, DEFAULT_I2C_SCL);
 
   /*
    * [/GENERATED]
@@ -84,6 +86,8 @@ void postinit_kv() {
   sync_ble_str(OTA_SERVER_PORT, IDX_VALUE(OTA_SERVER_PORT));
   sync_ble_str(OTA_VERSION_FILENAME, IDX_VALUE(OTA_VERSION_FILENAME));
   sync_ble_str(OTA_FILENAME, IDX_VALUE(OTA_FILENAME));
+  sync_ble_i(I2C_SDA, IDX_VALUE(I2C_SDA));
+  sync_ble_i(I2C_SCL, IDX_VALUE(I2C_SCL));
 
   /*
    * [/GENERATED]

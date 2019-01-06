@@ -82,6 +82,12 @@ static void stat_dump_task(void *param) {
     getstr(OTA_FILENAME, str, MAX_KVALUE_SIZE-1);
     ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_FILENAME", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
+    value = geti(I2C_SDA);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_SDA", value);
+    vTaskDelay(50 / portTICK_PERIOD_MS);
+    value = geti(I2C_SCL);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_SCL", value);
+    vTaskDelay(50 / portTICK_PERIOD_MS);
 
     vTaskDelay(60000 / portTICK_PERIOD_MS);
 

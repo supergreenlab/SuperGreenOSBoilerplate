@@ -33,6 +33,8 @@ void internal_set_ota_server_hostname(const char *value);
 void internal_set_ota_server_port(const char *value);
 void internal_set_ota_version_filename(const char *value);
 void internal_set_ota_filename(const char *value);
+void internal_set_i2c_sda(int value);
+void internal_set_i2c_scl(int value);
 
 /*
  * [/GENERATED]
