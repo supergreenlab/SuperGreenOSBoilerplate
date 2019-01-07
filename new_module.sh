@@ -37,7 +37,13 @@ do
   fi
 done
 
+echo "Adding module to main/component.mk"
+echo "COMPONENT_SRCDIRS += $1" >> main/component.mk
 
-echo "COMPONENT_SRCDIRS += main/$1" >> main/component.mk
-
-echo "Done, don't forget to add the init_$1(); function call in main/init.c"
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+NC="\033[0m"
+echo "==="
+echo -e "${GREEN}Done${NC}"
+echo "==="
+echo -e "${RED}Don't forget to add the init_$1(); function call in main/init.c and add $1/$1.h to the list of modules in config.yml${NC}"
