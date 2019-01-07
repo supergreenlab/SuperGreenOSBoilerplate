@@ -1,6 +1,24 @@
 ![SuperGreenLab](assets/sgl.png?raw=true "SuperGreenLab")
 
-# SuperGreenOS
+# SuperGreenOS Boilerplate
+
+Key-value based boilerplate for the esp-32.
+Makes most widely used features free.
+
+tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from yml through mustache templates to remove the pain and focus on the fun.
+
+## Features
+
+- Key-value architecture
+- Over-the-air update
+- Statistic reports
+- Bluetooth LE interface
+- HTTP interface
+- Mesh network (TODO)
+- All logs redirected to MQTT
+- Comes with a [cloud backend](http://github.com/SuperGreenCloud/)
+
+# Hardware
 
 Based on [esp-idf](https://github.com/espressif/esp-idf) from espressif, and FreeRTOS.
 
@@ -15,21 +33,13 @@ I've mostly been woking with either:
 
 ![ESP32 WROVER KIT](assets/esp32.png?raw=true "ESP32 WROVER KIT")
 
-## Features
-
-- Automatic update over wifi
-- Statistic reports
-- Bluetooth LE interface
-- HTTP interface
-- All logs redirected to MQTT
-
 ## Basic concept
 
-This code is made to be as compile-time as possible, in order to keep a low memory footprint and to keep memory-related error away.
+This code is made to be as compile-time as possible, in order to keep a memory footprint predictable, and avoid bloated dynamic code.
 
 This is to respond to the 2 main limitations:
 
-- esp32 in its most widely available is only 4mB flash capable, espressif's libraries eat most of the 1,5mB available for the actual firmware.
+- esp32 in its most widely available form is only 4mB flash capable, espressif's libraries eat most of the 1,5mB available for the actual firmware (1mB if you keep there schema with factory reset).
 - while the code will never really be complicated, it has to run for months without interruptions, thus avoiding any possibility of memory leakage seems wise for now.
 
 The firmware is mostly composed of 2 parts: a `key/value store` and `modules`
@@ -50,23 +60,25 @@ Modules are like threads that continuously run in the background, most folders u
 
 Their role is to ensure that the state described by the key/value store is the actual state of the SuperGreenDriver in the real world.
 
-For example, if you change the time of sunrise or sunset, the worker of the timer will pick the change up and change the state of the leds accordingly.
+For example, if you change the time of sunrise or sunset, the module of the timer will pick the change up and change the state of the leds accordingly.
 
-A worker in its most simple form is nothing more than an empty `while (true)` loop: (like an Arduino sketch)
+A module in its most simple form is nothing more than an empty `while (true)` loop: (like an Arduino sketch)
 
 ```c
 
-void worker_task(void *param) {
+void module_task(void *param) {
   while (true) {}
 }
 
 ```
 
-Most worker have a `wait(30s)` in there body. Every 30s they re-apply the desired state according to there related key/values.
+Most module have a `wait(30s)` in there body. Every 30s they re-apply the desired state according to there related key/values.
 
 This avoids error-prone event-driven development: whatever happens it'll get back on it's feet, even if you mess with the key/values through ble or http.
 
-And it makes it nearly as easy as creating and Arduino sketch to create a new worker.
+And it makes it nearly as easy as creating and Arduino sketch to create a new module.
+
+### Cloud, Logs and MQTT
 
 ## Quick start
 
