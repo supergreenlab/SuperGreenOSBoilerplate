@@ -16,15 +16,28 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-DATA="config.yml"
-DIR="main/"
-
-if [ "$#" -e 2 ]; then
-  DATA="$1"
-  DIR="$2"
+if [ "$#" -ne 1 ]; then
+  echo "[Usage] $0 module_name"
+  exit
 fi
 
-for i in $(find $DIR -name '*.template')
+mkdir main/$1
+echo "Copying files to main/$1"
+echo "$(sed "s/CAPS_NAME/${1^^}/g;s/NAME/$1/g"  templates/new_module.yml)" > /tmp/new_module
+for i in $(find templates/new_module/*)
 do
-  mustache $DATA $i > "${i/.template/}"
+  FILE="$(basename ${i/.template/})"
+  FILE_PATH="main/$1/${FILE/new_module/$1}"
+  if [[ "$i" == *".template" ]]; then
+    echo "Call mustache for $i to $FILE_PATH"
+    mustache /tmp/new_module $i > "$FILE_PATH"
+  else
+    echo "Copying file $i to $FILE_PATH"
+    #cp $i $FILE_PATH
+  fi
 done
+
+
+echo "COMPONENT_SRCDIRS += main/$1" >> main/component.mk
+
+echo "Done, don't forget to add the init_$1(); function call in main/init.c"
