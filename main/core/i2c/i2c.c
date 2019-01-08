@@ -63,7 +63,10 @@ void i2c_task(void *param) {
 }
 
 void init_i2c() {
+  int sda = geti(I2C_SDA);
+  int scl = geti(I2C_SCL);
   // Call `init` driver methods
+
   xTaskCreate(i2c_task, "I2C", 4096, NULL, 10, NULL);
 }
 

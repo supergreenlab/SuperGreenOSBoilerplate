@@ -22,7 +22,7 @@
 
 #define {{caps_name}}_ADDR 0x42
 
-void init_{{name}}() {
+void init_{{name}}(int sda, int sck) {
   ESP_LOGI(SGO_LOG_EVENT, "@{{caps_name}} Initializing {{name}} i2c device\n");
   // TODO: write you setup code here
 }

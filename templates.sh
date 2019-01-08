@@ -24,7 +24,7 @@ fi
 TEMPLATE_NAME="$1"
 MODULE_NAME="$2"
 
-mkdir main/$MODULE_NAME
+mkdir -p main/$MODULE_NAME
 echo "Copying files to main/$MODULE_NAME"
 echo "$(sed "s/CAPS_NAME/${1^^}/g;s/NAME/$MODULE_NAME/g"  templates/$TEMPLATE_NAME.yml)" > /tmp/$TEMPLATE_NAME
 for i in $(find templates/$TEMPLATE_NAME/*)
@@ -41,12 +41,14 @@ do
 done
 
 
-if [ "$TEMPLATE_NAME" == "new_module" ]; then
-  echo "Adding module to custom_modules in config.yml"
-  sed -i "/custom_modules:/ a - $MODULE_NAME" config.yml
-elif [ "$TEMPLATE_NAME" == "new_i2c_device" ]; then
-  echo "Adding i2c device to i2c_devices in config.yml"
-  sed -i "/i2c_devices:/ a - $MODULE_NAME" config.yml
+if ! grep -q -- "- $MODULE_NAME" config.yml; then
+  if [ "$TEMPLATE_NAME" == "new_module" ]; then
+    echo "Adding module to custom_modules in config.yml"
+    sed -i "/custom_modules:/ a - $MODULE_NAME" config.yml
+  elif [ "$TEMPLATE_NAME" == "new_i2c_device" ]; then
+    echo "Adding i2c device to i2c_devices in config.yml"
+    sed -i "/i2c_devices:/ a - $MODULE_NAME" config.yml
+  fi
 fi
 
 GREEN="\033[0;32m"
