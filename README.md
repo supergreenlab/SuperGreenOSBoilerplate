@@ -226,7 +226,7 @@ Open `config.yml` and go all the down the file.
 We'll add a temperature key, of type integer, accessible over ble and wifi, but read-only.
 And we want it to be automatically backed in the flash store. So the value stays there even after a reboot.
 
-The end of you `config.yml` should look like this:
+The end of your `config.yml` should look like this:
 
 ```yml
   #
