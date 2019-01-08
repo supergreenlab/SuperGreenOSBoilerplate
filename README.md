@@ -187,7 +187,7 @@ sth1x.h
 #ifndef NEW_I2C_DEVICE_H_
 #define NEW_I2C_DEVICE_H_
 
-void init_sht1x();
+void init_sht1x(int sda, int sck);
 void loop_sht1x(int sda, int sck);
 
 #endif
@@ -208,7 +208,7 @@ sht1x.c
 
 #define NEW_I2C_DEVICE_ADDR 0x42
 
-void init_sht1x() {
+void init_sht1x(int sda, int sck) {
   ESP_LOGI(SGO_LOG_EVENT, "@NEW_I2C_DEVICE Initializing sht1x i2c device\n");
   // TODO: write you setup code here
 }
