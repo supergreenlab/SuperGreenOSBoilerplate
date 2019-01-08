@@ -113,6 +113,22 @@ Call mustache for templates/new_i2c_device/new_i2c_device.h.template to main/sht
 Adding i2c device to i2c_devices in config.yml
 ===
 Done
+===
+Running ./update_template.sh....
+Processing main/component.mk.template: Done
+Processing main/init.c.template: Done
+Processing main/core/kv/kv.c.template: Done
+Processing main/core/kv/kv_helpers_internal.h.template: Done
+Processing main/core/kv/kv_helpers_internal.c.template: Done
+Processing main/core/kv/kv_helpers.c.template: Done
+Processing main/core/kv/keys.h.template: Done
+Processing main/core/kv/kv.h.template: Done
+Processing main/core/i2c/i2c.c.template: Done
+Processing main/core/httpd/httpd_kv_handlers.c.template: Done
+Processing main/core/ble/ble_db.h.template: Done
+Processing main/core/ble/ble_db.c.template: Done
+Processing main/core/include_modules.h.template: Done
+Processing main/core/stat_dump/stat_dump.c.template: Done
 
 ```
 
