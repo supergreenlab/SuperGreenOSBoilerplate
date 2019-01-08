@@ -36,12 +36,18 @@ do
     mustache /tmp/$TEMPLATE_NAME $i > "$FILE_PATH"
   else
     echo "Copying file $i to $FILE_PATH"
-    #cp $i $FILE_PATH
+    cp $i $FILE_PATH
   fi
 done
 
-echo "Adding module to main/component.mk"
-echo "COMPONENT_SRCDIRS += $MODULE_NAME" >> main/component.mk
+
+if [ "$TEMPLATE_NAME" == "new_module" ]; then
+  echo "Adding module to custom_modules in config.yml"
+  sed -i "/custom_modules:/ a - $MODULE_NAME" config.yml
+elif [ "$TEMPLATE_NAME" == "new_i2c_device" ]; then
+  echo "Adding i2c device to i2c_devices in config.yml"
+  sed -i "/i2c_devices:/ a - $MODULE_NAME" config.yml
+fi
 
 GREEN="\033[0;32m"
 RED="\033[0;31m"
@@ -49,5 +55,5 @@ NC="\033[0m"
 echo "==="
 echo -e "${GREEN}Done${NC}"
 echo "==="
-echo -e "${RED}NB:${NC}Don't forget to add $MODULE_NAME to the list of custom_modules in config.yml"
-echo -e "${RED}FOR I2C DEVICES:${NC}Don't forget to add $MODULE_NAME to the list of i2c_devices in config.yml"
+echo "Running ./update_template.sh...."
+./update_template.sh
