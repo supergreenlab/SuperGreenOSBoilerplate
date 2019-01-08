@@ -223,7 +223,7 @@ void loop_sht1x(int sda, int sck) {
 ## Create sht1x_temp key in config.yml
 
 Open `config.yml` and go all the down the file.
-We'll add a temperature key, of type integer, accessible over ble and wifi.
+We'll add a temperature key, of type integer, accessible over ble and wifi, but read-only.
 And we want it to be automatically backed in the flash store. So the value stays there even after a reboot.
 
 The end of you `config.yml` should look like this:
