@@ -95,6 +95,20 @@ python2 /home/korben/esp-idf/components/esptool_py/esptool/esptool.py --chip esp
 Now we're ready to start coding.
 We'll start by streaming the temperature to the cloud.
 
+For the 2 first step, we'll be using the script called `templates.sh`, which usage is as follows:
+
+```sh
+
+./templates.sh
+[Usage] ./templates.sh template_name module_name
+
+```
+
+- `template_name` is either `new_module` or `new_i2c_device`.
+- `module_name` is the name of the module of i2c_device we're creating
+
+## Add i2c sensor
+
 So first step is to create the i2c device. There's a script for that, we'll call our device sth1x:
 
 ```sh
@@ -132,7 +146,79 @@ Processing main/core/stat_dump/stat_dump.c.template: Done
 
 ```
 
-## Add i2c sensor
+Run the `make` command to ensure that the newly created module did not wreck everything:
+
+```sh
+make
+Toolchain path: /home/korben/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc
+Toolchain version: crosstool-ng-1.22.0-80-g6c4433a
+Compiler version: 5.2.0
+Python requirements from /home/korben/esp-idf/requirements.txt are satisfied.
+App "firmware" version: 24fcccf-dirty
+CC build/app_update/esp_app_desc.o
+AR build/app_update/libapp_update.a
+CC build/main/init.o
+
+[..... BLAH .....]
+
+CC build/main/sht1x/sht1x.o      <------ This is our new i2c_device
+AR build/main/libmain.a
+Generating libapp_update.a.sections_info
+Generating libmain.a.sections_info
+Generating esp32.common.ld
+LD build/firmware.elf
+esptool.py v2.6-beta1
+To flash all build output, run 'make flash' or:
+python2 /home/korben/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB1 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xd000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/ota_data_initial.bin 0x1000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/bootloader/bootloader.bin 0x10000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/firmware.bin 0x8000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/partitions.bin
+```
+
+Good.
+
+Now we have a new directory under `main/sht1x/` containing two files `sht1x.c` and `sht1x.h`, let's get there and open the files with your favorite code editor.
+
+They look something like this:
+
+sth1x.h
+```c
+/*
+ * GPL HEADER
+ */
+
+#ifndef NEW_I2C_DEVICE_H_
+#define NEW_I2C_DEVICE_H_
+
+void init_sht1x();
+void loop_sht1x(int sda, int sck);
+
+#endif
+```
+
+sht1x.c
+```c
+/*
+ * GPL HEADER
+ */
+
+#include <stdlib.h>
+#include "sht1x.h"
+#include "driver/i2c.h"
+
+#include "../core/kv/kv.h"
+#include "../core/log/log.h"
+
+#define NEW_I2C_DEVICE_ADDR 0x42
+
+void init_sht1x() {
+  ESP_LOGI(SGO_LOG_EVENT, "@NEW_I2C_DEVICE Initializing sht1x i2c device\n");
+  // TODO: write you setup code here
+}
+
+void loop_sht1x(int sda, int sck) {
+  // start_i2c();
+  // TODO: write you i2c device read code here
+  // stop_i2c();
+}
+```
 
 ## Create first module
 
