@@ -16,21 +16,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if [ "$#" -ne 1 ]; then
-  echo "[Usage] $0 module_name"
+if [ "$#" -ne 2 ]; then
+  echo "[Usage] $0 template_name module_name"
   exit
 fi
 
-mkdir main/$1
-echo "Copying files to main/$1"
-echo "$(sed "s/CAPS_NAME/${1^^}/g;s/NAME/$1/g"  templates/new_module.yml)" > /tmp/new_module
-for i in $(find templates/new_module/*)
+TEMPLATE_NAME="$1"
+MODULE_NAME="$2"
+
+mkdir main/$MODULE_NAME
+echo "Copying files to main/$MODULE_NAME"
+echo "$(sed "s/CAPS_NAME/${1^^}/g;s/NAME/$MODULE_NAME/g"  templates/$TEMPLATE_NAME.yml)" > /tmp/$TEMPLATE_NAME
+for i in $(find templates/$TEMPLATE_NAME/*)
 do
   FILE="$(basename ${i/.template/})"
-  FILE_PATH="main/$1/${FILE/new_module/$1}"
+  FILE_PATH="main/$MODULE_NAME/${FILE/$TEMPLATE_NAME/$MODULE_NAME}"
   if [[ "$i" == *".template" ]]; then
     echo "Call mustache for $i to $FILE_PATH"
-    mustache /tmp/new_module $i > "$FILE_PATH"
+    mustache /tmp/$TEMPLATE_NAME $i > "$FILE_PATH"
   else
     echo "Copying file $i to $FILE_PATH"
     #cp $i $FILE_PATH
@@ -38,7 +41,7 @@ do
 done
 
 echo "Adding module to main/component.mk"
-echo "COMPONENT_SRCDIRS += $1" >> main/component.mk
+echo "COMPONENT_SRCDIRS += $MODULE_NAME" >> main/component.mk
 
 GREEN="\033[0;32m"
 RED="\033[0;31m"
@@ -46,4 +49,5 @@ NC="\033[0m"
 echo "==="
 echo -e "${GREEN}Done${NC}"
 echo "==="
-echo -e "${RED}Don't forget to add the init_$1(); function call in main/init.c and add $1/$1.h to the list of modules in config.yml${NC}"
+echo -e "${RED}NB:${NC}Don't forget to add $MODULE_NAME to the list of custom_modules in config.yml"
+echo -e "${RED}FOR I2C DEVICES:${NC}Don't forget to add $MODULE_NAME to the list of i2c_devices in config.yml"

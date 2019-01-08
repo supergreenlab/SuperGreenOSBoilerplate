@@ -8,7 +8,7 @@ It allows to generate most of the code for ble/http/wifi/ota/etc.. from a config
 Built around the key/value and modules paradigm, it's quite close to what you'd find in a microservice architecture.
 It is also higly influenced by drone firmware architectures like Taulabs or Ardupilot.
 
-Describe all the keys that your system will require to work and communicate with the outside world, write your modules (Sort of arduino sketches) and you're good to go.
+`Describe all the keys that your system will require to work and communicate with the outside world, write your modules (Sort of arduino sketches) and you're good to go.`
 
 tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from yml through mustache templates to remove the pain and focus on the fun.
 
@@ -23,7 +23,9 @@ tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate gen
 - All logs redirected to MQTT
 - Comes with a [cloud backend](http://github.com/SuperGreenCloud/)
 
-# Hardware
+# How to use
+
+## Hardware
 
 Based on [esp-idf](https://github.com/espressif/esp-idf) from espressif, and FreeRTOS.
 
@@ -38,53 +40,21 @@ I've mostly been woking with either:
 
 ![ESP32 WROVER KIT](assets/esp32.png?raw=true "ESP32 WROVER KIT")
 
+## Workstation setup
+
+Follow the [get-started guide from espressif](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/).
+
+# Quickstart
+
 ## Basic concept
 
-This code is made to be as compile-time as possible, in order to keep a memory footprint predictable, and avoid bloated dynamic code.
+## Add i2c sensor
 
-This is to respond to the 2 main limitations:
+## Create first module
 
-- esp32 in its most widely available form is only 4mB flash capable, espressif's libraries eat most of the 1,5mB available for the actual firmware (1mB if you keep there schema with factory reset).
-- while the code will never really be complicated, it has to run for months without interruptions, thus avoiding any possibility of memory leakage seems wise for now.
+## Compile
 
-The firmware is mostly composed of 2 parts: a `key/value store` and `modules`
-
-### Key/Value store
-
-Espressif provides a flash-backed key/value store called [nvs](https://dl.espressif.com/doc/esp-idf/latest/api-reference/storage/nvs_flash.html) which will hold all the configuration and (nearly) anything that is currently happening inside the box.
-
-Most of these keys and values are accessible via 2 means of transport, ble, and http (coming soon).
-
-For example, there is a key `TIMER_T` that tells which type of timer is currently activated. And if the value is `1`, the "classic" timer is selected, then the keys `ON_H` and `ON_M` will tell the hour and minute at which the light goes on, `OFF_H` and `OFF_M` are for off jours and minutes.
-
-While http access is under development right now, ble already works, see below for a list of available characteristics available with there corresponding keys.
-
-### Modules
-
-Modules are like threads that continuously run in the background, most folders under the `main/` directory are modules.
-
-Their role is to ensure that the state described by the key/value store is the actual state of the SuperGreenDriver in the real world.
-
-For example, if you change the time of sunrise or sunset, the module of the timer will pick the change up and change the state of the leds accordingly.
-
-A module in its most simple form is nothing more than an empty `while (true)` loop: (like an Arduino sketch)
-
-```c
-
-void module_task(void *param) {
-  while (true) {}
-}
-
-```
-
-Most module have a `wait(30s)` in there body. Every 30s they re-apply the desired state according to there related key/values.
-
-This avoids error-prone event-driven development: whatever happens it'll get back on it's feet, even if you mess with the key/values through ble or http.
-
-And it makes it nearly as easy as creating and Arduino sketch to create a new module.
-
-### Cloud, Logs and MQTT
+## Cloud, Logs and MQTT
 
 ## Quick start
 
-Follow the [get-started guide from espressif](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/).

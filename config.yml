@@ -14,20 +14,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-modules:
+core_modules:
 
-  #
-  # Core modules
-  #
-  - core/wifi/wifi.h
-  - core/ble/ble.h
-  - core/kv/kv.h
-  - core/ota/ota.h
-  - core/httpd/httpd.h
-  - core/stat_dump/stat_dump.h
-  - core/time/time.h
-  - core/mqtt/mqtt.h
-  - core/i2c/i2c.h
+  - wifi
+  - ble
+  - kv
+  - ota
+  - httpd
+  - stat_dump
+  - time
+  - mqtt
+  - i2c
+
+custom_modules:
+
+i2c_devices:
 
 keys:
 

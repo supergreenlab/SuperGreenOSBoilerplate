@@ -1,0 +1,5 @@
+# Core modules
+COMPONENT_SRCDIRS := . core{{#core_modules}} {{.}}{{/core_modules}}
+
+# Custom modules
+COMPONENT_SRCDIRS +={{#custom_modules}} {{.}}{{/custom_modules}}
