@@ -107,7 +107,7 @@ For the 2 first step, we'll be using the script called `templates.sh`, which usa
 - `template_name` is either `new_module` or `new_i2c_device`.
 - `module_name` is the name of the module of i2c_device we're creating
 
-## Add i2c sensor
+## Create sht1x i2c device
 
 So first step is to create the i2c device. There's a script for that, we'll call our device sth1x:
 
@@ -220,11 +220,11 @@ void loop_sht1x(int sda, int sck) {
 }
 ```
 
-## Create first module
+## Create SHT1X_TEMP key in config.yml
 
-## Compile
+## Create Led module
+
+## Flash and monitor
 
 ## Cloud, Logs and MQTT
-
-## Quick start
 
