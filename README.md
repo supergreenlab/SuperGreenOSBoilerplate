@@ -2,6 +2,8 @@
 
 # SuperGreenOSBoilerplate
 
+tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from yml through mustache templates to remove the pain and focus on the fun.
+
 SuperGreeOSBoilerplate proposes a way to ease and accelerate esp32 firmware development. By making most widely used features free.
 It allows to generate most of the code for ble/http/wifi/ota/etc.. from a configuration file.
 
@@ -9,8 +11,6 @@ Built around the key/value and modules paradigm, it's quite close to what you'd 
 It is also higly influenced by drone firmware architectures like Taulabs or Ardupilot.
 
 `Describe all the keys that your system will require to work and communicate with the outside world, write your modules (Sort of arduino sketches) and you're good to go.`
-
-tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from yml through mustache templates to remove the pain and focus on the fun.
 
 ## Features
 
