@@ -46,7 +46,40 @@ Follow the [get-started guide from espressif](https://docs.espressif.com/project
 
 # Quickstart
 
+As an example we're just going to stream a temp sensor's values to a cloud, for monitoring and alerts.
+We'll also blink a led based on said sensor values (the hotter the faster it blinks).
+The sensor used here is the sht1x, I'll pass the detail because it's a weird one, but it's i2c compatible, and I have the code here.
+
+This will get us through the main features:
+- create a module
+- create an i2c device
+- intialize the key in the system
+
+First thing first, clone this repo, and run `make` to see if the whole xtensa/esp-idf setup is working:
+
+```sh
+
+git clone git@github.com:supergreenlab/SuperGreenOSBoilerplate.git SuperGreenTemp
+cd SuperGreenTemp
+make
+
+```
+
+Don't worry if you see a warning about i2c unused variable passing by.
+
+It should end with something like this:
+
+```sh
+Generating esp32.common.ld
+LD build/firmware.elf
+esptool.py v2.6-beta1
+To flash all build output, run 'make flash' or:
+python2 /home/korben/esp-idf/components/esptool_py/esptool/esptool.py --chip esp32 --port /dev/ttyUSB1 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0xd000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/ota_data_initial.bin 0x1000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/bootloader/bootloader.bin 0x10000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/firmware.bin 0x8000 /home/korben/SuperGreenLab/SuperGreenOSBoilerplate/build/partitions.bin
+```
+
 ## Basic concept
+
+Now 
 
 ## Add i2c sensor
 
