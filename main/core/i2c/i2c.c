@@ -23,6 +23,7 @@
 #include "../kv/kv.h"
 #include "../log/log.h"
 
+
 #define MASTER_TX_BUF_DISABLE  0
 #define MASTER_RX_BUF_DISABLE  0
 #define MASTER_FREQ_HZ         100000
@@ -56,7 +57,7 @@ void i2c_task(void *param) {
   int sda = geti(I2C_SDA);
   int scl = geti(I2C_SCL);
   while(true) {
-    // Call `read` driver methods
+
     vTaskDelay(2000 / portTICK_RATE_MS);
   }
 }

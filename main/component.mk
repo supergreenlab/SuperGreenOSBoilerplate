@@ -1,5 +1,8 @@
 # Core modules
-COMPONENT_SRCDIRS := . core core/ble core/kv core/log core/time core/wifi core/ota core/mqtt core/stat_dump core/httpd core/i2c
+COMPONENT_SRCDIRS := . core core/wifi core/ble core/kv core/ota core/httpd core/stat_dump core/time core/mqtt core/i2c
 
 # Custom modules
-COMPONENT_SRCDIRS += test
+COMPONENT_SRCDIRS +=
+
+# I2C devices
+COMPONENT_SRCDIRS +=

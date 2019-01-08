@@ -25,12 +25,12 @@
 
 // Core modules
 {{#core_modules}}
-#include "{{.}}"
+#include "{{.}}/{{.}}.h"
 {{/core_modules}}
 
 // Custom modules
 {{#custom_modules}}
-#include "../{{.}}"
+#include "../{{.}}/{{.}}.h"
 {{/custom_modules}}
 
 /*

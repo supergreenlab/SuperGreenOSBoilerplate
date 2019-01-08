@@ -17,14 +17,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 DATA="config.yml"
-DIR="main/"
+DIR="main"
 
-if [ "$#" -e 2 ]; then
+if [ "$#" -eq 2 ]; then
   DATA="$1"
   DIR="$2"
 fi
 
+GREEN="\033[0;32m"
+NC="\033[0m"
 for i in $(find $DIR -name '*.template')
 do
   mustache $DATA $i > "${i/.template/}"
+  echo -e "Processing $i: ${GREEN}Done${NC}"
 done
