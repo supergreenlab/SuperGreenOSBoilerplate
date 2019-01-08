@@ -26,7 +26,7 @@ MODULE_NAME="$2"
 
 mkdir -p main/$MODULE_NAME
 echo "Copying files to main/$MODULE_NAME"
-echo "$(sed "s/CAPS_NAME/${1^^}/g;s/NAME/$MODULE_NAME/g"  templates/$TEMPLATE_NAME.yml)" > /tmp/$TEMPLATE_NAME
+echo "$(sed "s/CAPS_NAME/${MODULE_NAME^^}/g;s/NAME/$MODULE_NAME/g"  templates/$TEMPLATE_NAME.yml)" > /tmp/$TEMPLATE_NAME
 for i in $(find templates/$TEMPLATE_NAME/*)
 do
   FILE="$(basename ${i/.template/})"

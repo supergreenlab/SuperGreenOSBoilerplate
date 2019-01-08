@@ -184,8 +184,8 @@ sth1x.h
  * GPL HEADER
  */
 
-#ifndef NEW_I2C_DEVICE_H_
-#define NEW_I2C_DEVICE_H_
+#ifndef SHT1X_H_
+#define SHT1X_H_
 
 void init_sht1x(int sda, int sck);
 void loop_sht1x(int sda, int sck);
@@ -206,10 +206,10 @@ sht1x.c
 #include "../core/kv/kv.h"
 #include "../core/log/log.h"
 
-#define NEW_I2C_DEVICE_ADDR 0x42
+#define SHT1X_ADDR 0x42
 
 void init_sht1x(int sda, int sck) {
-  ESP_LOGI(SGO_LOG_EVENT, "@NEW_I2C_DEVICE Initializing sht1x i2c device\n");
+  ESP_LOGI(SGO_LOG_EVENT, "@SHT1X Initializing sht1x i2c device\n");
   // TODO: write you setup code here
 }
 
