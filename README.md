@@ -10,7 +10,7 @@ It allows to generate most of the code for ble/http/wifi/ota/etc.. from a config
 Built around the key/value and modules paradigm, it's quite close to what you'd find in a microservice architecture.
 It is also higly influenced by drone firmware architectures like Taulabs or Ardupilot.
 
-`Describe all the keys that your system will require to work and communicate with the outside world, write your modules (Sort of arduino sketches) and you're good to go.`
+Describe all the keys that your system will require to work and communicate with the outside world, write your modules (Sort of arduino sketches) and you're good to go.
 
 ## Features
 
