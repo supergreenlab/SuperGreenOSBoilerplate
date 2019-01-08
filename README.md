@@ -243,7 +243,7 @@ The end of you `config.yml` should look like this:
       notify: true
     http:
       noop: true
-    default_var: 0
+    default: 0
 
 ```
 
@@ -269,9 +269,55 @@ make flash monitor
 
 After some uploading, you should see all the esp's logs (in green) appearing on your screen.
 
+### BLE access
+
 Download `LightBlue` on the ios and google stores, and start it.
 
-You should see 
+You should see a device named `🤖🍁`, select it. Now you're connected.
+
+In the characteristics list you should see a bunch of characteristics, those are the default ones, and at the very last, there's our temperature characteristic, it's name starts with `b2e0`, select it.
+
+Now you can press the `read` button, and it should display, `0`, which is the default value we provided in the config.yml file, under the `default` key, at the very last line.
+
+If you look in the logs of you esp32, you'll see it react when you press the `read` button.
+
+### HTTP access
+
+Now we're going to configure the wifi, it allows the device to re-set its internal clock on reboots, update its firmware automatically, and stream its datas to the cloud.
+
+Another thing it allows is complete control of all the firmware's parameter, ble has limitations (no more than 64 `keys`, for ex.). Http does not, so it's the preferred method to interact with the firmware.
+
+To configure the wifi get back to you lightblue, and select the characteristic starting with `372f`, it's the `wifi_status` characteristic, click the `subscribe` button, so you'll have a notification when the value changes.
+
+Now select the characteristic starting by `6ca3`, it's the `wifi_ssid` characteristic, press the `write` button in lightblue, and set your SSID, watch out for android users: the strings are in hex, so you can't type it directly, use a service like [this](https://sites.google.com/site/nathanlexwww/tools/utf8-convert) to do the transformation.
+
+Do the same for the `wifi_password`, it starts with `f7e4`.
+
+Now you should have notifications for the `wifi_status` characteristic changing value. You want it to be equal to `3`.
+
+Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreedriver.local/s?k=DEV_NAME](http://supergreedriver.local/s?k=DEV_NAME). Try a few times if it complains about unknown host resolution, the firmware broadcast every 20 seconds.
+
+The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
+
+The HTTP interface has 2 routes for now `/i` and `/s`, they correspond to the type of the value, `i` for `integer`, and `s` for `string`.
+
+Query parameters are as follows:
+
+- GET requests: `k` for the key's `name` to get.
+- POST requests: `k` for the key's `name` to set, and `v` for the value to set.
+
+So to set a new DEVICE_NAME:
+
+```sh
+curl -X POST http://supergreedriver.local/s?k=DEVICE_NAME&v=NewName
+```
+
+And to get the DEVICE_NAME back:
+
+```sh
+curl http://supergreedriver.local/s?k=DEV_NAME
+NewName
+```
 
 ## Create Led module
 
