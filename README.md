@@ -220,7 +220,58 @@ void loop_sht1x(int sda, int sck) {
 }
 ```
 
-## Create SHT1X_TEMP key in config.yml
+## Create sht1x_temp key in config.yml
+
+Open `config.yml` and go all the down the file.
+We'll add a temperature key, of type integer, accessible over ble and wifi.
+And we want it to be automatically backed in the flash store. So the value stays there even after a reboot.
+
+The end of you `config.yml` should look like this:
+
+```yml
+  #
+  # Custom keys
+  #
+
+  - name: sht1x
+    caps_name: SHT1X
+    integer: true
+    nvs:
+      key: SHT1X
+    ble:
+      uuid: "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}"
+      notify: true
+    http:
+      noop: true
+    default_var: 0
+
+```
+
+Now run the `update.sh` command. And then `make` to see that everything's ok.
+
+## First run
+
+At that point we want to see our key available over ble and http, right ?
+
+So plug in your esp32, set the right serial port by doing a `make menuconfig` and under `Serial flasher config -> Default serial port` you'll be able to set the port.
+
+Finding the right port depends on your system, on mine (debian) it's /dev/ttyUSBX, X being 0 for small esp32 boards, and should be 1 when using the esp-wrover-kit.
+
+On macosx I had to change the python version used too, explicitely set `python2` under `SDK tool configuration -> Python 2 interpreter`
+
+Now let's run:
+
+```sh
+
+make flash monitor
+
+```
+
+After some uploading, you should see all the esp's logs (in green) appearing on your screen.
+
+Download `LightBlue` on the ios and google stores, and start it.
+
+You should see 
 
 ## Create Led module
 
