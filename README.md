@@ -90,7 +90,7 @@ python2 /home/korben/esp-idf/components/esptool_py/esptool/esptool.py --chip esp
 
 ```
 
-## Basic concept
+## Creating modules and devices
 
 Now we're ready to start coding.
 We'll start by streaming the temperature to the cloud.
