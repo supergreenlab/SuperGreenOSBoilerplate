@@ -30,6 +30,7 @@ const kvi_handler kvi_handlers[] = {
   
   {
     .name = "TIME",
+    .nvs_key = "TIME",
     .handler = internal_set_time,
   },
 
@@ -58,10 +59,12 @@ const kvs_handler kvs_handlers[] = {
 
   {
     .name = "WIFI_SSID",
+    .nvs_key = "WSSID",
     .handler = internal_set_wifi_ssid,
   },
   {
     .name = "WIFI_PASS",
+    .nvs_key = "WPASS",
     .handler = internal_set_wifi_password,
   },
 

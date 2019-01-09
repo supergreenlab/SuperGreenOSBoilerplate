@@ -34,6 +34,9 @@ const kvi_handler kvi_handlers[] = {
   {{#write_cb}}
   {
     .name = "{{caps_name}}",
+    {{#nvs.key}}
+    .nvs_key = "{{nvs.key}}",
+    {{/nvs.key}}
     .handler = internal_set_{{name}},
   },
   {{/write_cb}}
@@ -70,6 +73,9 @@ const kvs_handler kvs_handlers[] = {
   {{#write_cb}}
   {
     .name = "{{caps_name}}",
+    {{#nvs.key}}
+    .nvs_key = "{{nvs.key}}",
+    {{/nvs.key}}
     .handler = internal_set_{{name}},
   },
   {{/write_cb}}
