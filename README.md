@@ -287,7 +287,7 @@ Now we're going to configure the wifi, it allows the device to re-set its intern
 
 Another thing it allows is complete control of all the firmware's parameter, ble has limitations (no more than 64 `keys`, for ex.). Http does not, so it's the preferred method to interact with the firmware.
 
-To configure the wifi get back to you lightblue, and select the characteristic starting with `372f`, it's the `wifi_status` characteristic, click the `subscribe` button, so you'll have a notification when the value changes.
+To configure the wifi get back to lightblue, and select the characteristic starting with `372f`, it's the `wifi_status` characteristic, click the `subscribe` button, so you'll have a notification when the value changes.
 
 Now select the characteristic starting by `6ca3`, it's the `wifi_ssid` characteristic, press the `write` button in lightblue, and set your SSID, watch out for android users: the strings are in hex, so you can't type it directly, use a service like [this](https://sites.google.com/site/nathanlexwww/tools/utf8-convert) to do the transformation.
 
@@ -295,7 +295,7 @@ Do the same for the `wifi_password`, it starts with `f7e4`.
 
 Now you should have notifications for the `wifi_status` characteristic changing value. You want it to be equal to `3`.
 
-Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreedriver.local/s?k=DEV_NAME](http://supergreedriver.local/s?k=DEV_NAME). Try a few times if it complains about unknown host resolution, the firmware broadcast every 20 seconds.
+Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreendriver.local/s?k=DEV_NAME](http://supergreendriver.local/s?k=DEV_NAME). Try a few times if it complains about unknown host resolution, the firmware broadcast every 20 seconds.
 
 The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
 
@@ -309,13 +309,13 @@ Query parameters are as follows:
 So to set a new DEVICE_NAME:
 
 ```sh
-curl -X POST http://supergreedriver.local/s?k=DEVICE_NAME&v=NewName
+curl -X POST http://supergreendriver.local/s?k=DEVICE_NAME&v=NewName
 ```
 
 And to get the DEVICE_NAME back:
 
 ```sh
-curl http://supergreedriver.local/s?k=DEV_NAME
+curl http://supergreendriver.local/s?k=DEV_NAME
 NewName
 ```
 
