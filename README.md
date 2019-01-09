@@ -111,6 +111,8 @@ For the 2 first step, we'll be using the script called `templates.sh`, which usa
 
 So first step is to create the i2c device. There's a script for that, we'll call our device sth1x:
 
+### I2C device boilerplate
+
 ```sh
 
 ./templates.sh new_i2c_device shtx
@@ -174,6 +176,8 @@ python2 /home/korben/esp-idf/components/esptool_py/esptool/esptool.py --chip esp
 
 Good.
 
+### Generated code
+
 Now we have a new directory under `main/sht1x/` containing two files `sht1x.c` and `sht1x.h`, let's get there and open the files with your favorite code editor.
 
 They look something like this:
@@ -220,6 +224,30 @@ void loop_sht1x(int sda, int sck) {
 }
 ```
 
+There are two functions defined, `init_sht1x` and `loop_sht1x`, `loop_sht1x` is called repeatedly every few seconds, depending on how many devices you have (only one i2c device can talk at a time).
+The `init_sht1x` method is called once at the very start of the program.
+
+### Driver code
+
+Let's get this straight, and copy those files in the `main/sht1x` directory:
+
+- [sht1x.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x.c)
+- [sht1x.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x.h)
+- [sht1x_driver.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x_driver.c)
+- [sht1x_driver.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x_driver.h)
+
+Connect the sht1x sensor as follows:
+
+```
+
+- PWR: 3.3v
+- GND: GND
+- SDA: 26
+- SCL: 27
+cf. main/core/i2c/i2c.h (these values can be changed through http)
+
+```
+
 ## Create sht1x_temp key in config.yml
 
 Open `config.yml` and go all the down the file.
@@ -250,6 +278,8 @@ The end of your `config.yml` should look like this:
 Now run the `update.sh` command. And then `make` to see that everything's ok.
 
 ## First run
+
+### Tool setup
 
 At that point we want to see our key available over ble and http, right ?
 
@@ -295,7 +325,7 @@ Do the same for the `wifi_password`, it starts with `f7e4`.
 
 Now you should have notifications for the `wifi_status` characteristic changing value. You want it to be equal to `3`.
 
-Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreedriver.local/s?k=DEV_NAME](http://supergreedriver.local/s?k=DEV_NAME). Try a few times if it complains about unknown host resolution, the firmware broadcast every 20 seconds.
+Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreedriver.local/s?k=DEV_NAME](http://supergreedriver.local/s?k=DEV_NAME). Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.
 
 The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
 
@@ -319,7 +349,93 @@ curl http://supergreedriver.local/s?k=DEV_NAME
 NewName
 ```
 
+All right, everything seems to be working, let's move on.
+
 ## Create Led module
+
+We usually want to do something other than monitoring and alerts, in our case we have a temperature value, so we could control a motor based on that for example.
+
+To illustrate that, we'll just blink a led, the hotter it gets the faster it blinks.
+
+### Boilerplate
+
+Just like we did with the i2c device, we'll use the `templates.sh` script to generate the base code for our module:
+
+```sh
+
+./templates.sh new_module led
+
+```
+
+(things should go roughly as with the i2c device)
+
+Run a `make` to make sure it's ok.
+
+### Generated code
+
+Module files look like i2c devices' files, except that they run their own freeRTOS task.
+
+Open the generated files in `main/led`:
+
+led.h
+```c
+
+/*
+ * [GPL HEADER]
+ */
+
+#ifndef LED_H_
+#define LED_H_
+
+void init_led();
+
+#endif
+
+```
+
+led.c
+```c
+
+/*
+ * [GPL HEADER]
+ */
+
+#include <stdlib.h>
+#include "led.h"
+
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
+#include "../core/kv/kv.h"
+#include "../core/log/log.h"
+
+static void led_task(void *param);
+
+void init_led() {
+  ESP_LOGI(SGO_LOG_EVENT, "@LED Initializing led module\n");
+
+  // TODO: write you setup code here
+
+  xTaskCreate(led_task, "LED", 4096, NULL, 10, NULL);
+}
+
+static void led_task(void *param) {
+  while (true) {
+
+    // TODO: write your loop code here
+
+    vTaskDelay(5 * 1000 / portTICK_PERIOD_MS);
+  }
+}
+```
+
+We have two functions, `init_led` and `led_task`, `init_led` is called once on startup, and `led_task` is the code of your task.
+
+In case you have never used freeRTOS before, you can see them as seperate threads.
+
+If you have already used arduino, it's like a sketch that can run with other sketches at the same time on the same chip.
+
+### Code the led blinking
 
 ## Flash and monitor
 
