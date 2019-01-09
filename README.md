@@ -433,11 +433,33 @@ We have two functions, `init_led` and `led_task`, `init_led` is called once on s
 
 In case you have never used freeRTOS before, you can see them as seperate threads.
 
-If you have already used arduino, it's like a sketch that can run with other sketches at the same time on the same chip.
+If you have already used arduino, it's like a sketch that can run with other sketches at the same time on the same chip. Only difference with a sketch is that you never exit a task (hence the `while(true)`.
 
 ### Code the led blinking
 
-## Flash and monitor
-
 ## Cloud, Logs and MQTT
+
+Now monitoring and alerts !
+
+### How data is sent to MQTT
+
+Now we have a way to know if it's too hot or too cold, but this would be even more useful if we could get that data when we're not here, or even better, if it could tell us when the temperature leaves a given range.
+
+Actually we'd like to know EVERYTHING that is happening inside the chip, there are also stack RAM monitoring that could be useful, or even re-reading the logs to see what might a provoked a crash.
+
+The boilerplate comes with an mqtt client, to make it simple, and be sure to sever nose anything, the firmware simply catches all logs from the code, and sends it directly to an mqtt server.
+
+MQTT is a publish/subscribe protocol, if you haven't used that before, it's like a big hub, clients connect to it, and can publish (send), or subscribe to messages.
+
+Which means that once the logs a gone in an mqtt server, it's really easy to plug other things to it, like a redis instance to keep the values of all key/value pairs of the system, or a prometheus server to produce nive graphs and alerts.
+
+You can even connect a voice assistant like Alexa or others. But that's useless.
+
+Checkout the repo [SuperGreenCloud](https://github.com/supergreenlab/SuperGreenCloud), it's a collection of softwares pre-configured, to let you deploy your own cloud in a matter of minutes.
+
+### Setup MQTT configuration
+
+There are 
+
+## OTA
 
