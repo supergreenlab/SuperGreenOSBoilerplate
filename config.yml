@@ -89,6 +89,8 @@ keys:
   - name: ota_timestamp
     caps_name: OTA_TIMESTAMP
     integer: true
+    nvs:
+      key: OTA_TMSTP
     http:
       write: true
     default_var: OTA_BUILD_TIMESTAMP

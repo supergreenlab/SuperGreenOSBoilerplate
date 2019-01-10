@@ -67,6 +67,9 @@ static void stat_dump_task(void *param) {
     value = geti(TIME);
     ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "TIME", value);
     vTaskDelay(50 / portTICK_PERIOD_MS);
+    value = geti(OTA_TIMESTAMP);
+    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "OTA_TIMESTAMP", value);
+    vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(OTA_SERVER_IP, str, MAX_KVALUE_SIZE-1);
     ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_IP", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);

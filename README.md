@@ -493,5 +493,3 @@ Again there are a few keys that you can configure to set this up, and they're on
 - OTA_SERVER_PORT: Server port.
 - OTA_VERSION_FILENAME: The path of the file containing the version information, right now it contains a timestamp, that is compared to the timestamp of the build (set at compile time).
 - OTA_FILENAME: The actual firmware file path.
-
-Restarting is required for changes to take effect (removing this is on the TODO)

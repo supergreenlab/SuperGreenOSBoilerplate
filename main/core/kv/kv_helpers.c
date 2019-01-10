@@ -41,6 +41,7 @@ void set_time(int value) {
   set_attr_value_and_notify(IDX_CHAR_VAL_TIME, (uint8_t *)&value, sizeof(int));
 }
 void set_ota_timestamp(int value) {
+  seti(OTA_TIMESTAMP, value);
 }
 void set_ota_server_ip(const char *value) {
   setstr(OTA_SERVER_IP, value);

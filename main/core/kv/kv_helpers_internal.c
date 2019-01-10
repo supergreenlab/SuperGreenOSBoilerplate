@@ -66,8 +66,10 @@ void internal_set_time(int value) {
   // TODO: httpd notify
 }
 void internal_set_ota_timestamp(int value) {
+  seti(OTA_TIMESTAMP, value);
 
 
+  seti(OTA_TIMESTAMP, value);
 
 
   // TODO: httpd notify

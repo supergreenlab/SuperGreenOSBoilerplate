@@ -30,8 +30,27 @@ const kvi_handler kvi_handlers[] = {
   
   {
     .name = "TIME",
+    .nvs_key = NULL,
     .nvs_key = "TIME",
     .handler = internal_set_time,
+  },
+  {
+    .name = "OTA_TIMESTAMP",
+    .nvs_key = NULL,
+    .nvs_key = "OTA_TMSTP",
+    .handler = internal_set_ota_timestamp,
+  },
+  {
+    .name = "I2C_SDA",
+    .nvs_key = NULL,
+    .nvs_key = "I2C_SDA",
+    .handler = internal_set_i2c_sda,
+  },
+  {
+    .name = "I2C_SCL",
+    .nvs_key = NULL,
+    .nvs_key = "I2C_SCL",
+    .handler = internal_set_i2c_scl,
   },
 
 /*
@@ -59,13 +78,57 @@ const kvs_handler kvs_handlers[] = {
 
   {
     .name = "WIFI_SSID",
+    .nvs_key = NULL,
     .nvs_key = "WSSID",
     .handler = internal_set_wifi_ssid,
   },
   {
     .name = "WIFI_PASS",
+    .nvs_key = NULL,
     .nvs_key = "WPASS",
     .handler = internal_set_wifi_password,
+  },
+  {
+    .name = "OTA_SERVER_IP",
+    .nvs_key = NULL,
+    .nvs_key = "OTA_SRV_IP",
+    .handler = internal_set_ota_server_ip,
+  },
+  {
+    .name = "OTA_SERVER_HOSTNAME",
+    .nvs_key = NULL,
+    .nvs_key = "OTA_SRV_HN",
+    .handler = internal_set_ota_server_hostname,
+  },
+  {
+    .name = "OTA_SERVER_PORT",
+    .nvs_key = NULL,
+    .nvs_key = "OTA_SRV_PRT",
+    .handler = internal_set_ota_server_port,
+  },
+  {
+    .name = "OTA_VERSION_FILENAME",
+    .nvs_key = NULL,
+    .nvs_key = "OTA_VR_FILE",
+    .handler = internal_set_ota_version_filename,
+  },
+  {
+    .name = "OTA_FILENAME",
+    .nvs_key = NULL,
+    .nvs_key = "OTA_FILE",
+    .handler = internal_set_ota_filename,
+  },
+  {
+    .name = "OTA",
+    .nvs_key = NULL,
+    .nvs_key = "OTA_SRV_IP",
+    .handler = internal_set_mqtt_broker_url,
+  },
+  {
+    .name = "BROKER_URL",
+    .nvs_key = NULL,
+    .nvs_key = "BRKR_URL",
+    .handler = internal_set_broker_url,
   },
 
 /*
