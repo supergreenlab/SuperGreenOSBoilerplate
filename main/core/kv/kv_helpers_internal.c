@@ -32,7 +32,6 @@
 void internal_set_wifi_status(int value) {
 
 
-
   set_attr_value_and_notify(IDX_CHAR_VAL_WIFI_STATUS, (uint8_t *)&value, sizeof(int));
 
   // TODO: httpd notify
@@ -40,24 +39,24 @@ void internal_set_wifi_status(int value) {
 void internal_set_wifi_ssid(const char *value) {
   setstr(WIFI_SSID, value);
 
-    value = on_set_wifi_ssid(value);
+  value = on_set_wifi_ssid(value);
 
   setstr(WIFI_SSID, value);
 
   set_attr_value(IDX_CHAR_VAL_WIFI_SSID, (uint8_t *)value, strlen(value));
 }
 void internal_set_wifi_password(const char *value) {
-  setstr(WIFI_PASS, value);
+  setstr(WIFI_PASSWORD, value);
 
-    value = on_set_wifi_password(value);
+  value = on_set_wifi_password(value);
 
-  setstr(WIFI_PASS, value);
+  setstr(WIFI_PASSWORD, value);
 
 }
 void internal_set_time(int value) {
   seti(TIME, value);
 
-    value = on_set_time(value);
+  value = on_set_time(value);
 
   seti(TIME, value);
 
@@ -69,8 +68,6 @@ void internal_set_ota_timestamp(int value) {
   seti(OTA_TIMESTAMP, value);
 
 
-  seti(OTA_TIMESTAMP, value);
-
 
   // TODO: httpd notify
 }
@@ -78,56 +75,40 @@ void internal_set_ota_server_ip(const char *value) {
   setstr(OTA_SERVER_IP, value);
 
 
-  setstr(OTA_SERVER_IP, value);
-
 }
 void internal_set_ota_server_hostname(const char *value) {
   setstr(OTA_SERVER_HOSTNAME, value);
 
-
-  setstr(OTA_SERVER_HOSTNAME, value);
 
 }
 void internal_set_ota_server_port(const char *value) {
   setstr(OTA_SERVER_PORT, value);
 
 
-  setstr(OTA_SERVER_PORT, value);
-
 }
 void internal_set_ota_version_filename(const char *value) {
   setstr(OTA_VERSION_FILENAME, value);
 
-
-  setstr(OTA_VERSION_FILENAME, value);
 
 }
 void internal_set_ota_filename(const char *value) {
   setstr(OTA_FILENAME, value);
 
 
-  setstr(OTA_FILENAME, value);
-
 }
 void internal_set_mqtt_broker_url(const char *value) {
   setstr(OTA, value);
 
-
-  setstr(OTA, value);
 
 }
 void internal_set_broker_url(const char *value) {
   setstr(BROKER_URL, value);
 
 
-  setstr(BROKER_URL, value);
-
 }
 void internal_set_i2c_sda(int value) {
   seti(I2C_SDA, value);
 
-
-  seti(I2C_SDA, value);
 
 
   // TODO: httpd notify
@@ -135,8 +116,6 @@ void internal_set_i2c_sda(int value) {
 void internal_set_i2c_scl(int value) {
   seti(I2C_SCL, value);
 
-
-  seti(I2C_SCL, value);
 
 
   // TODO: httpd notify

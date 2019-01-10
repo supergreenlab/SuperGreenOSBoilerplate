@@ -33,9 +33,11 @@ const kvi_handler kvi_handlers[] = {
   {{#http.write}}
   {
     .name = "{{caps_name}}",
-    .nvs_key = NULL,
     {{#nvs.key}}
     .nvs_key = "{{nvs.key}}",
+    {{/nvs.key}}
+    {{^nvs.key}}
+    .nvs_key = NULL,
     {{/nvs.key}}
     .handler = internal_set_{{name}},
   },
@@ -70,9 +72,11 @@ const kvs_handler kvs_handlers[] = {
   {{#string}}
   {
     .name = "{{caps_name}}",
-    .nvs_key = NULL,
     {{#nvs.key}}
     .nvs_key = "{{nvs.key}}",
+    {{/nvs.key}}
+    {{^nvs.key}}
+    .nvs_key = NULL,
     {{/nvs.key}}
     {{#http.write}}
     .handler = internal_set_{{name}},

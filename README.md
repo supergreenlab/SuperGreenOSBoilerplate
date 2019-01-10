@@ -303,6 +303,27 @@ Now there are two options to do the initial setup, by connecting either to its w
 
 ### WIFI AP access
 
+When no wifi station is configured or if connection repeatedly fails, the firmware will start its own wifi AP, it's called `🤖🍁`, and the default password is `multipass`.
+
+Once connected you can set the wifi credentials with the following commands:
+
+```sh
+
+curl -X POST http://supergreendriver.local/s?k=WIFI_SSID&v=[ Insert SSID here ]
+curl -X POST http://supergreendriver.local/s?k=WIFI_PASSWORD&v=[ Insert Wifi WPA password here ]
+
+```
+
+Only `wpa` is supported for now.
+
+You can check the wifi connection status in the log or by repeatedly calling this command, until it says `3`, which means `CONNECTED`
+
+```sh
+
+curl http://supergreendriver.local/i?k=WIFI_STATUS
+
+```
+
 ### BLE access
 
 Download `LightBlue` on the ios and google stores, and start it.
