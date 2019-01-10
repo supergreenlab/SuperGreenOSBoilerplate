@@ -18,7 +18,7 @@
 
 GREEN="\033[0;32m"
 NC="\033[0m"
-NAME="SuperGreenOSTemplate"
+NAME="SuperGreenOSBoilerplate"
 if [ "$#" -eq 1 ]; then
   NAME=$1
 else
