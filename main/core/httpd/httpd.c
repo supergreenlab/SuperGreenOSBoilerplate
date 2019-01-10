@@ -77,11 +77,12 @@ static esp_err_t geti_handler(httpd_req_t *req) {
   char name[50] = {0};
   find_str_param(req->uri, "k", name, &len);
 
-  if (!hasi(name)) {
+  const kvi_handler *h = get_kvi_handler(name);
+  if (!h) {
     return httpd_resp_send_404(req);
   }
 
-  int v = geti(name);
+  int v = geti(h->nvs_key);
   char ret[12] = {0};
   sprintf(ret, "%d", v);
 
@@ -118,12 +119,13 @@ static esp_err_t getstr_handler(httpd_req_t *req) {
   size_t len = 50;
   find_str_param(req->uri, "k", name, &len);
 
-  if (!hasstr(name)) {
+  const kvs_handler *h = get_kvs_handler(name);
+  if (!h) {
     return httpd_resp_send_404(req);
   }
 
   char v[MAX_KVALUE_SIZE] = {0};
-  getstr(name, v, MAX_KVALUE_SIZE);
+  getstr(h->nvs_key, v, MAX_KVALUE_SIZE);
 
   httpd_resp_send(req, v, strlen(v));
   return ESP_OK;
