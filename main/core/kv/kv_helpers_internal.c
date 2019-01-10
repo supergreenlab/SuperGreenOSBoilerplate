@@ -78,7 +78,6 @@ void internal_set_ota_server_ip(const char *value) {
 
   setstr(OTA_SERVER_IP, value);
 
-  set_attr_value(IDX_CHAR_VAL_OTA_SERVER_IP, (uint8_t *)value, strlen(value));
 }
 void internal_set_ota_server_hostname(const char *value) {
   setstr(OTA_SERVER_HOSTNAME, value);
@@ -86,7 +85,6 @@ void internal_set_ota_server_hostname(const char *value) {
 
   setstr(OTA_SERVER_HOSTNAME, value);
 
-  set_attr_value(IDX_CHAR_VAL_OTA_SERVER_HOSTNAME, (uint8_t *)value, strlen(value));
 }
 void internal_set_ota_server_port(const char *value) {
   setstr(OTA_SERVER_PORT, value);
@@ -94,7 +92,6 @@ void internal_set_ota_server_port(const char *value) {
 
   setstr(OTA_SERVER_PORT, value);
 
-  set_attr_value(IDX_CHAR_VAL_OTA_SERVER_PORT, (uint8_t *)value, strlen(value));
 }
 void internal_set_ota_version_filename(const char *value) {
   setstr(OTA_VERSION_FILENAME, value);
@@ -102,7 +99,6 @@ void internal_set_ota_version_filename(const char *value) {
 
   setstr(OTA_VERSION_FILENAME, value);
 
-  set_attr_value(IDX_CHAR_VAL_OTA_VERSION_FILENAME, (uint8_t *)value, strlen(value));
 }
 void internal_set_ota_filename(const char *value) {
   setstr(OTA_FILENAME, value);
@@ -110,7 +106,20 @@ void internal_set_ota_filename(const char *value) {
 
   setstr(OTA_FILENAME, value);
 
-  set_attr_value(IDX_CHAR_VAL_OTA_FILENAME, (uint8_t *)value, strlen(value));
+}
+void internal_set_mqtt_broker_url(const char *value) {
+  setstr(OTA, value);
+
+
+  setstr(OTA, value);
+
+}
+void internal_set_broker_url(const char *value) {
+  setstr(BROKER_URL, value);
+
+
+  setstr(BROKER_URL, value);
+
 }
 void internal_set_i2c_sda(int value) {
   seti(I2C_SDA, value);

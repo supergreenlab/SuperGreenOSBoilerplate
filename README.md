@@ -299,6 +299,10 @@ make flash monitor
 
 After some uploading, you should see all the esp's logs (in green) appearing on your screen.
 
+Now there are two options to do the initial setup, by connecting either to its wifi or ble inteface.
+
+### WIFI AP access
+
 ### BLE access
 
 Download `LightBlue` on the ios and google stores, and start it.
@@ -459,7 +463,35 @@ Checkout the repo [SuperGreenCloud](https://github.com/supergreenlab/SuperGreenC
 
 ### Setup MQTT configuration
 
-There are 
+There is a key pre-configured to set the mqtt broker url: `BROKER_URL`, it's only accessible through wifi.
+To change it's value:
 
-## OTA
+```sh
 
+curl -X POST http://supergreendriver.local/s?k=BROKER_URL&v=[ Enter your URL here ]
+
+```
+
+Restarting is required for changes to take effect (removing this is on the TODO)
+
+Now you should start seeing logs arriving in prometheus and grafana.
+
+### Monitoring
+
+### Alert
+
+## Over-The-Air (OTA) updates
+
+Now that we have our device setup and installed, we don't really want to have to bet back to it with a usb cord and a laptop.
+
+That's where OTA updates get handy, we only have to place two files on a server online, tell the firmware how to find them, and it'll check periodically is it needs to update itself.
+
+Again there are a few keys that you can configure to set this up, and they're only accessible through wifi:
+
+- OTA_SERVER_IP: IP address of the server.
+- OTA_SERVER_HOSTNAME: Hostname to set in the `Host: ` http header.
+- OTA_SERVER_PORT: Server port.
+- OTA_VERSION_FILENAME: The path of the file containing the version information, right now it contains a timestamp, that is compared to the timestamp of the build (set at compile time).
+- OTA_FILENAME: The actual firmware file path.
+
+Restarting is required for changes to take effect (removing this is on the TODO)
