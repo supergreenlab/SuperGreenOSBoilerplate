@@ -488,6 +488,8 @@ Now you should have notifications for the `wifi_status` characteristic changing 
 
 Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreendriver.local/s?k=DEVICE_NAME](http://supergreendriver.local/s?k=DEVICE_NAME) will print it's name. Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.
 
+## HTTP API
+
 The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
 
 The HTTP interface has 2 routes for now `/i` and `/s`, they correspond to the type of the value, `i` for `integer`, and `s` for `string`.
