@@ -55,7 +55,7 @@ Describe all the keys that your system will require to work and communicate with
 - HTTP interface
 - Mesh network (TODO)
 - All logs redirected to MQTT
-- Comes with a [cloud backend](http://github.com/SuperGreenCloud/)
+- Comes with a [cloud backend](http://github.com/supergreenlab/SuperGreenCloud/)
 
 # How to use
 
