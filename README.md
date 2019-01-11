@@ -265,10 +265,10 @@ The `init_sht1x` method is called once at the very start of the program.
 
 Let's get this straight, and copy those files in the `main/sht1x` directory:
 
-- [sht1x.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x.c)
-- [sht1x.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x.h)
-- [sht1x_driver.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x_driver.c)
-- [sht1x_driver.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/core/i2c/sht1x/sht1x_driver.h)
+- [sht1x.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht1x/sht1x.c)
+- [sht1x.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht1x/sht1x.h)
+- [sht1x_driver.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/mainsht1x/sht1x_driver.c)
+- [sht1x_driver.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht1x/sht1x_driver.h)
 
 Connect the sht1x sensor as follows:
 
