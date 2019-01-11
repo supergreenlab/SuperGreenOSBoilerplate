@@ -342,7 +342,7 @@ In your wifi list, you'll see that the firmware has started its own wifi AP, it'
 
 Once connected to it, the firmware is accessible as `supergreendriver.local`.
 
-HTTP is further explained [here]()
+The HTTP API is further explained [here](https://github.com/supergreenlab/SuperGreenOSBoilerplate#http-api)
 
 ### BLE
 
