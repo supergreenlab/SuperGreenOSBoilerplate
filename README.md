@@ -555,6 +555,8 @@ Now you should start seeing logs arriving in prometheus and grafana.
 
 Please follow the [SuperGreenCloud Quickstart guide](https://github.com/supergreenlab/SuperGreenCloud#quickstart).
 
+Which will lead you to something like this:
+
 ![Graphs 1](assets/sht1x-graphs.png?raw=true "Graphs 1")
 ![Graphs 2](assets/sht1x-graphs2.png?raw=true "Grahs 2")
 
