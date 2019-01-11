@@ -1,7 +1,6 @@
 ![SuperGreenLab](assets/sgl.png?raw=true "SuperGreenLab")
 
-<iframe src="http://dumbmatter.github.io/subreddit-buttons/subreddit-btn.html?name=SUBREDDIT"
-  allowtransparency="true" frameborder="0" scrolling="0" width="150" height="20"></iframe>
+[![SuperGreenLab](assets/reddit-button.png?raw=true "SuperGreenLab")](https://www.reddit.com/r/SuperGreenLab)
 
 Table of Contents
 =================
