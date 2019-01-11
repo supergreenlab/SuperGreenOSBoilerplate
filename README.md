@@ -99,6 +99,9 @@ gem install mustache
 
 Might need to `sudo` that tho.
 
+For windows users struggling to install `ruby`, just type `pacman -Ss ruby`.
+Then when then warning ` You don't have [path to bin dir] in your PATH, gem executables will not run.` just type `PATH="$PATH:[path to bin dir]"`.
+
 # Quickstart
 
 As an example we're just going to stream a temp sensor's values to a cloud, for monitoring and alerts.
@@ -119,6 +122,8 @@ cd SuperGreenTemp
 make
 
 ```
+
+If it's the first time you launch this command, this is going to ask you a bunch of questions, just press enter to enter the default.
 
 Don't worry if you see a warning about i2c unused variables passing by.
 
