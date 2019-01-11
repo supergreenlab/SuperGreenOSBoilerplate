@@ -57,6 +57,13 @@ Describe all the keys that your system will require to work and communicate with
 - All logs redirected to MQTT
 - Comes with a [cloud backend](http://github.com/supergreenlab/SuperGreenCloud/)
 
+## Philosophy
+
+The whole point is to end up with a code that is as static as possible, so we can totally eliminate any kind of memory leaks coming from our code itself.
+This is meant to be running 24/24 7/7 for months straight, so better have something as predictable as possible. Full static code makes that more reachable.
+
+But we don't want to lose the advantages of dynamic code, neither do we want to have to repeat things N times all over the code base. So the proposed solution is to produce static code before compilation.
+
 # How to use
 
 ## Hardware
