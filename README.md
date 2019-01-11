@@ -3,6 +3,7 @@
 Table of Contents
 =================
 
+   * [Table of Contents](#table-of-contents)
    * [SuperGreenOSBoilerplate](#supergreenosboilerplate)
       * [Features](#features)
    * [How to use](#how-to-use)
@@ -17,13 +18,15 @@ Table of Contents
       * [Create sht1x_temp key in config.yml](#create-sht1x_temp-key-in-configyml)
       * [First run](#first-run)
          * [Tool setup](#tool-setup)
-         * [WIFI AP access](#wifi-ap-access)
-         * [BLE access](#ble-access)
-         * [HTTP access](#http-access)
+         * [WIFI AP](#wifi-ap)
+         * [BLE](#ble)
       * [Create Led module](#create-led-module)
          * [Boilerplate](#boilerplate)
          * [Generated code](#generated-code-1)
          * [Code the led blinking](#code-the-led-blinking)
+      * [WIFI Configuration](#wifi-configuration)
+         * [Through WIFI AP](#through-wifi-ap)
+         * [Through BLE](#through-ble)
       * [Cloud, Logs and MQTT](#cloud-logs-and-mqtt)
          * [How data is sent to MQTT](#how-data-is-sent-to-mqtt)
          * [Setup MQTT configuration](#setup-mqtt-configuration)
@@ -332,30 +335,15 @@ After some uploading, you should see all the esp's logs (in green) appearing on 
 
 Now there are two options to do the initial setup, by connecting either to its wifi or ble inteface.
 
-### WIFI AP access
+### WIFI AP
 
-When no wifi station is configured or if connection repeatedly fails, the firmware will start its own wifi AP, it's called `🤖🍁`, and the default password is `multipass`.
+In your wifi list, you'll see that the firmware has started its own wifi AP, it's called `🤖🍁`, and the default password is `multipass`.
 
-Once connected you can set the wifi credentials with the following commands:
+Once connected to it, the firmware is accessible as `supergreendriver.local`.
 
-```sh
+HTTP is further explained [here]()
 
-curl -X POST http://supergreendriver.local/s?k=WIFI_SSID&v=[ Insert SSID here ]
-curl -X POST http://supergreendriver.local/s?k=WIFI_PASSWORD&v=[ Insert Wifi WPA password here ]
-
-```
-
-Only `wpa` is supported for now.
-
-You can check the wifi connection status in the log or by repeatedly calling this command, until it says `3`, which means `CONNECTED`
-
-```sh
-
-curl http://supergreendriver.local/i?k=WIFI_STATUS
-
-```
-
-### BLE access
+### BLE
 
 Download `LightBlue` on the ios and google stores, and start it.
 
@@ -366,46 +354,6 @@ In the characteristics list you should see a bunch of characteristics, those are
 Now you can press the `read` button, and it should display, `0`, which is the default value we provided in the config.yml file, under the `default` key, at the very last line.
 
 If you look in the logs of you esp32, you'll see it react when you press the `read` button.
-
-### HTTP access
-
-Now we're going to configure the wifi, it allows the device to re-set its internal clock on reboots, update its firmware automatically, and stream its datas to the cloud.
-
-Another thing it allows is complete control of all the firmware's parameter, ble has limitations (no more than 64 `keys`, for ex.). Http does not, so it's the preferred method to interact with the firmware.
-
-To configure the wifi get back to lightblue, and select the characteristic starting with `372f`, it's the `wifi_status` characteristic, click the `subscribe` button, so you'll have a notification when the value changes.
-
-Now select the characteristic starting by `6ca3`, it's the `wifi_ssid` characteristic, press the `write` button in lightblue, and set your SSID, watch out for android users: the strings are in hex, so you can't type it directly, use a service like [this](https://sites.google.com/site/nathanlexwww/tools/utf8-convert) to do the transformation.
-
-Do the same for the `wifi_password`, it starts with `f7e4`.
-
-Now you should have notifications for the `wifi_status` characteristic changing value. You want it to be equal to `3`.
-
-Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreendriver.local/s?k=DEVICE_NAME](http://supergreendriver.local/s?k=DEVICE_NAME) will print it's name. Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.
-
-The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
-
-The HTTP interface has 2 routes for now `/i` and `/s`, they correspond to the type of the value, `i` for `integer`, and `s` for `string`.
-
-Query parameters are as follows:
-
-- GET requests: `k` for the key's `name` to get.
-- POST requests: `k` for the key's `name` to set, and `v` for the value to set.
-
-So to set a new DEVICE_NAME:
-
-```sh
-curl -X POST http://supergreendriver.local/s?k=DEVICE_NAME&v=NewName
-```
-
-And to get the DEVICE_NAME back:
-
-```sh
-curl http://supergreendriver.local/s?k=DEV_NAME
-NewName
-```
-
-All right, everything seems to be working, let's move on.
 
 ## Create Led module
 
@@ -498,6 +446,71 @@ You know what ? I'm too lazy to do this part.
 Thus, this part shall be left as an exercise for the reader.
 
 Hint: [Espressif has done a great job with their examples](https://github.com/espressif/esp-idf/tree/master/examples/peripherals/gpio)
+
+## WIFI Configuration
+
+Now we're going to configure the wifi, it allows the device to re-set its internal clock on reboots, update its firmware automatically, and stream its datas to the cloud.
+
+Another thing it allows is complete control of all the firmware's parameter, ble has limitations (no more than 64 `keys`, for ex.). Http does not, so it's the preferred method to interact with the firmware.
+
+### Through WIFI AP
+
+When no wifi station is configured or if connection repeatedly fails, the firmware will start its own wifi AP, it's called `🤖🍁`, and the default password is `multipass`.
+
+Once connected you can set the wifi credentials with the following commands:
+
+```sh
+
+curl -X POST http://supergreendriver.local/s?k=WIFI_SSID&v=[ Insert SSID here ]
+curl -X POST http://supergreendriver.local/s?k=WIFI_PASSWORD&v=[ Insert Wifi WPA password here ]
+
+```
+
+Only `wpa` is supported for now.
+
+You can check the wifi connection status in the log or by repeatedly calling this command, until it says `3`, which means `CONNECTED`
+
+```sh
+
+curl http://supergreendriver.local/i?k=WIFI_STATUS
+
+```
+
+### Through BLE
+
+To configure the wifi with BLE get back to lightblue, and select the characteristic starting with `372f`, it's the `wifi_status` characteristic, click the `subscribe` button, so you'll have a notification when the value changes.
+
+Now select the characteristic starting by `6ca3`, it's the `wifi_ssid` characteristic, press the `write` button in lightblue, and set your SSID, watch out for android users: the strings are in hex, so you can't type it directly, use a service like [this](https://sites.google.com/site/nathanlexwww/tools/utf8-convert) to do the transformation.
+
+Do the same for the `wifi_password`, it starts with `f7e4`.
+
+Now you should have notifications for the `wifi_status` characteristic changing value. You want it to be equal to `3`.
+
+Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreendriver.local/s?k=DEVICE_NAME](http://supergreendriver.local/s?k=DEVICE_NAME) will print it's name. Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.
+
+The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
+
+The HTTP interface has 2 routes for now `/i` and `/s`, they correspond to the type of the value, `i` for `integer`, and `s` for `string`.
+
+Query parameters are as follows:
+
+- GET requests: `k` for the key's `name` to get.
+- POST requests: `k` for the key's `name` to set, and `v` for the value to set.
+
+So to set a new DEVICE_NAME:
+
+```sh
+curl -X POST http://supergreendriver.local/s?k=DEVICE_NAME&v=NewName
+```
+
+And to get the DEVICE_NAME back:
+
+```sh
+curl http://supergreendriver.local/s?k=DEV_NAME
+NewName
+```
+
+All right, everything seems to be working, let's move on.
 
 ## Cloud, Logs and MQTT
 
