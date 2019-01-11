@@ -493,6 +493,12 @@ If you have already used arduino, it's like a sketch that can run with other ske
 
 ### Code the led blinking
 
+You know what ? I'm too lazy to do this part.
+
+Thus, this part shall be left as an exercise for the reader.
+
+Hint: [Espressif has done a great job with their examples](https://github.com/espressif/esp-idf/tree/master/examples/peripherals/gpio)
+
 ## Cloud, Logs and MQTT
 
 Now monitoring and alerts !
