@@ -27,6 +27,7 @@ Table of Contents
       * [WIFI Configuration](#wifi-configuration)
          * [Through WIFI AP](#through-wifi-ap)
          * [Through BLE](#through-ble)
+      * [HTTP API](#http-api)
       * [Cloud, Logs and MQTT](#cloud-logs-and-mqtt)
          * [How data is sent to MQTT](#how-data-is-sent-to-mqtt)
          * [Setup MQTT configuration](#setup-mqtt-configuration)
