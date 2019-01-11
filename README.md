@@ -552,7 +552,11 @@ Now you should start seeing logs arriving in prometheus and grafana.
 
 ### Monitoring
 
+Please follow the [SuperGreenCloud Quickstart guide](https://github.com/supergreenlab/SuperGreenCloud#quickstart).
+
 ### Alert
+
+TODO
 
 ## Over-The-Air (OTA) updates
 
