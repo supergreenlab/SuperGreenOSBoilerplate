@@ -381,7 +381,7 @@ Do the same for the `wifi_password`, it starts with `f7e4`.
 
 Now you should have notifications for the `wifi_status` characteristic changing value. You want it to be equal to `3`.
 
-Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreendriver.local/s?k=DEVICE_NAME](http://supergreendriver.local/s?k=DEVICE_NAME). Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.
+Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreendriver.local/s?k=DEVICE_NAME](http://supergreendriver.local/s?k=DEVICE_NAME) will print it's name. Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.
 
 The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
 
