@@ -1,5 +1,36 @@
 ![SuperGreenLab](assets/sgl.png?raw=true "SuperGreenLab")
 
+Table of Contents
+=================
+
+   * [SuperGreenOSBoilerplate](#supergreenosboilerplate)
+      * [Features](#features)
+   * [How to use](#how-to-use)
+      * [Hardware](#hardware)
+      * [Workstation setup](#workstation-setup)
+   * [Quickstart](#quickstart)
+      * [Creating modules and devices](#creating-modules-and-devices)
+      * [Create sht1x i2c device](#create-sht1x-i2c-device)
+         * [I2C device boilerplate](#i2c-device-boilerplate)
+         * [Generated code](#generated-code)
+         * [Driver code](#driver-code)
+      * [Create sht1x_temp key in config.yml](#create-sht1x_temp-key-in-configyml)
+      * [First run](#first-run)
+         * [Tool setup](#tool-setup)
+         * [WIFI AP access](#wifi-ap-access)
+         * [BLE access](#ble-access)
+         * [HTTP access](#http-access)
+      * [Create Led module](#create-led-module)
+         * [Boilerplate](#boilerplate)
+         * [Generated code](#generated-code-1)
+         * [Code the led blinking](#code-the-led-blinking)
+      * [Cloud, Logs and MQTT](#cloud-logs-and-mqtt)
+         * [How data is sent to MQTT](#how-data-is-sent-to-mqtt)
+         * [Setup MQTT configuration](#setup-mqtt-configuration)
+         * [Monitoring](#monitoring)
+         * [Alert](#alert)
+      * [Over-The-Air (OTA) updates](#over-the-air-ota-updates)
+
 # SuperGreenOSBoilerplate
 
 tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from yml through mustache templates to remove the pain and focus on the fun.
