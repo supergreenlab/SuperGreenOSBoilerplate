@@ -150,7 +150,7 @@ For the 2 first step, we'll be using the script called `templates.sh`, which usa
 ```
 
 - `template_name` is either `new_module` or `new_i2c_device`.
-- `module_name` is the name of the module of i2c_device we're creating
+- `module_name` is the name of the module of i2c_device we're creating.
 
 ## Create sht1x i2c device
 
@@ -295,7 +295,7 @@ cf. main/core/i2c/i2c.h (these values can be changed through http)
 
 ## Create sht1x_temp key in config.yml
 
-Open `config.yml` and go all the down the file.
+Open `config.yml` and go all the way down the file.
 We'll add a temperature key, of type integer, accessible over ble and wifi, but read-only.
 And we want it to be automatically backed in the flash store. So the value stays there even after a reboot.
 
@@ -460,7 +460,7 @@ Hint: [Espressif has done a great job with their examples](https://github.com/es
 
 ## WIFI Configuration
 
-Now we're going to configure the wifi, it allows the device to re-set its internal clock on reboots, update its firmware automatically, and stream its datas to the cloud.
+Now we're going to configure the wifi, it allows the device to reset its internal clock on reboots, update its firmware automatically, and stream its datas to the cloud.
 
 Another thing it allows is complete control of all the firmware's parameter, ble has limitations (no more than 64 `keys`, for ex.). Http does not, so it's the preferred method to interact with the firmware.
 
@@ -535,13 +535,13 @@ Now monitoring and alerts !
 
 Now we have a way to know if it's too hot or too cold, but this would be even more useful if we could get that data when we're not here, or even better, if it could tell us when the temperature leaves a given range.
 
-Actually we'd like to know EVERYTHING that is happening inside the chip, there are also stack RAM monitoring that could be useful, or even re-reading the logs to see what might a provoked a crash.
+Actually we'd like to know EVERYTHING that is happening inside the chip, there are also stack RAM monitoring that could be useful, or even re-reading the logs to see what might have lead to a crash.
 
-The boilerplate comes with an mqtt client, to make it simple, and be sure to sever nose anything, the firmware simply catches all logs from the code, and sends it directly to an mqtt server.
+The boilerplate comes with an mqtt client, to make it simple, and be sure to never lose anything, the firmware simply catches all logs from the code, and sends it directly to an mqtt server.
 
 MQTT is a publish/subscribe protocol, if you haven't used that before, it's like a big hub, clients connect to it, and can publish (send), or subscribe to messages.
 
-Which means that once the logs a gone in an mqtt server, it's really easy to plug other things to it, like a redis instance to keep the values of all key/value pairs of the system, or a prometheus server to produce nive graphs and alerts.
+Which means that once the logs are gone in an mqtt server, it's really easy to plug other things to it, like a redis instance to keep the values of all key/value pairs of the system, or a prometheus server to produce nive graphs and alerts.
 
 You can even connect a voice assistant like Alexa or others. But that's useless.
 
@@ -581,7 +581,7 @@ TODO
 
 Now that we have our device setup and installed, we don't really want to have to bet back to it with a usb cord and a laptop.
 
-That's where OTA updates get handy, we only have to place two files on a server online, tell the firmware how to find them, and it'll check periodically is it needs to update itself.
+That's where OTA updates get handy, we only have to place two files on a server online, tell the firmware how to find them, and it'll check periodically if it needs to update itself.
 
 Again there are a few keys that you can configure to set this up, and they're only accessible through wifi:
 
