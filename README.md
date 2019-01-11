@@ -3,7 +3,6 @@
 Table of Contents
 =================
 
-   * [Table of Contents](#table-of-contents)
    * [SuperGreenOSBoilerplate](#supergreenosboilerplate)
       * [Features](#features)
    * [How to use](#how-to-use)
