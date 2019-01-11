@@ -560,6 +560,8 @@ Which will lead you to something like this:
 ![Graphs 1](assets/sht1x-graphs.png?raw=true "Graphs 1")
 ![Graphs 2](assets/sht1x-graphs2.png?raw=true "Grahs 2")
 
+Let me know if you need a complete guide, because that's much more work than just typing text:P
+
 ### Alert
 
 TODO
