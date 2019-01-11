@@ -5,6 +5,7 @@ Table of Contents
 
    * [SuperGreenOSBoilerplate](#supergreenosboilerplate)
       * [Features](#features)
+      * [Philosophy](#philosophy)
    * [How to use](#how-to-use)
       * [Hardware](#hardware)
       * [Workstation setup](#workstation-setup)
@@ -33,6 +34,8 @@ Table of Contents
          * [Monitoring](#monitoring)
          * [Alert](#alert)
       * [Over-The-Air (OTA) updates](#over-the-air-ota-updates)
+   * [Troubleshoot](#troubleshoot)
+   * [Contribute](#contribute)
 
 # SuperGreenOSBoilerplate
 
