@@ -587,3 +587,16 @@ Again there are a few keys that you can configure to set this up, and they're on
 - OTA_SERVER_PORT: Server port.
 - OTA_VERSION_FILENAME: The path of the file containing the version information, right now it contains a timestamp, that is compared to the timestamp of the build (set at compile time).
 - OTA_FILENAME: The actual firmware file path.
+
+# Troubleshoot
+
+Right now SuperGreenLab does not have an official support hotline.
+But here's a bunch of places where we'll respond:
+
+- [towelie@supergreenlab.com](mailto:towelie@supergreenlab.com)
+- [r/supergreenlab](https://www.reddit.com/r/supergreenlab), maybe the chat is the right place for quick questions
+- [Github issues](https://github.com/supergreenlab/SuperGreenOSBoilerplate/issues)
+
+# Contribute
+
+Actually that's the whole purpose of this repository, so what you'll learn on SuperGreenOS can actually be used for other stuffs:)
