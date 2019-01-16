@@ -18,6 +18,10 @@
 
 #include <string.h>
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+
 #include "kv.h"
 #include "kv_ble.h"
 #include "../ble/ble.h"
@@ -26,15 +30,23 @@
  * [GENERATED]
  */
 
+StaticSemaphore_t mutex_buffer;
 
+
+static SemaphoreHandle_t _mutex_wifi_status;
 static int _wifi_status = 0;
 
 int get_wifi_status() {
-  return _wifi_status;
+  xSemaphoreTake(_mutex_wifi_status, 0);
+  int v = _wifi_status;
+  xSemaphoreGive(_mutex_wifi_status);
+  return v;
 }
 
 void set_wifi_status(int value) {
+  xSemaphoreTake(_mutex_wifi_status, 0);
   _wifi_status = value;
+  xSemaphoreGive(_mutex_wifi_status);
   set_attr_value_and_notify(IDX_CHAR_VAL_WIFI_STATUS, (uint8_t *)&value, sizeof(int));
 }
 
@@ -186,6 +198,10 @@ void set_i2c_scl(int value) {
   seti(I2C_SCL, value);
 }
 
+
+void init_helpers() {
+  _mutex_wifi_status = xSemaphoreCreateMutexStatic(&mutex_buffer);
+}
 
 /*
  * [/GENERATED]
