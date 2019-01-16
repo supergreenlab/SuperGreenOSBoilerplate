@@ -1,20 +1,21 @@
 /*
- * =====================================================================================
+ * Copyright (C) 2019  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
- *       Filename:  stat_dump.c
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    Description:  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *        Version:  1.0
- *        Created:  10/30/2018 11:27:15 AM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <string.h>
 
 #include "stat_dump.h"
@@ -87,9 +88,6 @@ static void stat_dump_task(void *param) {
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(OTA_FILENAME, str, MAX_KVALUE_SIZE-1);
     ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_FILENAME", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    getstr(OTA, str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA", str);
     vTaskDelay(50 / portTICK_PERIOD_MS);
     getstr(BROKER_URL, str, MAX_KVALUE_SIZE-1);
     ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "BROKER_URL", str);

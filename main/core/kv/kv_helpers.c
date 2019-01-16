@@ -61,9 +61,6 @@ void set_ota_version_filename(const char *value) {
 void set_ota_filename(const char *value) {
   setstr(OTA_FILENAME, value);
 }
-void set_mqtt_broker_url(const char *value) {
-  setstr(OTA, value);
-}
 void set_broker_url(const char *value) {
   setstr(BROKER_URL, value);
 }

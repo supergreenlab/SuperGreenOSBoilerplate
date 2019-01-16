@@ -1,19 +1,19 @@
 /*
- * =====================================================================================
+ * Copyright (C) 2019  SuperGreenLab <towelie@supergreenlab.com>
+ * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
- *       Filename:  httpd_kv_handlers.c
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *    Description:  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *        Version:  1.0
- *        Created:  11/14/2018 11:24:27 AM
- *       Revision:  none
- *       Compiler:  gcc
- *
- *         Author:  YOUR NAME (), 
- *   Organization:  
- *
- * =====================================================================================
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <stdlib.h>
@@ -106,11 +106,6 @@ const kvs_handler kvs_handlers[] = {
     .name = "OTA_FILENAME",
     .nvs_key = "OTA_FILE",
     .handler = internal_set_ota_filename,
-  },
-  {
-    .name = "OTA",
-    .nvs_key = "OTA_SRV_IP",
-    .handler = internal_set_mqtt_broker_url,
   },
   {
     .name = "BROKER_URL",
