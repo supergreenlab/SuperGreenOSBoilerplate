@@ -42,19 +42,33 @@ void defaultstr(const char * key, const char * value);
  * [GENERATED]
  */
 
+int get_wifi_status();
 void set_wifi_status(int value);
+void get_wifi_ssid(char *dest, size_t len);
 void set_wifi_ssid(const char *value);
+void get_wifi_password(char *dest, size_t len);
 void set_wifi_password(const char *value);
+int get_time();
 void set_time(int value);
+int get_n_restarts();
 void set_n_restarts(int value);
+int get_ota_timestamp();
 void set_ota_timestamp(int value);
+void get_ota_server_ip(char *dest, size_t len);
 void set_ota_server_ip(const char *value);
+void get_ota_server_hostname(char *dest, size_t len);
 void set_ota_server_hostname(const char *value);
+void get_ota_server_port(char *dest, size_t len);
 void set_ota_server_port(const char *value);
+void get_ota_version_filename(char *dest, size_t len);
 void set_ota_version_filename(const char *value);
+void get_ota_filename(char *dest, size_t len);
 void set_ota_filename(const char *value);
+void get_broker_url(char *dest, size_t len);
 void set_broker_url(const char *value);
+int get_i2c_sda();
 void set_i2c_sda(int value);
+int get_i2c_scl();
 void set_i2c_scl(int value);
 
 /*

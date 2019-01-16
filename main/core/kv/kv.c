@@ -58,19 +58,32 @@ void preinit_kv() {
    * [GENERATED]
    */
 
-  defaultstr(WIFI_SSID, "");
-  defaultstr(WIFI_PASSWORD, "");
-  defaulti(TIME, 0);
-  defaulti(N_RESTARTS, 0);
-  defaulti(OTA_TIMESTAMP, OTA_BUILD_TIMESTAMP);
-  defaultstr(OTA_SERVER_IP, CONFIG_OTA_SERVER_IP);
-  defaultstr(OTA_SERVER_HOSTNAME, CONFIG_OTA_SERVER_HOSTNAME);
-  defaultstr(OTA_SERVER_PORT, CONFIG_OTA_SERVER_PORT);
-  defaultstr(OTA_VERSION_FILENAME, CONFIG_OTA_VERSION_FILENAME);
-  defaultstr(OTA_FILENAME, CONFIG_OTA_FILENAME);
-  defaultstr(BROKER_URL, CONFIG_BROKER_URL);
-  defaulti(I2C_SDA, DEFAULT_I2C_SDA);
-  defaulti(I2C_SCL, DEFAULT_I2C_SCL);
+  const char *default_wifi_ssid = "";
+  defaultstr(WIFI_SSID, default_wifi_ssid);
+  const char *default_wifi_password = "";
+  defaultstr(WIFI_PASSWORD, default_wifi_password);
+  int default_time = 0;
+  defaulti(TIME, default_time);
+  int default_n_restarts = 0;
+  defaulti(N_RESTARTS, default_n_restarts);
+  int default_ota_timestamp = OTA_BUILD_TIMESTAMP;
+  defaulti(OTA_TIMESTAMP, default_ota_timestamp);
+  const char *default_ota_server_ip = CONFIG_OTA_SERVER_IP;
+  defaultstr(OTA_SERVER_IP, default_ota_server_ip);
+  const char *default_ota_server_hostname = CONFIG_OTA_SERVER_HOSTNAME;
+  defaultstr(OTA_SERVER_HOSTNAME, default_ota_server_hostname);
+  const char *default_ota_server_port = CONFIG_OTA_SERVER_PORT;
+  defaultstr(OTA_SERVER_PORT, default_ota_server_port);
+  const char *default_ota_version_filename = CONFIG_OTA_VERSION_FILENAME;
+  defaultstr(OTA_VERSION_FILENAME, default_ota_version_filename);
+  const char *default_ota_filename = CONFIG_OTA_FILENAME;
+  defaultstr(OTA_FILENAME, default_ota_filename);
+  const char *default_broker_url = CONFIG_BROKER_URL;
+  defaultstr(BROKER_URL, default_broker_url);
+  int default_i2c_sda = DEFAULT_I2C_SDA;
+  defaulti(I2C_SDA, default_i2c_sda);
+  int default_i2c_scl = DEFAULT_I2C_SCL;
+  defaulti(I2C_SCL, default_i2c_scl);
 
   /*
    * [/GENERATED]
@@ -84,6 +97,11 @@ void postinit_kv() {
 
   sync_ble_str(WIFI_SSID, IDX_VALUE(WIFI_SSID));
   sync_ble_i(TIME, IDX_VALUE(TIME));
+
+  // Initialize non-nvs keys
+  int default_wifi_status = DISCONNECTED;
+  set_wifi_status(default_wifi_status);
+
 
   /*
    * [/GENERATED]

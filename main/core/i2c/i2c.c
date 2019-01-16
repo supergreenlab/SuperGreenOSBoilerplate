@@ -54,8 +54,8 @@
 }*/
 
 void i2c_task(void *param) {
-  int sda = geti(I2C_SDA);
-  int scl = geti(I2C_SCL);
+  int sda = get_i2c_sda();
+  int scl = get_i2c_scl();
   while(true) {
 
     vTaskDelay(2000 / portTICK_RATE_MS);
@@ -63,8 +63,8 @@ void i2c_task(void *param) {
 }
 
 void init_i2c() {
-  int sda = geti(I2C_SDA);
-  int scl = geti(I2C_SCL);
+  int sda = get_i2c_sda();
+  int scl = get_i2c_scl();
   // Call `init` driver methods
 
   xTaskCreate(i2c_task, "I2C", 4096, NULL, 10, NULL);
@@ -75,8 +75,8 @@ static bool i2c_started = false;
 void start_i2c() {
   if (i2c_started) return;
 
-  int sda = geti(I2C_SDA);
-  int scl = geti(I2C_SCL);
+  int sda = get_i2c_sda();
+  int scl = get_i2c_scl();
 
   i2c_started = true;
   i2c_config_t conf;

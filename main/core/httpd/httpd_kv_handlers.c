@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../kv/kv.h"
 #include "../kv/kv_helpers_internal.h"
 #include "httpd_kv_handlers.h"
 #include "../include_modules.h"
@@ -29,24 +30,34 @@ const kvi_handler kvi_handlers[] = {
 */
   
   {
+    .name = "WIFI_STATUS",
+    .handler = NULL,
+    .getter = get_wifi_status,
+  },
+  {
     .name = "TIME",
-    .nvs_key = "TIME",
     .handler = internal_set_time,
+    .getter = get_time,
+  },
+  {
+    .name = "N_RESTARTS",
+    .handler = NULL,
+    .getter = get_n_restarts,
   },
   {
     .name = "OTA_TIMESTAMP",
-    .nvs_key = "OTA_TMSTP",
     .handler = internal_set_ota_timestamp,
+    .getter = get_ota_timestamp,
   },
   {
     .name = "I2C_SDA",
-    .nvs_key = "I2C_SDA",
     .handler = internal_set_i2c_sda,
+    .getter = get_i2c_sda,
   },
   {
     .name = "I2C_SCL",
-    .nvs_key = "I2C_SCL",
     .handler = internal_set_i2c_scl,
+    .getter = get_i2c_scl,
   },
 
 /*
@@ -74,43 +85,43 @@ const kvs_handler kvs_handlers[] = {
 
   {
     .name = "WIFI_SSID",
-    .nvs_key = "WSSID",
     .handler = internal_set_wifi_ssid,
+    .getter = get_wifi_ssid,
   },
   {
     .name = "WIFI_PASSWORD",
-    .nvs_key = "WPASS",
     .handler = internal_set_wifi_password,
+    .getter = get_wifi_password,
   },
   {
     .name = "OTA_SERVER_IP",
-    .nvs_key = "OTA_SRV_IP",
     .handler = internal_set_ota_server_ip,
+    .getter = get_ota_server_ip,
   },
   {
     .name = "OTA_SERVER_HOSTNAME",
-    .nvs_key = "OTA_SRV_HN",
     .handler = internal_set_ota_server_hostname,
+    .getter = get_ota_server_hostname,
   },
   {
     .name = "OTA_SERVER_PORT",
-    .nvs_key = "OTA_SRV_PRT",
     .handler = internal_set_ota_server_port,
+    .getter = get_ota_server_port,
   },
   {
     .name = "OTA_VERSION_FILENAME",
-    .nvs_key = "OTA_VR_FILE",
     .handler = internal_set_ota_version_filename,
+    .getter = get_ota_version_filename,
   },
   {
     .name = "OTA_FILENAME",
-    .nvs_key = "OTA_FILE",
     .handler = internal_set_ota_filename,
+    .getter = get_ota_filename,
   },
   {
     .name = "BROKER_URL",
-    .nvs_key = "BRKR_URL",
     .handler = internal_set_broker_url,
+    .getter = get_broker_url,
   },
 
 /*

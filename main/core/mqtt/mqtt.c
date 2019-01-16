@@ -42,8 +42,10 @@ static int CMD_MQTT_FORCE_FLUSH = 2;
 
 static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 {
-  // your_context_t *context = event->context;
   switch (event->event_id) {
+    case MQTT_EVENT_BEFORE_CONNECT:
+      ESP_LOGI(SGO_LOG_EVENT, "@MQTT MQTT_EVENT_BEFORE_CONNECT");
+      break;
     case MQTT_EVENT_CONNECTED:
       ESP_LOGI(SGO_LOG_EVENT, "@MQTT MQTT_EVENT_CONNECTED");
       xQueueSend(cmd, &CMD_MQTT_CONNECTED, 0);

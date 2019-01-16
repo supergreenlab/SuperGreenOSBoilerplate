@@ -19,10 +19,12 @@
 #ifndef HTTPD_KV_HANDLERS_H_
 #define HTTPD_KV_HANDLERS_H_
 
+#include <string.h>
+
 typedef struct {
   const char *name;
-  const char *nvs_key;
   void (*handler)(int);
+  int (*getter)();
 } kvi_handler;
 
 extern const kvi_handler kvi_handlers[];
@@ -30,8 +32,8 @@ const kvi_handler *get_kvi_handler(const char *name);
 
 typedef struct {
   const char *name;
-  const char *nvs_key;
   void (*handler)(const char *);
+  void (*getter)(char *, size_t);
 } kvs_handler;
 
 extern const kvs_handler kvs_handlers[];

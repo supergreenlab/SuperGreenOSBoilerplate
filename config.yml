@@ -55,7 +55,7 @@ keys:
     http:
       write: true
     write_cb: true
-    default: 
+    default: ""
 
   - name: wifi_password
     caps_name: WIFI_PASSWORD
