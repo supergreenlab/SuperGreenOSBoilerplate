@@ -7,6 +7,7 @@ Table of Contents
 
    * [SuperGreenOSBoilerplate](#supergreenosboilerplate)
       * [Features](#features)
+      * [TODO](#todo)
       * [Philosophy](#philosophy)
    * [How to use](#how-to-use)
       * [Hardware](#hardware)
@@ -58,9 +59,15 @@ Describe all the keys that your system will require to work and communicate with
 - Statistic reports
 - Bluetooth LE interface
 - HTTP interface
-- Mesh network (TODO)
 - All logs redirected to MQTT
 - Comes with a [cloud backend](http://github.com/supergreenlab/SuperGreenCloud/)
+
+## TODO
+
+- Websocket
+- Mesh network (TODO)
+- Bluetooth (non BLE)
+- Multibox (one controller for multiple boxes, multiple timers etc..)
 
 ## Philosophy
 
