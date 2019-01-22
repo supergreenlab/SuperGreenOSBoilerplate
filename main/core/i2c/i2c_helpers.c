@@ -16,33 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KEYS_H_
-#define KEYS_H_
+#include "i2c_helpers.h"
 
-/*
- * [GENERATED]
- */
+#include "i2c.h"
+#include "../kv/kv.h"
 
-#define WIFI_SSID "WSSID"
-#define WIFI_PASSWORD "WPASS"
-#define TIME "TIME"
-#define N_RESTARTS "N_RESTARTS"
-#define OTA_TIMESTAMP "OTA_TMSTP"
-#define OTA_SERVER_IP "OTA_SRV_IP"
-#define OTA_SERVER_HOSTNAME "OTA_SRV_HN"
-#define OTA_SERVER_PORT "OTA_SRV_PRT"
-#define OTA_VERSION_FILENAME "OTA_VR_FILE"
-#define OTA_FILENAME "OTA_FILE"
-#define BROKER_URL "BRKR_URL"
-#define I2C_0_SDA "I2C_0_SDA"
-#define I2C_0_SCL "I2C_0_SCL"
-#define I2C_0_ENABLED "I2C_0_E"
-#define I2C_1_SDA "I2C_1_SDA"
-#define I2C_1_SCL "I2C_1_SCL"
-#define I2C_1_ENABLED "I2C_1_E"
+#define I2C_CB(i2cId, param) int on_set_i2c_## i2cId ##_## param(int value) { \
+  return on_set_i2c_## param(i2cId, value); \
+}
 
-/*
- * [/GENERATED]
- */
+#define I2C_GETTER(param) int get_i2c_## param(int i2cId) { \
+  switch(i2cId) { \
+    case 0: \
+      return get_i2c_0_## param(i2cId); \
+    case 1: \
+      return get_i2c_1_## param(i2cId); \
+  } \
+  return 0; \
+}
 
-#endif
+#define I2C_SETTER(param) void set_i2c_## param(int i2cId, int value) { \
+  switch(i2cId) { \
+    case 0: \
+      set_i2c_0_## param(value); \
+    case 1: \
+      set_i2c_1_## param(value); \
+  } \
+}
+
+
+I2C_SETTER(sda)
+I2C_GETTER(sda)
+I2C_SETTER(scl)
+I2C_GETTER(scl)
+I2C_SETTER(enabled)
+I2C_GETTER(enabled)

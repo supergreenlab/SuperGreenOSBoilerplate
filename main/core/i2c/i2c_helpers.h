@@ -16,33 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KEYS_H_
-#define KEYS_H_
+#ifndef I2C_HELPERS_H_
+#define I2C_HELPERS_H_
 
-/*
- * [GENERATED]
- */
+#define I2C_CB_H(i2cId, param) int on_set_i2c_## i2cId ##_## param( int value);
+#define I2C_GETTER_H(param) int get_i2c_## param(int i2cId);
+#define I2C_SETTER_H(param) void set_i2c_## param(int i2cId, int value);
 
-#define WIFI_SSID "WSSID"
-#define WIFI_PASSWORD "WPASS"
-#define TIME "TIME"
-#define N_RESTARTS "N_RESTARTS"
-#define OTA_TIMESTAMP "OTA_TMSTP"
-#define OTA_SERVER_IP "OTA_SRV_IP"
-#define OTA_SERVER_HOSTNAME "OTA_SRV_HN"
-#define OTA_SERVER_PORT "OTA_SRV_PRT"
-#define OTA_VERSION_FILENAME "OTA_VR_FILE"
-#define OTA_FILENAME "OTA_FILE"
-#define BROKER_URL "BRKR_URL"
-#define I2C_0_SDA "I2C_0_SDA"
-#define I2C_0_SCL "I2C_0_SCL"
-#define I2C_0_ENABLED "I2C_0_E"
-#define I2C_1_SDA "I2C_1_SDA"
-#define I2C_1_SCL "I2C_1_SCL"
-#define I2C_1_ENABLED "I2C_1_E"
+I2C_CB_H(0, sda)
+I2C_CB_H(0, sdc)
+I2C_CB_H(0, enabled)
+I2C_CB_H(1, sda)
+I2C_CB_H(1, scl)
+I2C_CB_H(1, enabled)
 
-/*
- * [/GENERATED]
- */
+I2C_SETTER_H(sda)
+I2C_GETTER_H(sda)
+I2C_SETTER_H(scl)
+I2C_GETTER_H(scl)
+I2C_SETTER_H(enabled)
+I2C_GETTER_H(enabled)
 
 #endif
