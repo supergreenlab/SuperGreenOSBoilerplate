@@ -95,6 +95,202 @@ void preinit_kv() {
   defaulti(I2C_1_SCL, default_i2c_1_scl);
   int default_i2c_1_enabled = 0;
   defaulti(I2C_1_ENABLED, default_i2c_1_enabled);
+  int default_state = FIRST_RUN;
+  defaulti(STATE, default_state);
+  const char *default_device_name = "SuperGreenDriver";
+  defaultstr(DEVICE_NAME, default_device_name);
+  int default_box_0_enabled = 1;
+  defaulti(BOX_0_ENABLED, default_box_0_enabled);
+  int default_box_0_timer_type = TIMER_MANUAL;
+  defaulti(BOX_0_TIMER_TYPE, default_box_0_timer_type);
+  int default_box_0_timer_output = 0;
+  defaulti(BOX_0_TIMER_OUTPUT, default_box_0_timer_output);
+  int default_box_0_started_at = 0;
+  defaulti(BOX_0_STARTED_AT, default_box_0_started_at);
+  int default_box_0_on_hour = 1;
+  defaulti(BOX_0_ON_HOUR, default_box_0_on_hour);
+  int default_box_0_on_min = 0;
+  defaulti(BOX_0_ON_MIN, default_box_0_on_min);
+  int default_box_0_off_hour = 19;
+  defaulti(BOX_0_OFF_HOUR, default_box_0_off_hour);
+  int default_box_0_off_min = 0;
+  defaulti(BOX_0_OFF_MIN, default_box_0_off_min);
+  int default_box_0_stretch = 0;
+  defaulti(BOX_0_STRETCH, default_box_0_stretch);
+  int default_box_0_led_dim = 0;
+  defaulti(BOX_0_LED_DIM, default_box_0_led_dim);
+  int default_box_0_blower = 50;
+  defaulti(BOX_0_BLOWER, default_box_0_blower);
+  int default_box_0_blower_mode = BLOWER_MODE_MANUAL;
+  defaulti(BOX_0_BLOWER_MODE, default_box_0_blower_mode);
+  int default_box_0_blower_gpio = DEFAULT_BLOWER_GPIO;
+  defaulti(BOX_0_BLOWER_GPIO, default_box_0_blower_gpio);
+  int default_box_0_sht1x_temp_c = -1000000;
+  defaulti(BOX_0_SHT1X_TEMP_C, default_box_0_sht1x_temp_c);
+  int default_box_0_sht1x_temp_f = -1000000;
+  defaulti(BOX_0_SHT1X_TEMP_F, default_box_0_sht1x_temp_f);
+  int default_box_0_sht1x_humi = -1000000;
+  defaulti(BOX_0_SHT1X_HUMI, default_box_0_sht1x_humi);
+  int default_box_0_arduino_co2 = -1000000;
+  defaulti(BOX_0_ARDUINO_CO2, default_box_0_arduino_co2);
+  int default_box_0_dust_gpy2y10 = -1000000;
+  defaulti(BOX_0_DUST_GPY2Y10, default_box_0_dust_gpy2y10);
+  int default_box_1_enabled = 0;
+  defaulti(BOX_1_ENABLED, default_box_1_enabled);
+  int default_box_1_timer_type = TIMER_MANUAL;
+  defaulti(BOX_1_TIMER_TYPE, default_box_1_timer_type);
+  int default_box_1_timer_output = 0;
+  defaulti(BOX_1_TIMER_OUTPUT, default_box_1_timer_output);
+  int default_box_1_started_at = 0;
+  defaulti(BOX_1_STARTED_AT, default_box_1_started_at);
+  int default_box_1_on_hour = 1;
+  defaulti(B_1_ON_HOUR, default_box_1_on_hour);
+  int default_box_1_on_min = 0;
+  defaulti(BOX_1_ON_MIN, default_box_1_on_min);
+  int default_box_1_off_hour = 19;
+  defaulti(BOX_1_OFF_HOUR, default_box_1_off_hour);
+  int default_box_1_off_min = 0;
+  defaulti(BOX_1_OFF_MIN, default_box_1_off_min);
+  int default_box_1_stretch = 0;
+  defaulti(BOX_1_STRETCH, default_box_1_stretch);
+  int default_box_1_led_dim = 0;
+  defaulti(BOX_1_LED_DIM, default_box_1_led_dim);
+  int default_box_1_blower = 50;
+  defaulti(BOX_1_BLOWER, default_box_1_blower);
+  int default_box_1_blower_mode = BLOWER_MODE_MANUAL;
+  defaulti(BOX_1_BLOWER_MODE, default_box_1_blower_mode);
+  int default_box_1_blower_gpio = DEFAULT_BLOWER_GPIO;
+  defaulti(BOX_1_BLOWER_GPIO, default_box_1_blower_gpio);
+  int default_box_1_sht1x_temp_c = -1000000;
+  defaulti(BOX_1_SHT1X_TEMP_C, default_box_1_sht1x_temp_c);
+  int default_box_1_sht1x_temp_f = -1000000;
+  defaulti(BOX_1_SHT1X_TEMP_F, default_box_1_sht1x_temp_f);
+  int default_box_1_sht1x_humi = -1000000;
+  defaulti(BOX_1_SHT1X_HUMI, default_box_1_sht1x_humi);
+  int default_box_1_arduino_co2 = -1000000;
+  defaulti(BOX_1_ARDUINO_CO2, default_box_1_arduino_co2);
+  int default_box_1_dust_gpy2y10 = -1000000;
+  defaulti(BOX_1_DUST_GPY2Y10, default_box_1_dust_gpy2y10);
+  int default_box_2_enabled = 0;
+  defaulti(BOX_2_ENABLED, default_box_2_enabled);
+  int default_box_2_timer_type = TIMER_MANUAL;
+  defaulti(BOX_2_TIMER_TYPE, default_box_2_timer_type);
+  int default_box_2_timer_output = 0;
+  defaulti(BOX_2_TIMER_OUTPUT, default_box_2_timer_output);
+  int default_box_2_started_at = 0;
+  defaulti(BOX_2_STARTED_AT, default_box_2_started_at);
+  int default_box_2_on_hour = 1;
+  defaulti(B_2_ON_HOUR, default_box_2_on_hour);
+  int default_box_2_on_min = 0;
+  defaulti(BOX_2_ON_MIN, default_box_2_on_min);
+  int default_box_2_off_hour = 19;
+  defaulti(BOX_2_OFF_HOUR, default_box_2_off_hour);
+  int default_box_2_off_min = 0;
+  defaulti(BOX_2_OFF_MIN, default_box_2_off_min);
+  int default_box_2_stretch = 0;
+  defaulti(BOX_2_STRETCH, default_box_2_stretch);
+  int default_box_2_led_dim = 0;
+  defaulti(BOX_2_LED_DIM, default_box_2_led_dim);
+  int default_box_2_blower = 50;
+  defaulti(BOX_2_BLOWER, default_box_2_blower);
+  int default_box_2_blower_mode = BLOWER_MODE_MANUAL;
+  defaulti(BOX_2_BLOWER_MODE, default_box_2_blower_mode);
+  int default_box_2_blower_gpio = DEFAULT_BLOWER_GPIO;
+  defaulti(BOX_2_BLOWER_GPIO, default_box_2_blower_gpio);
+  int default_box_2_sht1x_temp_c = -1000000;
+  defaulti(BOX_2_SHT1X_TEMP_C, default_box_2_sht1x_temp_c);
+  int default_box_2_sht1x_temp_f = -1000000;
+  defaulti(BOX_2_SHT1X_TEMP_F, default_box_2_sht1x_temp_f);
+  int default_box_2_sht1x_humi = -1000000;
+  defaulti(BOX_2_SHT1X_HUMI, default_box_2_sht1x_humi);
+  int default_box_2_arduino_co2 = -1000000;
+  defaulti(BOX_2_ARDUINO_CO2, default_box_2_arduino_co2);
+  int default_box_2_dust_gpy2y10 = -1000000;
+  defaulti(BOX_2_DUST_GPY2Y10, default_box_2_dust_gpy2y10);
+  int default_led_0_duty = 0;
+  defaulti(LED_0_DUTY, default_led_0_duty);
+  int default_led_1_duty = 0;
+  defaulti(LED_1_DUTY, default_led_1_duty);
+  int default_led_2_duty = 0;
+  defaulti(LED_2_DUTY, default_led_2_duty);
+  int default_led_3_duty = 0;
+  defaulti(LED_3_DUTY, default_led_3_duty);
+  int default_led_4_duty = 0;
+  defaulti(LED_4_DUTY, default_led_4_duty);
+  int default_led_5_duty = 0;
+  defaulti(LED_5_DUTY, default_led_5_duty);
+  int default_led_0_gpio = DEFAULT_LED_0_GPIO;
+  defaulti(LED_0_GPIO, default_led_0_gpio);
+  int default_led_1_gpio = DEFAULT_LED_1_GPIO;
+  defaulti(LED_1_GPIO, default_led_1_gpio);
+  int default_led_2_gpio = DEFAULT_LED_2_GPIO;
+  defaulti(LED_2_GPIO, default_led_2_gpio);
+  int default_led_3_gpio = DEFAULT_LED_3_GPIO;
+  defaulti(LED_3_GPIO, default_led_3_gpio);
+  int default_led_4_gpio = DEFAULT_LED_4_GPIO;
+  defaulti(LED_4_GPIO, default_led_4_gpio);
+  int default_led_5_gpio = DEFAULT_LED_5_GPIO;
+  defaulti(LED_5_GPIO, default_led_5_gpio);
+  int default_led_0_x = 0;
+  defaulti(LED_0_X, default_led_0_x);
+  int default_led_1_x = 0;
+  defaulti(LED_1_X, default_led_1_x);
+  int default_led_2_x = 0;
+  defaulti(LED_2_X, default_led_2_x);
+  int default_led_3_x = 0;
+  defaulti(LED_3_X, default_led_3_x);
+  int default_led_4_x = 0;
+  defaulti(LED_4_X, default_led_4_x);
+  int default_led_5_x = 0;
+  defaulti(LED_5_X, default_led_5_x);
+  int default_led_0_y = 0;
+  defaulti(LED_0_Y, default_led_0_y);
+  int default_led_1_y = 0;
+  defaulti(LED_1_Y, default_led_1_y);
+  int default_led_2_y = 0;
+  defaulti(LED_2_Y, default_led_2_y);
+  int default_led_3_y = 0;
+  defaulti(LED_3_Y, default_led_3_y);
+  int default_led_4_y = 0;
+  defaulti(LED_4_Y, default_led_4_y);
+  int default_led_5_y = 0;
+  defaulti(LED_5_Y, default_led_5_y);
+  int default_led_0_z = 0;
+  defaulti(LED_0_Z, default_led_0_z);
+  int default_led_1_z = 0;
+  defaulti(LED_1_Z, default_led_1_z);
+  int default_led_2_z = 0;
+  defaulti(LED_2_Z, default_led_2_z);
+  int default_led_3_z = 0;
+  defaulti(LED_3_Z, default_led_3_z);
+  int default_led_4_z = 0;
+  defaulti(LED_4_Z, default_led_4_z);
+  int default_led_5_z = 0;
+  defaulti(LED_5_Z, default_led_5_z);
+  int default_led_0_enable = 1;
+  defaulti(LED_0_ENABLE, default_led_0_enable);
+  int default_led_1_enable = 1;
+  defaulti(LED_1_ENABLE, default_led_1_enable);
+  int default_led_2_enable = 1;
+  defaulti(LED_2_ENABLE, default_led_2_enable);
+  int default_led_3_enable = 1;
+  defaulti(LED_3_ENABLE, default_led_3_enable);
+  int default_led_4_enable = 1;
+  defaulti(LED_4_ENABLE, default_led_4_enable);
+  int default_led_5_enable = 1;
+  defaulti(LED_5_ENABLE, default_led_5_enable);
+  int default_led_0_box = 0;
+  defaulti(LED_0_BOX, default_led_0_box);
+  int default_led_1_box = 0;
+  defaulti(LED_1_BOX, default_led_1_box);
+  int default_led_2_box = 0;
+  defaulti(LED_2_BOX, default_led_2_box);
+  int default_led_3_box = 0;
+  defaulti(LED_3_BOX, default_led_3_box);
+  int default_led_4_box = 1;
+  defaulti(LED_4_BOX, default_led_4_box);
+  int default_led_5_box = 1;
+  defaulti(LED_5_BOX, default_led_5_box);
 
   /*
    * [/GENERATED]
@@ -108,10 +304,27 @@ void postinit_kv() {
 
   sync_ble_str(WIFI_SSID, IDX_VALUE(WIFI_SSID));
   sync_ble_i(TIME, IDX_VALUE(TIME));
+  sync_ble_i(STATE, IDX_VALUE(STATE));
+  sync_ble_str(DEVICE_NAME, IDX_VALUE(DEVICE_NAME));
+  sync_ble_i(BOX_0_TIMER_TYPE, IDX_VALUE(BOX_0_TIMER_TYPE));
+  sync_ble_i(BOX_0_STARTED_AT, IDX_VALUE(BOX_0_STARTED_AT));
+  sync_ble_i(BOX_0_ON_HOUR, IDX_VALUE(BOX_0_ON_HOUR));
+  sync_ble_i(BOX_0_ON_MIN, IDX_VALUE(BOX_0_ON_MIN));
+  sync_ble_i(BOX_0_OFF_HOUR, IDX_VALUE(BOX_0_OFF_HOUR));
+  sync_ble_i(BOX_0_OFF_MIN, IDX_VALUE(BOX_0_OFF_MIN));
+  sync_ble_i(BOX_0_STRETCH, IDX_VALUE(BOX_0_STRETCH));
+  sync_ble_i(BOX_0_LED_DIM, IDX_VALUE(BOX_0_LED_DIM));
+  sync_ble_i(BOX_0_BLOWER, IDX_VALUE(BOX_0_BLOWER));
 
   // Initialize non-nvs keys
   int default_wifi_status = DISCONNECTED;
   set_wifi_status(default_wifi_status);
+  const char *default_box_0_led_info = "";
+  set_box_0_led_info(default_box_0_led_info);
+  const char *default_box_1_led_info = "";
+  set_box_1_led_info(default_box_1_led_info);
+  const char *default_box_2_led_info = "";
+  set_box_2_led_info(default_box_2_led_info);
 
 
   /*
@@ -142,15 +355,11 @@ void seti(const char * key, int value) {
   ESP_ERROR_CHECK(err);
   nvs_commit(kv_handle);
   nvs_close(kv_handle);
-  ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", key, value);
 }
 
 void defaulti(const char * key, int value) {
   if (!hasi(key)) {
     seti(key, value);
-  } else {
-    int v = geti(key);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", key, v);
   }
 }
 
@@ -175,18 +384,13 @@ void setstr(const char * key, const char * value) {
   ESP_ERROR_CHECK(err);
   nvs_commit(kv_handle);
   nvs_close(kv_handle);
-
-  ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", key, value);
 }
 
 void defaultstr(const char * key, const char * value) {
-  bool skip = strcmp(key, "WPASS") == 0;
-  
   if (!hasstr(key)) {
     setstr(key, value);
   } else {
     char buf[MAX_KVALUE_SIZE] = {0};
     getstr(key, buf, sizeof(buf) - 1);
-    ESP_LOGI(skip ? SGO_LOG_NOSEND : SGO_LOG_METRIC, "@KV %s=%s", key, buf);
   }
 }
