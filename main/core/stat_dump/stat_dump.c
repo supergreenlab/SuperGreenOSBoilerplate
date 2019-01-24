@@ -31,8 +31,9 @@
 #define MAX_KEY_SIZE 21
 
 static void stat_dump_task(void *param) {
+  int counter = 0;
   wait_connected();
-  vTaskDelay(60000 / portTICK_PERIOD_MS);
+  vTaskDelay(30 * 1000 / portTICK_PERIOD_MS);
   int n_tasks = uxTaskGetNumberOfTasks();
   uint32_t ulTotalRunTime, ulStatsAsPercentage;
   TaskStatus_t *statuses = malloc(n_tasks * sizeof(TaskStatus_t));
@@ -59,59 +60,114 @@ static void stat_dump_task(void *param) {
 
     int value;
     char str[MAX_KVALUE_SIZE] = {0};
-    get_wifi_ssid(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "WIFI_SSID", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    get_wifi_password(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "WIFI_PASSWORD", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_time();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "TIME", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_n_restarts();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "N_RESTARTS", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_ota_timestamp();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "OTA_TIMESTAMP", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    get_ota_server_ip(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_IP", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    get_ota_server_hostname(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_HOSTNAME", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    get_ota_server_port(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_PORT", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    get_ota_version_filename(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_VERSION_FILENAME", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    get_ota_filename(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_FILENAME", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    get_broker_url(str, MAX_KVALUE_SIZE-1);
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "BROKER_URL", str);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_i2c_0_sda();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_0_SDA", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_i2c_0_scl();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_0_SCL", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_i2c_0_enabled();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_0_ENABLED", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_i2c_1_sda();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_1_SDA", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_i2c_1_scl();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_1_SCL", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    value = get_i2c_1_enabled();
-    ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_1_ENABLED", value);
-    vTaskDelay(50 / portTICK_PERIOD_MS);
+    if ((counter % 20) == 0 || is_wifi_status_changed()) {
+      reset_wifi_status_changed();
+    }
+    if ((counter % 20) == 0 || is_wifi_ssid_changed()) {
+      get_wifi_ssid(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "WIFI_SSID", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_wifi_ssid_changed();
+    }
+    if ((counter % 20) == 0 || is_wifi_password_changed()) {
+      get_wifi_password(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "WIFI_PASSWORD", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_wifi_password_changed();
+    }
+    if ((counter % 20) == 0 || is_time_changed()) {
+      value = get_time();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "TIME", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_time_changed();
+    }
+    if ((counter % 20) == 0 || is_n_restarts_changed()) {
+      value = get_n_restarts();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "N_RESTARTS", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_n_restarts_changed();
+    }
+    if ((counter % 20) == 0 || is_ota_timestamp_changed()) {
+      value = get_ota_timestamp();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "OTA_TIMESTAMP", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_ota_timestamp_changed();
+    }
+    if ((counter % 20) == 0 || is_ota_server_ip_changed()) {
+      get_ota_server_ip(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_IP", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_ota_server_ip_changed();
+    }
+    if ((counter % 20) == 0 || is_ota_server_hostname_changed()) {
+      get_ota_server_hostname(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_HOSTNAME", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_ota_server_hostname_changed();
+    }
+    if ((counter % 20) == 0 || is_ota_server_port_changed()) {
+      get_ota_server_port(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_SERVER_PORT", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_ota_server_port_changed();
+    }
+    if ((counter % 20) == 0 || is_ota_version_filename_changed()) {
+      get_ota_version_filename(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_VERSION_FILENAME", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_ota_version_filename_changed();
+    }
+    if ((counter % 20) == 0 || is_ota_filename_changed()) {
+      get_ota_filename(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_FILENAME", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_ota_filename_changed();
+    }
+    if ((counter % 20) == 0 || is_broker_url_changed()) {
+      get_broker_url(str, MAX_KVALUE_SIZE-1);
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "BROKER_URL", str);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_broker_url_changed();
+    }
+    if ((counter % 20) == 0 || is_i2c_0_sda_changed()) {
+      value = get_i2c_0_sda();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_0_SDA", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_i2c_0_sda_changed();
+    }
+    if ((counter % 20) == 0 || is_i2c_0_scl_changed()) {
+      value = get_i2c_0_scl();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_0_SCL", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_i2c_0_scl_changed();
+    }
+    if ((counter % 20) == 0 || is_i2c_0_enabled_changed()) {
+      value = get_i2c_0_enabled();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_0_ENABLED", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_i2c_0_enabled_changed();
+    }
+    if ((counter % 20) == 0 || is_i2c_1_sda_changed()) {
+      value = get_i2c_1_sda();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_1_SDA", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_i2c_1_sda_changed();
+    }
+    if ((counter % 20) == 0 || is_i2c_1_scl_changed()) {
+      value = get_i2c_1_scl();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_1_SCL", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_i2c_1_scl_changed();
+    }
+    if ((counter % 20) == 0 || is_i2c_1_enabled_changed()) {
+      value = get_i2c_1_enabled();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "I2C_1_ENABLED", value);
+      vTaskDelay(50 / portTICK_PERIOD_MS);
+      reset_i2c_1_enabled_changed();
+    }
 
-    vTaskDelay(60000 / portTICK_PERIOD_MS);
+    vTaskDelay(5 * 1000 / portTICK_PERIOD_MS);
+    ++counter;
 
     /*
      * [/GENERATED]

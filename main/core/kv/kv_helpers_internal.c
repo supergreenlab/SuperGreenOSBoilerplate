@@ -37,114 +37,114 @@ void internal_set_wifi_status(int value) {
   // TODO: httpd notify
 }
 void internal_set_wifi_ssid(const char *value) {
-  setstr(WIFI_SSID, value);
+  set_wifi_ssid(value);
 
   value = on_set_wifi_ssid(value);
 
-  setstr(WIFI_SSID, value);
+  set_wifi_ssid(value);
 
   set_attr_value(IDX_CHAR_VAL_WIFI_SSID, (uint8_t *)value, strlen(value));
 }
 void internal_set_wifi_password(const char *value) {
-  setstr(WIFI_PASSWORD, value);
+  set_wifi_password(value);
 
   value = on_set_wifi_password(value);
 
-  setstr(WIFI_PASSWORD, value);
+  set_wifi_password(value);
 
 }
 void internal_set_time(int value) {
-  seti(TIME, value);
+  set_time(value);
 
   value = on_set_time(value);
 
-  seti(TIME, value);
+  set_time(value);
 
   set_attr_value_and_notify(IDX_CHAR_VAL_TIME, (uint8_t *)&value, sizeof(int));
 
   // TODO: httpd notify
 }
 void internal_set_n_restarts(int value) {
-  seti(N_RESTARTS, value);
+  set_n_restarts(value);
 
 
 
   // TODO: httpd notify
 }
 void internal_set_ota_timestamp(int value) {
-  seti(OTA_TIMESTAMP, value);
+  set_ota_timestamp(value);
 
 
 
   // TODO: httpd notify
 }
 void internal_set_ota_server_ip(const char *value) {
-  setstr(OTA_SERVER_IP, value);
+  set_ota_server_ip(value);
 
 
 }
 void internal_set_ota_server_hostname(const char *value) {
-  setstr(OTA_SERVER_HOSTNAME, value);
+  set_ota_server_hostname(value);
 
 
 }
 void internal_set_ota_server_port(const char *value) {
-  setstr(OTA_SERVER_PORT, value);
+  set_ota_server_port(value);
 
 
 }
 void internal_set_ota_version_filename(const char *value) {
-  setstr(OTA_VERSION_FILENAME, value);
+  set_ota_version_filename(value);
 
 
 }
 void internal_set_ota_filename(const char *value) {
-  setstr(OTA_FILENAME, value);
+  set_ota_filename(value);
 
 
 }
 void internal_set_broker_url(const char *value) {
-  setstr(BROKER_URL, value);
+  set_broker_url(value);
 
 
 }
 void internal_set_i2c_0_sda(int value) {
-  seti(I2C_0_SDA, value);
+  set_i2c_0_sda(value);
 
 
 
   // TODO: httpd notify
 }
 void internal_set_i2c_0_scl(int value) {
-  seti(I2C_0_SCL, value);
+  set_i2c_0_scl(value);
 
 
 
   // TODO: httpd notify
 }
 void internal_set_i2c_0_enabled(int value) {
-  seti(I2C_0_ENABLED, value);
+  set_i2c_0_enabled(value);
 
 
 
   // TODO: httpd notify
 }
 void internal_set_i2c_1_sda(int value) {
-  seti(I2C_1_SDA, value);
+  set_i2c_1_sda(value);
 
 
 
   // TODO: httpd notify
 }
 void internal_set_i2c_1_scl(int value) {
-  seti(I2C_1_SCL, value);
+  set_i2c_1_scl(value);
 
 
 
   // TODO: httpd notify
 }
 void internal_set_i2c_1_enabled(int value) {
-  seti(I2C_1_ENABLED, value);
+  set_i2c_1_enabled(value);
 
 
 
