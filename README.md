@@ -59,6 +59,7 @@ Describe all the keys that your system will require to work and communicate with
 - Statistic reports
 - Bluetooth LE interface
 - HTTP interface
+- Tiny local file system and http file serving
 - All logs redirected to MQTT
 - Comes with a [cloud backend](http://github.com/supergreenlab/SuperGreenCloud/)
 
