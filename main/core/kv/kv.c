@@ -35,7 +35,7 @@
 void init_helpers();
 nvs_handle kv_handle;
 
-void preinit_kv() {
+void open_kv() {
   // Initialize NVS
   esp_err_t err = nvs_flash_init();
   if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
@@ -50,7 +50,9 @@ void preinit_kv() {
   if (err != ESP_OK) {
     ESP_LOGI(SGO_LOG_EVENT, "@KV Error (%s) opening NVS handle!\n", esp_err_to_name(err));
   }
+}
 
+void preinit_kv() {
   /*
    * [GENERATED]
    */
@@ -60,6 +62,14 @@ void preinit_kv() {
   defaultstr(WIFI_SSID, default_wifi_ssid);
   const char *default_wifi_password = "";
   defaultstr(WIFI_PASSWORD, default_wifi_password);
+  const char *default_wifi_ap_ssid = DEFAULT_AP_SSID;
+  defaultstr(WIFI_AP_SSID, default_wifi_ap_ssid);
+  const char *default_wifi_ap_password = DEFAULT_AP_PASSWORD;
+  defaultstr(WIFI_AP_PASSWORD, default_wifi_ap_password);
+  const char *default_mdns_domain = DEFAULT_MDNS_DOMAIN;
+  defaultstr(MDNS_DOMAIN, default_mdns_domain);
+  const char *default_wifi_ip = "0.0.0.0";
+  defaultstr(WIFI_IP, default_wifi_ip);
   int default_time = 0;
   defaulti(TIME, default_time);
   int default_n_restarts = 0;
@@ -72,12 +82,14 @@ void preinit_kv() {
   defaultstr(OTA_SERVER_HOSTNAME, default_ota_server_hostname);
   const char *default_ota_server_port = CONFIG_OTA_SERVER_PORT;
   defaultstr(OTA_SERVER_PORT, default_ota_server_port);
-  const char *default_ota_version_filename = CONFIG_OTA_VERSION_FILENAME;
-  defaultstr(OTA_VERSION_FILENAME, default_ota_version_filename);
-  const char *default_ota_filename = CONFIG_OTA_FILENAME;
-  defaultstr(OTA_FILENAME, default_ota_filename);
+  const char *default_ota_basedir = CONFIG_OTA_BASEDIR;
+  defaultstr(OTA_BASEDIR, default_ota_basedir);
   const char *default_broker_url = CONFIG_BROKER_URL;
   defaultstr(BROKER_URL, default_broker_url);
+  const char *default_broker_channel = "";
+  defaultstr(BROKER_CHANNEL, default_broker_channel);
+  const char *default_broker_clientid = "";
+  defaultstr(BROKER_CLIENTID, default_broker_clientid);
   int default_i2c_0_sda = DEFAULT_I2C_0_SDA;
   defaulti(I2C_0_SDA, default_i2c_0_sda);
   int default_i2c_0_scl = DEFAULT_I2C_0_SCL;
@@ -102,16 +114,66 @@ void postinit_kv() {
    */
 
   sync_ble_str(WIFI_SSID, IDX_VALUE(WIFI_SSID));
+  sync_ble_str(WIFI_IP, IDX_VALUE(WIFI_IP));
   sync_ble_i(TIME, IDX_VALUE(TIME));
 
   // Initialize non-nvs keys
   int default_wifi_status = DISCONNECTED;
   set_wifi_status(default_wifi_status);
+  int default_reboot = 0;
+  set_reboot(default_reboot);
 
 
   /*
    * [/GENERATED]
    */
+}
+
+void reset_defaults() {
+  const char *default_wifi_ssid = "";
+  setstr(WIFI_SSID, default_wifi_ssid);
+  const char *default_wifi_password = "";
+  setstr(WIFI_PASSWORD, default_wifi_password);
+  const char *default_wifi_ap_ssid = DEFAULT_AP_SSID;
+  setstr(WIFI_AP_SSID, default_wifi_ap_ssid);
+  const char *default_wifi_ap_password = DEFAULT_AP_PASSWORD;
+  setstr(WIFI_AP_PASSWORD, default_wifi_ap_password);
+  const char *default_mdns_domain = DEFAULT_MDNS_DOMAIN;
+  setstr(MDNS_DOMAIN, default_mdns_domain);
+  const char *default_wifi_ip = "0.0.0.0";
+  setstr(WIFI_IP, default_wifi_ip);
+  int default_time = 0;
+  seti(TIME, default_time);
+  int default_n_restarts = 0;
+  seti(N_RESTARTS, default_n_restarts);
+  int default_ota_timestamp = OTA_BUILD_TIMESTAMP;
+  seti(OTA_TIMESTAMP, default_ota_timestamp);
+  const char *default_ota_server_ip = CONFIG_OTA_SERVER_IP;
+  setstr(OTA_SERVER_IP, default_ota_server_ip);
+  const char *default_ota_server_hostname = CONFIG_OTA_SERVER_HOSTNAME;
+  setstr(OTA_SERVER_HOSTNAME, default_ota_server_hostname);
+  const char *default_ota_server_port = CONFIG_OTA_SERVER_PORT;
+  setstr(OTA_SERVER_PORT, default_ota_server_port);
+  const char *default_ota_basedir = CONFIG_OTA_BASEDIR;
+  setstr(OTA_BASEDIR, default_ota_basedir);
+  const char *default_broker_url = CONFIG_BROKER_URL;
+  setstr(BROKER_URL, default_broker_url);
+  const char *default_broker_channel = "";
+  setstr(BROKER_CHANNEL, default_broker_channel);
+  const char *default_broker_clientid = "";
+  setstr(BROKER_CLIENTID, default_broker_clientid);
+  int default_i2c_0_sda = DEFAULT_I2C_0_SDA;
+  seti(I2C_0_SDA, default_i2c_0_sda);
+  int default_i2c_0_scl = DEFAULT_I2C_0_SCL;
+  seti(I2C_0_SCL, default_i2c_0_scl);
+  int default_i2c_0_enabled = 1;
+  seti(I2C_0_ENABLED, default_i2c_0_enabled);
+  int default_i2c_1_sda = DEFAULT_I2C_1_SDA;
+  seti(I2C_1_SDA, default_i2c_1_sda);
+  int default_i2c_1_scl = DEFAULT_I2C_1_SCL;
+  seti(I2C_1_SCL, default_i2c_1_scl);
+  int default_i2c_1_enabled = 0;
+  seti(I2C_1_ENABLED, default_i2c_1_enabled);
 }
 
 bool hasi(const char * key) {

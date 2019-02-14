@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2019  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,26 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef WIFI_H_
-#define WIFI_H_
+#ifndef REBOOT_H_
+#define REBOOT_H_
 
-#define DEFAULT_AP_SSID "🤖🍁"
-#define DEFAULT_AP_PASSWORD "multipass"
-#define DEFAULT_MDNS_DOMAIN "supergreendriver"
+void init_reboot();
 
-typedef enum {
-  DISCONNECTED = 1,
-  CONNECTING,
-  CONNECTED,
-  FAILED,
-  AP,
-} wifi_status;
-
-void init_wifi();
-
-void wait_connected();
-
-const char *on_set_wifi_ssid(const char *ssid);
-const char *on_set_wifi_password(const char *pass);
+int on_set_reboot(int value);
 
 #endif

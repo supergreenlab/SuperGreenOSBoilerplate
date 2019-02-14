@@ -38,9 +38,6 @@
 #include "../kv/kv.h"
 #include "../kv/kv_ble.h"
 
-#define AP_SSID "🤖🍁"
-#define AP_PASS "multipass"
-
 typedef const unsigned int wifi_cmd;
 static wifi_cmd CMD_SSID_CHANGED = 1;
 static wifi_cmd CMD_PASS_CHANGED = 2;
@@ -101,12 +98,20 @@ static void start_mdns_service()
 		return;
 	}
 
-	mdns_hostname_set("supergreendriver");
+  char domain[MAX_KVALUE_SIZE] = {0};
+  get_mdns_domain(domain, MAX_KVALUE_SIZE-1);
+	mdns_hostname_set(domain);
   mdns_service_add(NULL, "_http", "_tcp", 80, NULL, 0);
+  ESP_LOGI(SGO_LOG_EVENT, "@WIFI Started MDNS advertising as %s.local", domain);
 }
 
 static void start_ap() {
-  ESP_LOGI(SGO_LOG_EVENT, "@WIFI AP mode started SSID=%s", AP_SSID);
+  char ssid[MAX_KVALUE_SIZE] = {0};
+  get_wifi_ap_ssid(ssid, MAX_KVALUE_SIZE-1);
+  char password[MAX_KVALUE_SIZE] = {0};
+  get_wifi_ap_password(password, MAX_KVALUE_SIZE-1);
+  ESP_LOGI(SGO_LOG_EVENT, "@WIFI AP mode started SSID=%s", ssid);
+
   esp_wifi_stop();
 
   set_wifi_status(AP);
@@ -114,8 +119,8 @@ static void start_ap() {
   wifi_config_t wifi_config = {0};
   wifi_config.ap.authmode = WIFI_AUTH_WPA2_PSK;
   wifi_config.ap.max_connection = 1;
-  memcpy(wifi_config.ap.ssid, AP_SSID, sizeof(wifi_config.ap.ssid));
-  memcpy(wifi_config.ap.password, AP_PASS, sizeof(wifi_config.ap.password));
+  memcpy(wifi_config.ap.ssid, ssid, sizeof(wifi_config.ap.ssid));
+  memcpy(wifi_config.ap.password, password, sizeof(wifi_config.ap.password));
 
   ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_AP) );
   ESP_ERROR_CHECK( esp_wifi_set_config(ESP_IF_WIFI_AP, &wifi_config) );
@@ -143,6 +148,19 @@ static void start_sta() {
   ESP_ERROR_CHECK( esp_wifi_start() );
 }
 
+static void set_ip(tcpip_adapter_if_t interface) {
+  tcpip_adapter_ip_info_t info;
+  esp_err_t err = tcpip_adapter_get_ip_info(interface, &info);
+  if (err != ESP_OK) {
+    ESP_LOGE(SGO_LOG_EVENT, "@WIFI tcpip_adapter_get_ip_info failed");
+    return;
+  }
+
+  char ip[20] = {0};
+  sprintf(ip, "%d.%d.%d.%d", ((uint8_t*)&(info.ip.addr))[0], ((uint8_t*)&(info.ip.addr))[1], ((uint8_t*)&(info.ip.addr))[2], ((uint8_t*)&(info.ip.addr))[3]);
+  set_wifi_ip(ip);
+}
+
 static esp_err_t event_handler(void *ctx, system_event_t *event) {
   switch(event->event_id) {
     case SYSTEM_EVENT_STA_START:
@@ -155,6 +173,7 @@ static esp_err_t event_handler(void *ctx, system_event_t *event) {
       xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
       xQueueSend(cmd, &CMD_STA_CONNECTED, 0);
       set_wifi_status(CONNECTED);
+      set_ip(TCPIP_ADAPTER_IF_STA);
       break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
       ESP_LOGI(SGO_LOG_EVENT, "@WIFI SYSTEM_EVENT_STA_DISCONNECTED = %d", event->event_info.disconnected.reason);
@@ -170,6 +189,7 @@ static esp_err_t event_handler(void *ctx, system_event_t *event) {
       break;
     case SYSTEM_EVENT_AP_START:
       xQueueSend(cmd, &CMD_AP_START, 0);
+      set_ip(TCPIP_ADAPTER_IF_AP);
       break;
     case SYSTEM_EVENT_AP_STACONNECTED:
       ESP_LOGI(SGO_LOG_EVENT, "@WIFI SYSTEM_EVENT_AP_STACONNECTED");
@@ -186,6 +206,23 @@ static esp_err_t event_handler(void *ctx, system_event_t *event) {
   return ESP_OK;
 }
 
+static bool try_sta_connection() {
+  wifi_mode_t wm = {0};
+  //wifi_sta_list_t sl = {0}; // commented all esp_wifi_ap_get_sta_list stuffs as it seems it doesn't refresh properly
+  if (esp_wifi_get_mode(&wm) == ESP_OK && wm != WIFI_MODE_STA) {
+    //if (esp_wifi_ap_get_sta_list(&sl) == ESP_OK) {
+      ESP_LOGI(SGO_LOG_EVENT, "@WIFI Trying STA while no-one's watching");
+      start_sta();
+      return true;
+    /*} else {
+      ESP_LOGI(SGO_LOG_EVENT, "@WIFI unable to esp_wifi_ap_get_sta_list");
+    }*/
+  } else {
+    ESP_LOGI(SGO_LOG_EVENT, "@WIFI unable to get_mode");
+  }
+  return false;
+}
+
 static void wifi_task(void *param) {
   unsigned int c;
   unsigned int n_connection_failed = 0;
@@ -194,7 +231,7 @@ static void wifi_task(void *param) {
   bool was_valid = is_valid();
 
   for (;;) {
-    if (xQueueReceive(cmd, &c, 10000 / portTICK_PERIOD_MS)) {
+    if (xQueueReceive(cmd, &c, 20000 / portTICK_PERIOD_MS)) {
       ESP_LOGI(SGO_LOG_EVENT, "@WIFI xQueueReceive %d", c);
 
       // Wifi STA conf change
@@ -212,7 +249,6 @@ static void wifi_task(void *param) {
       } else if (c == CMD_AP_START) {
         ESP_LOGI(SGO_LOG_EVENT, "@WIFI CMD_AP_START");
         n_connected_sta = 0;
-
       } else if (c == CMD_STA_CONNECTED) {
         ESP_LOGI(SGO_LOG_EVENT, "@WIFI CMD_STA_CONNECTED");
         start_mdns_service();
@@ -239,24 +275,11 @@ static void wifi_task(void *param) {
       }
     } else {
       // if AP mode and noone's watching, try STA mode.
-      wifi_mode_t wm = {0};
-      wifi_sta_list_t sl = {0}; // commented all esp_wifi_ap_get_sta_list stuffs as it seems it doesn't refresh properly
-      if (esp_wifi_get_mode(&wm) == ESP_OK) {
-        if (esp_wifi_ap_get_sta_list(&sl) == ESP_OK) {
-          ESP_LOGI(SGO_LOG_EVENT, "@WIFI num_sta=%d, wm=%d, counter=%d/6", n_connected_sta, wm, (counter % 6) + 1);
-          if (!(counter % 6) && is_valid() && n_connected_sta == 0 && wm != WIFI_MODE_STA) {
-            ESP_LOGI(SGO_LOG_EVENT, "@WIFI Trying STA while no-one's watching");
-            start_sta();
-            ++counter;
-            continue;
-          }
-        } else {
-          ESP_LOGI(SGO_LOG_EVENT, "@WIFI unable to esp_wifi_ap_get_sta_list");
-        }
-      } else {
-        ESP_LOGI(SGO_LOG_EVENT, "@WIFI unable to get_mode");
+      if (!(counter % 6) && !n_connected_sta && is_valid() && try_sta_connection()) {
+        ++counter;
+        continue;
       }
-      ESP_LOGI(SGO_LOG_EVENT, "@WIFI Refresh MDNS service");
+      //ESP_LOGI(SGO_LOG_EVENT, "@WIFI Refresh MDNS service");
       start_mdns_service();
       ++counter;
     }

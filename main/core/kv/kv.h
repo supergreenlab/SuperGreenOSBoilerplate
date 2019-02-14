@@ -25,8 +25,10 @@
 
 #define MAX_KVALUE_SIZE 517
 
+void open_kv();
 void preinit_kv();
 void postinit_kv();
+void reset_defaults();
 
 int geti(const char * key);
 void seti(const char * key, int value);
@@ -54,6 +56,22 @@ void reset_wifi_password_changed();
 bool is_wifi_password_changed();
 void get_wifi_password(char *dest, size_t len);
 void set_wifi_password(const char *value);
+void reset_wifi_ap_ssid_changed();
+bool is_wifi_ap_ssid_changed();
+void get_wifi_ap_ssid(char *dest, size_t len);
+void set_wifi_ap_ssid(const char *value);
+void reset_wifi_ap_password_changed();
+bool is_wifi_ap_password_changed();
+void get_wifi_ap_password(char *dest, size_t len);
+void set_wifi_ap_password(const char *value);
+void reset_mdns_domain_changed();
+bool is_mdns_domain_changed();
+void get_mdns_domain(char *dest, size_t len);
+void set_mdns_domain(const char *value);
+void reset_wifi_ip_changed();
+bool is_wifi_ip_changed();
+void get_wifi_ip(char *dest, size_t len);
+void set_wifi_ip(const char *value);
 void reset_time_changed();
 bool is_time_changed();
 int get_time();
@@ -78,18 +96,22 @@ void reset_ota_server_port_changed();
 bool is_ota_server_port_changed();
 void get_ota_server_port(char *dest, size_t len);
 void set_ota_server_port(const char *value);
-void reset_ota_version_filename_changed();
-bool is_ota_version_filename_changed();
-void get_ota_version_filename(char *dest, size_t len);
-void set_ota_version_filename(const char *value);
-void reset_ota_filename_changed();
-bool is_ota_filename_changed();
-void get_ota_filename(char *dest, size_t len);
-void set_ota_filename(const char *value);
+void reset_ota_basedir_changed();
+bool is_ota_basedir_changed();
+void get_ota_basedir(char *dest, size_t len);
+void set_ota_basedir(const char *value);
 void reset_broker_url_changed();
 bool is_broker_url_changed();
 void get_broker_url(char *dest, size_t len);
 void set_broker_url(const char *value);
+void reset_broker_channel_changed();
+bool is_broker_channel_changed();
+void get_broker_channel(char *dest, size_t len);
+void set_broker_channel(const char *value);
+void reset_broker_clientid_changed();
+bool is_broker_clientid_changed();
+void get_broker_clientid(char *dest, size_t len);
+void set_broker_clientid(const char *value);
 void reset_i2c_0_sda_changed();
 bool is_i2c_0_sda_changed();
 int get_i2c_0_sda();
@@ -114,6 +136,10 @@ void reset_i2c_1_enabled_changed();
 bool is_i2c_1_enabled_changed();
 int get_i2c_1_enabled();
 void set_i2c_1_enabled(int value);
+void reset_reboot_changed();
+bool is_reboot_changed();
+int get_reboot();
+void set_reboot(int value);
 
 /*
  * [/GENERATED]

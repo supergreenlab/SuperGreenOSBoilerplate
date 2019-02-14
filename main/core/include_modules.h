@@ -33,6 +33,7 @@
 #include "time/time.h"
 #include "mqtt/mqtt.h"
 #include "i2c/i2c.h"
+#include "reboot/reboot.h"
 
 // Custom modules
 

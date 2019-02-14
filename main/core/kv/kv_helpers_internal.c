@@ -53,6 +53,27 @@ void internal_set_wifi_password(const char *value) {
   set_wifi_password(value);
 
 }
+void internal_set_wifi_ap_ssid(const char *value) {
+  set_wifi_ap_ssid(value);
+
+
+}
+void internal_set_wifi_ap_password(const char *value) {
+  set_wifi_ap_password(value);
+
+
+}
+void internal_set_mdns_domain(const char *value) {
+  set_mdns_domain(value);
+
+
+}
+void internal_set_wifi_ip(const char *value) {
+  set_wifi_ip(value);
+
+
+  set_attr_value_and_notify(IDX_CHAR_VAL_WIFI_IP, (uint8_t *)value, strlen(value));
+}
 void internal_set_time(int value) {
   set_time(value);
 
@@ -93,18 +114,23 @@ void internal_set_ota_server_port(const char *value) {
 
 
 }
-void internal_set_ota_version_filename(const char *value) {
-  set_ota_version_filename(value);
-
-
-}
-void internal_set_ota_filename(const char *value) {
-  set_ota_filename(value);
+void internal_set_ota_basedir(const char *value) {
+  set_ota_basedir(value);
 
 
 }
 void internal_set_broker_url(const char *value) {
   set_broker_url(value);
+
+
+}
+void internal_set_broker_channel(const char *value) {
+  set_broker_channel(value);
+
+
+}
+void internal_set_broker_clientid(const char *value) {
+  set_broker_clientid(value);
 
 
 }
@@ -145,6 +171,14 @@ void internal_set_i2c_1_scl(int value) {
 }
 void internal_set_i2c_1_enabled(int value) {
   set_i2c_1_enabled(value);
+
+
+
+  // TODO: httpd notify
+}
+void internal_set_reboot(int value) {
+
+  value = on_set_reboot(value);
 
 
 

@@ -27,12 +27,12 @@ else
   echo "Using default name $NAME, change it as first parameter."
 fi
 
-DEST="releases/$NAME"
+TS=`date +"%s"`
+DEST="releases/$NAME/$TS"
 mkdir -p $DEST
 
-TS=`date +"%s"`
 sed -i -E "s/^#define OTA_BUILD_TIMESTAMP [^$]+/#define OTA_BUILD_TIMESTAMP ${TS}/g" main/core/ota/ota.h
-echo -e "Created set timestamp in main/core/ota/ota.h to $TS: ${GREEN}Done${NC}"
+echo -e "Set timestamp in main/core/ota/ota.h to $TS: ${GREEN}Done${NC}"
 make -j4
 echo -e "Building project: ${GREEN}Done${NC}"
 
@@ -42,7 +42,8 @@ cp $i $DEST/
 echo -e "Copying $i to $DEST/$i: ${GREEN}Done${NC}"
 done
 
-echo $TS > $DEST/last_timestamp
+echo $TS > "releases/$NAME/last_timestamp"
+echo $TS > "$DEST/timestamp"
 
 echo "#!/bin/bash" > $DEST/flash.sh
 echo 'DIR=`dirname "$0"`' >> $DEST/flash.sh
@@ -51,10 +52,16 @@ echo 'python2 $DIR/esptool.py --chip esp32 --port /dev/ttyUSB1 --baud 115200 --b
 chmod +x $DEST/flash.sh
 echo -e "Created $DEST/flash.sh: ${GREEN}Done${NC}"
 
-gzip -c config.yml >> spiffs_fs/config.yml.gz
-echo -e "Created spiffs_fs/config.yml.gz: ${GREEN}Done${NC}"
+# TODO DRY with ./write_spiffs.sh
+echo -e "Creating spiffs.bin partition:"
+mkdir spiffs_fs_gz
+for i in $(ls ./spiffs_fs); do
+  gzip -c "./spiffs_fs/$i" >> "./spiffs_fs_gz/$i"
+  echo -e "Created spiffs_fs_gq/$i: ${GREEN}Done${NC}"
+done
+mkspiffs -c spiffs_fs_gz/ -b 4096 -p 256 -s 0x8000 $DEST/spiffs.bin
+rm -rf spiffs_fs_gz
 
-mkspiffs -c spiffs_fs/ -b 4096 -p 256 -s 0x8000 $DEST/spiffs.bin
 echo -e "Created $DEST/spiffs.bin: ${GREEN}Done${NC}"
 echo "#!/bin/bash" > $DEST/write_spiffs.sh
 echo 'DIR=`dirname "$0"`' >> $DEST/write_spiffs.sh

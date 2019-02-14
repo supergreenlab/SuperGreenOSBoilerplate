@@ -26,21 +26,27 @@
 void internal_set_wifi_status(int value);
 void internal_set_wifi_ssid(const char *value);
 void internal_set_wifi_password(const char *value);
+void internal_set_wifi_ap_ssid(const char *value);
+void internal_set_wifi_ap_password(const char *value);
+void internal_set_mdns_domain(const char *value);
+void internal_set_wifi_ip(const char *value);
 void internal_set_time(int value);
 void internal_set_n_restarts(int value);
 void internal_set_ota_timestamp(int value);
 void internal_set_ota_server_ip(const char *value);
 void internal_set_ota_server_hostname(const char *value);
 void internal_set_ota_server_port(const char *value);
-void internal_set_ota_version_filename(const char *value);
-void internal_set_ota_filename(const char *value);
+void internal_set_ota_basedir(const char *value);
 void internal_set_broker_url(const char *value);
+void internal_set_broker_channel(const char *value);
+void internal_set_broker_clientid(const char *value);
 void internal_set_i2c_0_sda(int value);
 void internal_set_i2c_0_scl(int value);
 void internal_set_i2c_0_enabled(int value);
 void internal_set_i2c_1_sda(int value);
 void internal_set_i2c_1_scl(int value);
 void internal_set_i2c_1_enabled(int value);
+void internal_set_reboot(int value);
 
 /*
  * [/GENERATED]

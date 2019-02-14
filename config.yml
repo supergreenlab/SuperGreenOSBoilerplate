@@ -25,6 +25,7 @@ core_modules:
   - time
   - mqtt
   - i2c
+  - reboot
 
 custom_modules:
 
@@ -50,8 +51,10 @@ keys:
     caps_name: WIFI_STATUS
     integer: true
     ble:
-      uuid: "{0xee,0x06,0x0e,0xb5,0x31,0xae,0x83,0xf0,0xda,0xcb,0x67,0x6d,0x1c,0xda,0x2f,0x37}"
+      uuid: "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x5c}"
       notify: true
+    http:
+      noop: true
     default_var: DISCONNECTED
 
   - name: wifi_ssid
@@ -74,7 +77,7 @@ keys:
     nvs:
       key: WPASS
     ble:
-      uuid: "{0xb9,0x5d,0x53,0x82,0x6e,0xcc,0xa0,0xfe,0xf1,0xa6,0xfe,0x6c,0x10,0x0b,0xe4,0xf7}"
+      uuid: "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x7c}"
       write: true
       notify: true
       no_sync: true
@@ -82,6 +85,45 @@ keys:
       write: true
     write_cb: true
     default: ""
+
+  - name: wifi_ap_ssid
+    caps_name: WIFI_AP_SSID
+    string: true
+    nvs:
+      key: WAPSSID
+    http:
+      write: true
+    default_var: DEFAULT_AP_SSID
+
+  - name: wifi_ap_password
+    caps_name: WIFI_AP_PASSWORD
+    string: true
+    nvs:
+      key: WAPPASS
+    http:
+      write: true
+    default_var: DEFAULT_AP_PASSWORD
+
+  - name: mdns_domain
+    caps_name: MDNS_DOMAIN
+    string: true
+    nvs:
+      key: MDNSD
+    http:
+      write: true
+    default_var: DEFAULT_MDNS_DOMAIN
+
+  - name: wifi_ip
+    caps_name: WIFI_IP
+    string: true
+    nvs:
+      key: WIP
+    ble:
+      uuid: "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x8c}"
+      notify: true
+    http:
+      noop: true
+    default: "0.0.0.0"
 
   - name: time
     caps_name: TIME
@@ -104,7 +146,7 @@ keys:
       key: N_RESTARTS
     http:
       noop: true
-    default_var: 0
+    default: 0
  
   - name: ota_timestamp
     caps_name: OTA_TIMESTAMP
@@ -142,23 +184,14 @@ keys:
       write: true
     default_var: CONFIG_OTA_SERVER_PORT
 
-  - name: ota_version_filename
-    caps_name: OTA_VERSION_FILENAME
+  - name: ota_basedir
+    caps_name: OTA_BASEDIR
     string: true
     nvs:
-      key: OTA_VR_FILE
+      key: OTA_BASEDIR
     http:
       write: true
-    default_var: CONFIG_OTA_VERSION_FILENAME
-
-  - name: ota_filename
-    caps_name: OTA_FILENAME
-    string: true
-    nvs:
-      key: OTA_FILE
-    http:
-      write: true
-    default_var: CONFIG_OTA_FILENAME
+    default_var: CONFIG_OTA_BASEDIR
 
   - name: broker_url
     caps_name: BROKER_URL
@@ -168,6 +201,24 @@ keys:
     http:
       write: true
     default_var: CONFIG_BROKER_URL
+
+  - name: broker_channel
+    caps_name: BROKER_CHANNEL
+    string: true
+    nvs:
+      key: BRKR_CHN
+    http:
+      write: true
+    default: ""
+
+  - name: broker_clientid
+    caps_name: BROKER_CLIENTID
+    string: true
+    nvs:
+      key: BRKR_CLID
+    http:
+      write: true
+    default: ""
 
   - name: i2c_0_sda
     caps_name: I2C_0_SDA
@@ -240,6 +291,14 @@ keys:
       key: I2C_1_E
     http:
       write: true
+    default: 0
+
+  - name: reboot
+    caps_name: REBOOT
+    integer: true
+    http:
+      write: true
+    write_cb: true
     default: 0
 
   #

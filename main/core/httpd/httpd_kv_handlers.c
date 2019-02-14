@@ -79,6 +79,11 @@ const kvi_handler kvi_handlers[] = {
     .handler = internal_set_i2c_1_enabled,
     .getter = get_i2c_1_enabled,
   },
+  {
+    .name = "REBOOT",
+    .handler = internal_set_reboot,
+    .getter = get_reboot,
+  },
 
 /*
 * [/GENERATED]
@@ -114,6 +119,26 @@ const kvs_handler kvs_handlers[] = {
     .getter = get_wifi_password,
   },
   {
+    .name = "WIFI_AP_SSID",
+    .handler = internal_set_wifi_ap_ssid,
+    .getter = get_wifi_ap_ssid,
+  },
+  {
+    .name = "WIFI_AP_PASSWORD",
+    .handler = internal_set_wifi_ap_password,
+    .getter = get_wifi_ap_password,
+  },
+  {
+    .name = "MDNS_DOMAIN",
+    .handler = internal_set_mdns_domain,
+    .getter = get_mdns_domain,
+  },
+  {
+    .name = "WIFI_IP",
+    .handler = NULL,
+    .getter = get_wifi_ip,
+  },
+  {
     .name = "OTA_SERVER_IP",
     .handler = internal_set_ota_server_ip,
     .getter = get_ota_server_ip,
@@ -129,19 +154,24 @@ const kvs_handler kvs_handlers[] = {
     .getter = get_ota_server_port,
   },
   {
-    .name = "OTA_VERSION_FILENAME",
-    .handler = internal_set_ota_version_filename,
-    .getter = get_ota_version_filename,
-  },
-  {
-    .name = "OTA_FILENAME",
-    .handler = internal_set_ota_filename,
-    .getter = get_ota_filename,
+    .name = "OTA_BASEDIR",
+    .handler = internal_set_ota_basedir,
+    .getter = get_ota_basedir,
   },
   {
     .name = "BROKER_URL",
     .handler = internal_set_broker_url,
     .getter = get_broker_url,
+  },
+  {
+    .name = "BROKER_CHANNEL",
+    .handler = internal_set_broker_channel,
+    .getter = get_broker_channel,
+  },
+  {
+    .name = "BROKER_CLIENTID",
+    .handler = internal_set_broker_clientid,
+    .getter = get_broker_clientid,
   },
 
 /*
