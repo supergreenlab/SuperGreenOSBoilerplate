@@ -40,9 +40,9 @@ static void dump_heap_infos(const char *name, uint32_t cap) {
 
 static void stat_dump_task(void *param) {
   int counter = 0;
-  wait_connected();
+  //wait_connected();
   vTaskDelay(30 * 1000 / portTICK_PERIOD_MS);
-  uint32_t ulTotalRunTime, ulStatsAsPercentage;
+  //uint32_t ulTotalRunTime, ulStatsAsPercentage;
   while(1) {
     dump_heap_infos("32BIT", MALLOC_CAP_32BIT);
     vTaskDelay(200 / portTICK_PERIOD_MS);
@@ -85,6 +85,7 @@ static void stat_dump_task(void *param) {
 
     ESP_LOGI(SGO_LOG_METRIC, "@HEAP free=%d, min=%d", esp_get_free_heap_size(), esp_get_minimum_free_heap_size());
 
+    ESP_LOGI(SGO_LOG_METRIC, "@SYS n_tasks=%d", uxTaskGetNumberOfTasks());
     /* int n_tasks = uxTaskGetNumberOfTasks();
     TaskStatus_t *statuses = malloc(n_tasks * sizeof(TaskStatus_t));
     if (statuses) {
@@ -187,6 +188,9 @@ static void stat_dump_task(void *param) {
       ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%s", "OTA_BASEDIR", str);
       vTaskDelay(200 / portTICK_PERIOD_MS);
       reset_ota_basedir_changed();
+    }
+    if ((counter % 20) == 0 || is_ota_status_changed()) {
+      reset_ota_status_changed();
     }
     if ((counter % 20) == 0 || is_broker_url_changed()) {
       get_broker_url(str, MAX_KVALUE_SIZE-1);

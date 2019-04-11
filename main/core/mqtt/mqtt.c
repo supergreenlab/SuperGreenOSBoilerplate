@@ -143,7 +143,9 @@ static int mqtt_logging_vprintf(const char *str, va_list l) {
   va_copy(nl, l);
   va_arg(nl, int);
   const char *tag = va_arg(nl, const char *);
-  if (strcmp(tag, SGO_LOG_NOSEND) == 0) {
+  if (strcmp(tag, SGO_LOG_MSG) != 0 &&
+      strcmp(tag, SGO_LOG_EVENT) != 0 &&
+      strcmp(tag, SGO_LOG_METRIC) != 0) {
     return vprintf(str, l);
   }
 
@@ -173,7 +175,7 @@ void mqtt_intercept_log() {
 void init_mqtt() {
   ESP_LOGI(SGO_LOG_EVENT, "@MQTT Intializing MQTT task");
 
-  esp_log_level_set("MQTT_CLIENT", ESP_LOG_NONE);
+  //esp_log_level_set("MQTT_CLIENT", ESP_LOG_NONE);
 
   cmd = xQueueCreate(10, sizeof(int));
   if (cmd == NULL) {

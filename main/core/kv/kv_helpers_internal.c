@@ -119,6 +119,12 @@ void internal_set_ota_basedir(const char *value) {
 
 
 }
+void internal_set_ota_status(int value) {
+
+
+
+  // TODO: httpd notify
+}
 void internal_set_broker_url(const char *value) {
   set_broker_url(value);
 

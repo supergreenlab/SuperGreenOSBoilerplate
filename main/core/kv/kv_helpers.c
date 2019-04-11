@@ -535,6 +535,41 @@ void set_ota_basedir(const char *value) {
   xSemaphoreGive(_mutex_ota_basedir);
 }
 
+static SemaphoreHandle_t _mutex_ota_status; // TODO check RAM weight of creating so many semaphores :/
+static bool _ota_status_changed = true;
+
+void reset_ota_status_changed() {
+  xSemaphoreTake(_mutex_ota_status, 0);
+  _ota_status_changed = false;
+  xSemaphoreGive(_mutex_ota_status);
+}
+
+bool is_ota_status_changed() {
+  xSemaphoreTake(_mutex_ota_status, 0);
+  bool v = _ota_status_changed;
+  xSemaphoreGive(_mutex_ota_status);
+  return v;
+}
+
+
+static int _ota_status = 0;
+
+int get_ota_status() {
+  xSemaphoreTake(_mutex_ota_status, 0);
+  int v = _ota_status;
+  xSemaphoreGive(_mutex_ota_status);
+  return v;
+}
+
+void set_ota_status(int value) {
+  xSemaphoreTake(_mutex_ota_status, 0);
+  if (_ota_status == value) return;
+  _ota_status = value;
+  _ota_status_changed = true;
+  xSemaphoreGive(_mutex_ota_status);
+}
+
+
 static SemaphoreHandle_t _mutex_broker_url; // TODO check RAM weight of creating so many semaphores :/
 static bool _broker_url_changed = true;
 
@@ -882,6 +917,7 @@ void init_helpers() {
   _mutex_ota_server_hostname = xSemaphoreCreateMutexStatic(&mutex_buffer);
   _mutex_ota_server_port = xSemaphoreCreateMutexStatic(&mutex_buffer);
   _mutex_ota_basedir = xSemaphoreCreateMutexStatic(&mutex_buffer);
+  _mutex_ota_status = xSemaphoreCreateMutexStatic(&mutex_buffer);
   _mutex_broker_url = xSemaphoreCreateMutexStatic(&mutex_buffer);
   _mutex_broker_channel = xSemaphoreCreateMutexStatic(&mutex_buffer);
   _mutex_broker_clientid = xSemaphoreCreateMutexStatic(&mutex_buffer);

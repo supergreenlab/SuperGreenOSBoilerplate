@@ -193,6 +193,13 @@ keys:
       write: true
     default_var: CONFIG_OTA_BASEDIR
 
+  - name: ota_status
+    caps_name: OTA_STATUS
+    integer: true
+    http:
+      noop: true
+    default_var: OTA_STATUS_IDLE
+
   - name: broker_url
     caps_name: BROKER_URL
     string: true

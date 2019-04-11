@@ -29,6 +29,7 @@
 #define IS_URI_SEP(c) (c == '?' || c == '&' || c == '=')
 
 esp_err_t download_get_handler(httpd_req_t *req);
+esp_err_t upload_post_handler(httpd_req_t *req);
 esp_err_t init_spiffs(void);
 
 /* static size_t get_char_count(const char *uri) {
@@ -110,6 +111,7 @@ static esp_err_t seti_handler(httpd_req_t *req) {
   int res = atoi(value);
 
   h->handler(res);
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
   httpd_resp_send(req, "OK", 2);
   return ESP_OK;
 }
@@ -147,6 +149,15 @@ static esp_err_t setstr_handler(httpd_req_t *req) {
   find_str_param(req->uri, "v", value, &len);
 
   h->handler(value);
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  httpd_resp_send(req, "OK", 2);
+  return ESP_OK;
+}
+
+static esp_err_t option_handler(httpd_req_t *req) {
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Headers", "Content-Type,Access-Control-Allow-Origin");
   httpd_resp_send(req, "OK", 2);
   return ESP_OK;
 }
@@ -186,6 +197,20 @@ httpd_uri_t file_download = {
 	.user_ctx  = NULL
 };
 
+httpd_uri_t file_upload = {
+	.uri       = "/fs/*",
+	.method    = HTTP_POST,
+	.handler   = upload_post_handler,
+	.user_ctx  = NULL
+};
+
+httpd_uri_t uri_option = {
+  .uri      = "/*",
+  .method   = HTTP_OPTIONS,
+  .handler  = option_handler,
+  .user_ctx = NULL
+};
+
 static httpd_handle_t server = NULL;
 
 static httpd_handle_t start_webserver(void) {
@@ -194,17 +219,19 @@ static httpd_handle_t start_webserver(void) {
   config.uri_match_fn = httpd_uri_match_wildcard;
 
   if (httpd_start(&server, &config) == ESP_OK) {
+    httpd_register_uri_handler(server, &uri_option);
     httpd_register_uri_handler(server, &file_download);
     httpd_register_uri_handler(server, &uri_geti);
     httpd_register_uri_handler(server, &uri_seti);
     httpd_register_uri_handler(server, &uri_getstr);
     httpd_register_uri_handler(server, &uri_setstr);
+		httpd_register_uri_handler(server, &file_upload);
   }
   return server;
 }
 
 void init_httpd() {
-  ESP_LOGI(SGO_LOG_EVENT, "@MQTT Intializing MQTT task");
+  ESP_LOGI(SGO_LOG_EVENT, "@HTTPS Intializing HTTPD task");
 
   init_spiffs();
   start_webserver();

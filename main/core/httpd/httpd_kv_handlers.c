@@ -50,6 +50,11 @@ const kvi_handler kvi_handlers[] = {
     .getter = get_ota_timestamp,
   },
   {
+    .name = "OTA_STATUS",
+    .handler = NULL,
+    .getter = get_ota_status,
+  },
+  {
     .name = "I2C_0_SDA",
     .handler = internal_set_i2c_0_sda,
     .getter = get_i2c_0_sda,

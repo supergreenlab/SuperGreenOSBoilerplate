@@ -37,6 +37,7 @@ void internal_set_ota_server_ip(const char *value);
 void internal_set_ota_server_hostname(const char *value);
 void internal_set_ota_server_port(const char *value);
 void internal_set_ota_basedir(const char *value);
+void internal_set_ota_status(int value);
 void internal_set_broker_url(const char *value);
 void internal_set_broker_channel(const char *value);
 void internal_set_broker_clientid(const char *value);

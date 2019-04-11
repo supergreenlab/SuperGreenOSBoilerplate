@@ -120,6 +120,8 @@ void postinit_kv() {
   // Initialize non-nvs keys
   int default_wifi_status = DISCONNECTED;
   set_wifi_status(default_wifi_status);
+  int default_ota_status = OTA_STATUS_IDLE;
+  set_ota_status(default_ota_status);
   int default_reboot = 0;
   set_reboot(default_reboot);
 
