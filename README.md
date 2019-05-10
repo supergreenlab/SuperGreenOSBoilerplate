@@ -606,6 +606,31 @@ Again there are a few keys that you can configure to set this up, and they're on
 - OTA_VERSION_FILENAME: The path of the file containing the version information, right now it contains a timestamp, that is compared to the timestamp of the build (set at compile time).
 - OTA_FILENAME: The actual firmware file path.
 
+# Keys definition
+
+The whole OS revolves around the key/value database embedded (KV) in the firmware.
+KV is the center of trust, it sits in the middle. All modules can add more keys to work with.
+All keys are defined in the file [config.yml](https://github.com/supergreenlab/SuperGreenOS/blob/master/config.yml).
+
+Each keys have a set of avaiable configs:
+
+- *name*: lowercase name, ex: wifi_ssid
+- *caps_name*: uppcase name, ex: WIFI_SSID
+- *string* or *integer*: should have the value true, determines the datatype used for the value (string is a char[512] and integer is int)
+- *nvs*: if absent the key is not persistent between reboots (ie. not stored in flash)
+  - *key*: name of the key in the flash, limited to 15 characters, ex: WSSID
+- *ble*: if absent, the key will not be available over ble, watchout ble only supports a limited number of available keys.
+  - *first*: needs to be set to true if it's the first on the list, that's a mustache template limitation:( 
+  - *uuid*: BLE UUID, in the form: "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x6c}" see [here](http://yupana-engineering.com/online-uuid-to-c-array-converter)
+  - *write*: Set this to true if the key is writable
+  - *notify*: Set this to true to tell the generated to produce a ble notification on value internally changed.
+- *http*: if absent, the key is not be available over http
+  - *write*: Set this to true if the key is writable
+  - *noop*: Set this to true, just to avoid have an empty 'http' configuration (when `write` is absent)
+- *write_cb*: This determines if you want a callback to be called when the key is changed, either set it to `true` and it'll call a function called `on_set_[name]`, or directly enter the name of a function you have. prototype of the function is as: `const char *on_set_name(const char *ssid)` for a string or `int on_set_name(int boxId, int value)` for integer values.
+- *default*: This is the default value for the key, if the value is in a variable or macro in you code, skip this and use `default_var` instead.
+- *default_var*: allows to use a variable or macro name for the default value.
+
 # Troubleshoot
 
 Right now SuperGreenLab does not have an official support hotline.

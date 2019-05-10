@@ -35,6 +35,7 @@ StaticSemaphore_t mutex_buffer;
 
 static SemaphoreHandle_t _mutex_wifi_status; // TODO check RAM weight of creating so many semaphores :/
 static bool _wifi_status_changed = true;
+static bool _wifi_status_undefined = true;
 
 void reset_wifi_status_changed() {
   xSemaphoreTake(_mutex_wifi_status, 0);
@@ -49,8 +50,15 @@ bool is_wifi_status_changed() {
   return v;
 }
 
+bool is_wifi_status_undefined() {
+  xSemaphoreTake(_mutex_wifi_status, 0);
+  bool v = _wifi_status_undefined;
+  xSemaphoreGive(_mutex_wifi_status);
+  return v;
+}
 
-static int _wifi_status = 0;
+
+static int _wifi_status = INT_MAX;
 
 int get_wifi_status() {
   xSemaphoreTake(_mutex_wifi_status, 0);
@@ -64,6 +72,7 @@ void set_wifi_status(int value) {
   if (_wifi_status == value) return;
   _wifi_status = value;
   _wifi_status_changed = true;
+  _wifi_status_undefined = false;
   xSemaphoreGive(_mutex_wifi_status);
   set_attr_value_and_notify(IDX_CHAR_VAL_WIFI_STATUS, (uint8_t *)&value, sizeof(int));
 }
@@ -71,6 +80,7 @@ void set_wifi_status(int value) {
 
 static SemaphoreHandle_t _mutex_wifi_ssid; // TODO check RAM weight of creating so many semaphores :/
 static bool _wifi_ssid_changed = true;
+static bool _wifi_ssid_undefined = true;
 
 void reset_wifi_ssid_changed() {
   xSemaphoreTake(_mutex_wifi_ssid, 0);
@@ -81,6 +91,13 @@ void reset_wifi_ssid_changed() {
 bool is_wifi_ssid_changed() {
   xSemaphoreTake(_mutex_wifi_ssid, 0);
   bool v = _wifi_ssid_changed;
+  xSemaphoreGive(_mutex_wifi_ssid);
+  return v;
+}
+
+bool is_wifi_ssid_undefined() {
+  xSemaphoreTake(_mutex_wifi_ssid, 0);
+  bool v = _wifi_ssid_undefined;
   xSemaphoreGive(_mutex_wifi_ssid);
   return v;
 }
@@ -109,6 +126,7 @@ void set_wifi_ssid(const char *value) {
 
 static SemaphoreHandle_t _mutex_wifi_password; // TODO check RAM weight of creating so many semaphores :/
 static bool _wifi_password_changed = true;
+static bool _wifi_password_undefined = true;
 
 void reset_wifi_password_changed() {
   xSemaphoreTake(_mutex_wifi_password, 0);
@@ -119,6 +137,13 @@ void reset_wifi_password_changed() {
 bool is_wifi_password_changed() {
   xSemaphoreTake(_mutex_wifi_password, 0);
   bool v = _wifi_password_changed;
+  xSemaphoreGive(_mutex_wifi_password);
+  return v;
+}
+
+bool is_wifi_password_undefined() {
+  xSemaphoreTake(_mutex_wifi_password, 0);
+  bool v = _wifi_password_undefined;
   xSemaphoreGive(_mutex_wifi_password);
   return v;
 }
@@ -146,6 +171,7 @@ void set_wifi_password(const char *value) {
 
 static SemaphoreHandle_t _mutex_wifi_ap_ssid; // TODO check RAM weight of creating so many semaphores :/
 static bool _wifi_ap_ssid_changed = true;
+static bool _wifi_ap_ssid_undefined = true;
 
 void reset_wifi_ap_ssid_changed() {
   xSemaphoreTake(_mutex_wifi_ap_ssid, 0);
@@ -156,6 +182,13 @@ void reset_wifi_ap_ssid_changed() {
 bool is_wifi_ap_ssid_changed() {
   xSemaphoreTake(_mutex_wifi_ap_ssid, 0);
   bool v = _wifi_ap_ssid_changed;
+  xSemaphoreGive(_mutex_wifi_ap_ssid);
+  return v;
+}
+
+bool is_wifi_ap_ssid_undefined() {
+  xSemaphoreTake(_mutex_wifi_ap_ssid, 0);
+  bool v = _wifi_ap_ssid_undefined;
   xSemaphoreGive(_mutex_wifi_ap_ssid);
   return v;
 }
@@ -183,6 +216,7 @@ void set_wifi_ap_ssid(const char *value) {
 
 static SemaphoreHandle_t _mutex_wifi_ap_password; // TODO check RAM weight of creating so many semaphores :/
 static bool _wifi_ap_password_changed = true;
+static bool _wifi_ap_password_undefined = true;
 
 void reset_wifi_ap_password_changed() {
   xSemaphoreTake(_mutex_wifi_ap_password, 0);
@@ -193,6 +227,13 @@ void reset_wifi_ap_password_changed() {
 bool is_wifi_ap_password_changed() {
   xSemaphoreTake(_mutex_wifi_ap_password, 0);
   bool v = _wifi_ap_password_changed;
+  xSemaphoreGive(_mutex_wifi_ap_password);
+  return v;
+}
+
+bool is_wifi_ap_password_undefined() {
+  xSemaphoreTake(_mutex_wifi_ap_password, 0);
+  bool v = _wifi_ap_password_undefined;
   xSemaphoreGive(_mutex_wifi_ap_password);
   return v;
 }
@@ -220,6 +261,7 @@ void set_wifi_ap_password(const char *value) {
 
 static SemaphoreHandle_t _mutex_mdns_domain; // TODO check RAM weight of creating so many semaphores :/
 static bool _mdns_domain_changed = true;
+static bool _mdns_domain_undefined = true;
 
 void reset_mdns_domain_changed() {
   xSemaphoreTake(_mutex_mdns_domain, 0);
@@ -230,6 +272,13 @@ void reset_mdns_domain_changed() {
 bool is_mdns_domain_changed() {
   xSemaphoreTake(_mutex_mdns_domain, 0);
   bool v = _mdns_domain_changed;
+  xSemaphoreGive(_mutex_mdns_domain);
+  return v;
+}
+
+bool is_mdns_domain_undefined() {
+  xSemaphoreTake(_mutex_mdns_domain, 0);
+  bool v = _mdns_domain_undefined;
   xSemaphoreGive(_mutex_mdns_domain);
   return v;
 }
@@ -257,6 +306,7 @@ void set_mdns_domain(const char *value) {
 
 static SemaphoreHandle_t _mutex_wifi_ip; // TODO check RAM weight of creating so many semaphores :/
 static bool _wifi_ip_changed = true;
+static bool _wifi_ip_undefined = true;
 
 void reset_wifi_ip_changed() {
   xSemaphoreTake(_mutex_wifi_ip, 0);
@@ -267,6 +317,13 @@ void reset_wifi_ip_changed() {
 bool is_wifi_ip_changed() {
   xSemaphoreTake(_mutex_wifi_ip, 0);
   bool v = _wifi_ip_changed;
+  xSemaphoreGive(_mutex_wifi_ip);
+  return v;
+}
+
+bool is_wifi_ip_undefined() {
+  xSemaphoreTake(_mutex_wifi_ip, 0);
+  bool v = _wifi_ip_undefined;
   xSemaphoreGive(_mutex_wifi_ip);
   return v;
 }
@@ -295,6 +352,7 @@ void set_wifi_ip(const char *value) {
 
 static SemaphoreHandle_t _mutex_time; // TODO check RAM weight of creating so many semaphores :/
 static bool _time_changed = true;
+static bool _time_undefined = true;
 
 void reset_time_changed() {
   xSemaphoreTake(_mutex_time, 0);
@@ -305,6 +363,13 @@ void reset_time_changed() {
 bool is_time_changed() {
   xSemaphoreTake(_mutex_time, 0);
   bool v = _time_changed;
+  xSemaphoreGive(_mutex_time);
+  return v;
+}
+
+bool is_time_undefined() {
+  xSemaphoreTake(_mutex_time, 0);
+  bool v = _time_undefined;
   xSemaphoreGive(_mutex_time);
   return v;
 }
@@ -320,6 +385,7 @@ void set_time(int value) {
   seti(TIME, value);
   xSemaphoreTake(_mutex_time, 0);
   _time_changed = true;
+  _time_undefined = false;
   xSemaphoreGive(_mutex_time);
   set_attr_value_and_notify(IDX_CHAR_VAL_TIME, (uint8_t *)&value, sizeof(int));
 }
@@ -327,6 +393,7 @@ void set_time(int value) {
 
 static SemaphoreHandle_t _mutex_n_restarts; // TODO check RAM weight of creating so many semaphores :/
 static bool _n_restarts_changed = true;
+static bool _n_restarts_undefined = true;
 
 void reset_n_restarts_changed() {
   xSemaphoreTake(_mutex_n_restarts, 0);
@@ -337,6 +404,13 @@ void reset_n_restarts_changed() {
 bool is_n_restarts_changed() {
   xSemaphoreTake(_mutex_n_restarts, 0);
   bool v = _n_restarts_changed;
+  xSemaphoreGive(_mutex_n_restarts);
+  return v;
+}
+
+bool is_n_restarts_undefined() {
+  xSemaphoreTake(_mutex_n_restarts, 0);
+  bool v = _n_restarts_undefined;
   xSemaphoreGive(_mutex_n_restarts);
   return v;
 }
@@ -352,12 +426,14 @@ void set_n_restarts(int value) {
   seti(N_RESTARTS, value);
   xSemaphoreTake(_mutex_n_restarts, 0);
   _n_restarts_changed = true;
+  _n_restarts_undefined = false;
   xSemaphoreGive(_mutex_n_restarts);
 }
 
 
 static SemaphoreHandle_t _mutex_ota_timestamp; // TODO check RAM weight of creating so many semaphores :/
 static bool _ota_timestamp_changed = true;
+static bool _ota_timestamp_undefined = true;
 
 void reset_ota_timestamp_changed() {
   xSemaphoreTake(_mutex_ota_timestamp, 0);
@@ -368,6 +444,13 @@ void reset_ota_timestamp_changed() {
 bool is_ota_timestamp_changed() {
   xSemaphoreTake(_mutex_ota_timestamp, 0);
   bool v = _ota_timestamp_changed;
+  xSemaphoreGive(_mutex_ota_timestamp);
+  return v;
+}
+
+bool is_ota_timestamp_undefined() {
+  xSemaphoreTake(_mutex_ota_timestamp, 0);
+  bool v = _ota_timestamp_undefined;
   xSemaphoreGive(_mutex_ota_timestamp);
   return v;
 }
@@ -383,12 +466,14 @@ void set_ota_timestamp(int value) {
   seti(OTA_TIMESTAMP, value);
   xSemaphoreTake(_mutex_ota_timestamp, 0);
   _ota_timestamp_changed = true;
+  _ota_timestamp_undefined = false;
   xSemaphoreGive(_mutex_ota_timestamp);
 }
 
 
 static SemaphoreHandle_t _mutex_ota_server_ip; // TODO check RAM weight of creating so many semaphores :/
 static bool _ota_server_ip_changed = true;
+static bool _ota_server_ip_undefined = true;
 
 void reset_ota_server_ip_changed() {
   xSemaphoreTake(_mutex_ota_server_ip, 0);
@@ -399,6 +484,13 @@ void reset_ota_server_ip_changed() {
 bool is_ota_server_ip_changed() {
   xSemaphoreTake(_mutex_ota_server_ip, 0);
   bool v = _ota_server_ip_changed;
+  xSemaphoreGive(_mutex_ota_server_ip);
+  return v;
+}
+
+bool is_ota_server_ip_undefined() {
+  xSemaphoreTake(_mutex_ota_server_ip, 0);
+  bool v = _ota_server_ip_undefined;
   xSemaphoreGive(_mutex_ota_server_ip);
   return v;
 }
@@ -426,6 +518,7 @@ void set_ota_server_ip(const char *value) {
 
 static SemaphoreHandle_t _mutex_ota_server_hostname; // TODO check RAM weight of creating so many semaphores :/
 static bool _ota_server_hostname_changed = true;
+static bool _ota_server_hostname_undefined = true;
 
 void reset_ota_server_hostname_changed() {
   xSemaphoreTake(_mutex_ota_server_hostname, 0);
@@ -436,6 +529,13 @@ void reset_ota_server_hostname_changed() {
 bool is_ota_server_hostname_changed() {
   xSemaphoreTake(_mutex_ota_server_hostname, 0);
   bool v = _ota_server_hostname_changed;
+  xSemaphoreGive(_mutex_ota_server_hostname);
+  return v;
+}
+
+bool is_ota_server_hostname_undefined() {
+  xSemaphoreTake(_mutex_ota_server_hostname, 0);
+  bool v = _ota_server_hostname_undefined;
   xSemaphoreGive(_mutex_ota_server_hostname);
   return v;
 }
@@ -463,6 +563,7 @@ void set_ota_server_hostname(const char *value) {
 
 static SemaphoreHandle_t _mutex_ota_server_port; // TODO check RAM weight of creating so many semaphores :/
 static bool _ota_server_port_changed = true;
+static bool _ota_server_port_undefined = true;
 
 void reset_ota_server_port_changed() {
   xSemaphoreTake(_mutex_ota_server_port, 0);
@@ -473,6 +574,13 @@ void reset_ota_server_port_changed() {
 bool is_ota_server_port_changed() {
   xSemaphoreTake(_mutex_ota_server_port, 0);
   bool v = _ota_server_port_changed;
+  xSemaphoreGive(_mutex_ota_server_port);
+  return v;
+}
+
+bool is_ota_server_port_undefined() {
+  xSemaphoreTake(_mutex_ota_server_port, 0);
+  bool v = _ota_server_port_undefined;
   xSemaphoreGive(_mutex_ota_server_port);
   return v;
 }
@@ -500,6 +608,7 @@ void set_ota_server_port(const char *value) {
 
 static SemaphoreHandle_t _mutex_ota_basedir; // TODO check RAM weight of creating so many semaphores :/
 static bool _ota_basedir_changed = true;
+static bool _ota_basedir_undefined = true;
 
 void reset_ota_basedir_changed() {
   xSemaphoreTake(_mutex_ota_basedir, 0);
@@ -510,6 +619,13 @@ void reset_ota_basedir_changed() {
 bool is_ota_basedir_changed() {
   xSemaphoreTake(_mutex_ota_basedir, 0);
   bool v = _ota_basedir_changed;
+  xSemaphoreGive(_mutex_ota_basedir);
+  return v;
+}
+
+bool is_ota_basedir_undefined() {
+  xSemaphoreTake(_mutex_ota_basedir, 0);
+  bool v = _ota_basedir_undefined;
   xSemaphoreGive(_mutex_ota_basedir);
   return v;
 }
@@ -537,6 +653,7 @@ void set_ota_basedir(const char *value) {
 
 static SemaphoreHandle_t _mutex_ota_status; // TODO check RAM weight of creating so many semaphores :/
 static bool _ota_status_changed = true;
+static bool _ota_status_undefined = true;
 
 void reset_ota_status_changed() {
   xSemaphoreTake(_mutex_ota_status, 0);
@@ -551,8 +668,15 @@ bool is_ota_status_changed() {
   return v;
 }
 
+bool is_ota_status_undefined() {
+  xSemaphoreTake(_mutex_ota_status, 0);
+  bool v = _ota_status_undefined;
+  xSemaphoreGive(_mutex_ota_status);
+  return v;
+}
 
-static int _ota_status = 0;
+
+static int _ota_status = INT_MAX;
 
 int get_ota_status() {
   xSemaphoreTake(_mutex_ota_status, 0);
@@ -566,12 +690,14 @@ void set_ota_status(int value) {
   if (_ota_status == value) return;
   _ota_status = value;
   _ota_status_changed = true;
+  _ota_status_undefined = false;
   xSemaphoreGive(_mutex_ota_status);
 }
 
 
 static SemaphoreHandle_t _mutex_broker_url; // TODO check RAM weight of creating so many semaphores :/
 static bool _broker_url_changed = true;
+static bool _broker_url_undefined = true;
 
 void reset_broker_url_changed() {
   xSemaphoreTake(_mutex_broker_url, 0);
@@ -582,6 +708,13 @@ void reset_broker_url_changed() {
 bool is_broker_url_changed() {
   xSemaphoreTake(_mutex_broker_url, 0);
   bool v = _broker_url_changed;
+  xSemaphoreGive(_mutex_broker_url);
+  return v;
+}
+
+bool is_broker_url_undefined() {
+  xSemaphoreTake(_mutex_broker_url, 0);
+  bool v = _broker_url_undefined;
   xSemaphoreGive(_mutex_broker_url);
   return v;
 }
@@ -609,6 +742,7 @@ void set_broker_url(const char *value) {
 
 static SemaphoreHandle_t _mutex_broker_channel; // TODO check RAM weight of creating so many semaphores :/
 static bool _broker_channel_changed = true;
+static bool _broker_channel_undefined = true;
 
 void reset_broker_channel_changed() {
   xSemaphoreTake(_mutex_broker_channel, 0);
@@ -619,6 +753,13 @@ void reset_broker_channel_changed() {
 bool is_broker_channel_changed() {
   xSemaphoreTake(_mutex_broker_channel, 0);
   bool v = _broker_channel_changed;
+  xSemaphoreGive(_mutex_broker_channel);
+  return v;
+}
+
+bool is_broker_channel_undefined() {
+  xSemaphoreTake(_mutex_broker_channel, 0);
+  bool v = _broker_channel_undefined;
   xSemaphoreGive(_mutex_broker_channel);
   return v;
 }
@@ -646,6 +787,7 @@ void set_broker_channel(const char *value) {
 
 static SemaphoreHandle_t _mutex_broker_clientid; // TODO check RAM weight of creating so many semaphores :/
 static bool _broker_clientid_changed = true;
+static bool _broker_clientid_undefined = true;
 
 void reset_broker_clientid_changed() {
   xSemaphoreTake(_mutex_broker_clientid, 0);
@@ -656,6 +798,13 @@ void reset_broker_clientid_changed() {
 bool is_broker_clientid_changed() {
   xSemaphoreTake(_mutex_broker_clientid, 0);
   bool v = _broker_clientid_changed;
+  xSemaphoreGive(_mutex_broker_clientid);
+  return v;
+}
+
+bool is_broker_clientid_undefined() {
+  xSemaphoreTake(_mutex_broker_clientid, 0);
+  bool v = _broker_clientid_undefined;
   xSemaphoreGive(_mutex_broker_clientid);
   return v;
 }
@@ -683,6 +832,7 @@ void set_broker_clientid(const char *value) {
 
 static SemaphoreHandle_t _mutex_i2c_0_sda; // TODO check RAM weight of creating so many semaphores :/
 static bool _i2c_0_sda_changed = true;
+static bool _i2c_0_sda_undefined = true;
 
 void reset_i2c_0_sda_changed() {
   xSemaphoreTake(_mutex_i2c_0_sda, 0);
@@ -693,6 +843,13 @@ void reset_i2c_0_sda_changed() {
 bool is_i2c_0_sda_changed() {
   xSemaphoreTake(_mutex_i2c_0_sda, 0);
   bool v = _i2c_0_sda_changed;
+  xSemaphoreGive(_mutex_i2c_0_sda);
+  return v;
+}
+
+bool is_i2c_0_sda_undefined() {
+  xSemaphoreTake(_mutex_i2c_0_sda, 0);
+  bool v = _i2c_0_sda_undefined;
   xSemaphoreGive(_mutex_i2c_0_sda);
   return v;
 }
@@ -708,12 +865,14 @@ void set_i2c_0_sda(int value) {
   seti(I2C_0_SDA, value);
   xSemaphoreTake(_mutex_i2c_0_sda, 0);
   _i2c_0_sda_changed = true;
+  _i2c_0_sda_undefined = false;
   xSemaphoreGive(_mutex_i2c_0_sda);
 }
 
 
 static SemaphoreHandle_t _mutex_i2c_0_scl; // TODO check RAM weight of creating so many semaphores :/
 static bool _i2c_0_scl_changed = true;
+static bool _i2c_0_scl_undefined = true;
 
 void reset_i2c_0_scl_changed() {
   xSemaphoreTake(_mutex_i2c_0_scl, 0);
@@ -724,6 +883,13 @@ void reset_i2c_0_scl_changed() {
 bool is_i2c_0_scl_changed() {
   xSemaphoreTake(_mutex_i2c_0_scl, 0);
   bool v = _i2c_0_scl_changed;
+  xSemaphoreGive(_mutex_i2c_0_scl);
+  return v;
+}
+
+bool is_i2c_0_scl_undefined() {
+  xSemaphoreTake(_mutex_i2c_0_scl, 0);
+  bool v = _i2c_0_scl_undefined;
   xSemaphoreGive(_mutex_i2c_0_scl);
   return v;
 }
@@ -739,12 +905,14 @@ void set_i2c_0_scl(int value) {
   seti(I2C_0_SCL, value);
   xSemaphoreTake(_mutex_i2c_0_scl, 0);
   _i2c_0_scl_changed = true;
+  _i2c_0_scl_undefined = false;
   xSemaphoreGive(_mutex_i2c_0_scl);
 }
 
 
 static SemaphoreHandle_t _mutex_i2c_0_enabled; // TODO check RAM weight of creating so many semaphores :/
 static bool _i2c_0_enabled_changed = true;
+static bool _i2c_0_enabled_undefined = true;
 
 void reset_i2c_0_enabled_changed() {
   xSemaphoreTake(_mutex_i2c_0_enabled, 0);
@@ -755,6 +923,13 @@ void reset_i2c_0_enabled_changed() {
 bool is_i2c_0_enabled_changed() {
   xSemaphoreTake(_mutex_i2c_0_enabled, 0);
   bool v = _i2c_0_enabled_changed;
+  xSemaphoreGive(_mutex_i2c_0_enabled);
+  return v;
+}
+
+bool is_i2c_0_enabled_undefined() {
+  xSemaphoreTake(_mutex_i2c_0_enabled, 0);
+  bool v = _i2c_0_enabled_undefined;
   xSemaphoreGive(_mutex_i2c_0_enabled);
   return v;
 }
@@ -770,12 +945,14 @@ void set_i2c_0_enabled(int value) {
   seti(I2C_0_ENABLED, value);
   xSemaphoreTake(_mutex_i2c_0_enabled, 0);
   _i2c_0_enabled_changed = true;
+  _i2c_0_enabled_undefined = false;
   xSemaphoreGive(_mutex_i2c_0_enabled);
 }
 
 
 static SemaphoreHandle_t _mutex_i2c_1_sda; // TODO check RAM weight of creating so many semaphores :/
 static bool _i2c_1_sda_changed = true;
+static bool _i2c_1_sda_undefined = true;
 
 void reset_i2c_1_sda_changed() {
   xSemaphoreTake(_mutex_i2c_1_sda, 0);
@@ -786,6 +963,13 @@ void reset_i2c_1_sda_changed() {
 bool is_i2c_1_sda_changed() {
   xSemaphoreTake(_mutex_i2c_1_sda, 0);
   bool v = _i2c_1_sda_changed;
+  xSemaphoreGive(_mutex_i2c_1_sda);
+  return v;
+}
+
+bool is_i2c_1_sda_undefined() {
+  xSemaphoreTake(_mutex_i2c_1_sda, 0);
+  bool v = _i2c_1_sda_undefined;
   xSemaphoreGive(_mutex_i2c_1_sda);
   return v;
 }
@@ -801,12 +985,14 @@ void set_i2c_1_sda(int value) {
   seti(I2C_1_SDA, value);
   xSemaphoreTake(_mutex_i2c_1_sda, 0);
   _i2c_1_sda_changed = true;
+  _i2c_1_sda_undefined = false;
   xSemaphoreGive(_mutex_i2c_1_sda);
 }
 
 
 static SemaphoreHandle_t _mutex_i2c_1_scl; // TODO check RAM weight of creating so many semaphores :/
 static bool _i2c_1_scl_changed = true;
+static bool _i2c_1_scl_undefined = true;
 
 void reset_i2c_1_scl_changed() {
   xSemaphoreTake(_mutex_i2c_1_scl, 0);
@@ -817,6 +1003,13 @@ void reset_i2c_1_scl_changed() {
 bool is_i2c_1_scl_changed() {
   xSemaphoreTake(_mutex_i2c_1_scl, 0);
   bool v = _i2c_1_scl_changed;
+  xSemaphoreGive(_mutex_i2c_1_scl);
+  return v;
+}
+
+bool is_i2c_1_scl_undefined() {
+  xSemaphoreTake(_mutex_i2c_1_scl, 0);
+  bool v = _i2c_1_scl_undefined;
   xSemaphoreGive(_mutex_i2c_1_scl);
   return v;
 }
@@ -832,12 +1025,14 @@ void set_i2c_1_scl(int value) {
   seti(I2C_1_SCL, value);
   xSemaphoreTake(_mutex_i2c_1_scl, 0);
   _i2c_1_scl_changed = true;
+  _i2c_1_scl_undefined = false;
   xSemaphoreGive(_mutex_i2c_1_scl);
 }
 
 
 static SemaphoreHandle_t _mutex_i2c_1_enabled; // TODO check RAM weight of creating so many semaphores :/
 static bool _i2c_1_enabled_changed = true;
+static bool _i2c_1_enabled_undefined = true;
 
 void reset_i2c_1_enabled_changed() {
   xSemaphoreTake(_mutex_i2c_1_enabled, 0);
@@ -848,6 +1043,13 @@ void reset_i2c_1_enabled_changed() {
 bool is_i2c_1_enabled_changed() {
   xSemaphoreTake(_mutex_i2c_1_enabled, 0);
   bool v = _i2c_1_enabled_changed;
+  xSemaphoreGive(_mutex_i2c_1_enabled);
+  return v;
+}
+
+bool is_i2c_1_enabled_undefined() {
+  xSemaphoreTake(_mutex_i2c_1_enabled, 0);
+  bool v = _i2c_1_enabled_undefined;
   xSemaphoreGive(_mutex_i2c_1_enabled);
   return v;
 }
@@ -863,12 +1065,14 @@ void set_i2c_1_enabled(int value) {
   seti(I2C_1_ENABLED, value);
   xSemaphoreTake(_mutex_i2c_1_enabled, 0);
   _i2c_1_enabled_changed = true;
+  _i2c_1_enabled_undefined = false;
   xSemaphoreGive(_mutex_i2c_1_enabled);
 }
 
 
 static SemaphoreHandle_t _mutex_reboot; // TODO check RAM weight of creating so many semaphores :/
 static bool _reboot_changed = true;
+static bool _reboot_undefined = true;
 
 void reset_reboot_changed() {
   xSemaphoreTake(_mutex_reboot, 0);
@@ -883,8 +1087,15 @@ bool is_reboot_changed() {
   return v;
 }
 
+bool is_reboot_undefined() {
+  xSemaphoreTake(_mutex_reboot, 0);
+  bool v = _reboot_undefined;
+  xSemaphoreGive(_mutex_reboot);
+  return v;
+}
 
-static int _reboot = 0;
+
+static int _reboot = INT_MAX;
 
 int get_reboot() {
   xSemaphoreTake(_mutex_reboot, 0);
@@ -898,6 +1109,7 @@ void set_reboot(int value) {
   if (_reboot == value) return;
   _reboot = value;
   _reboot_changed = true;
+  _reboot_undefined = false;
   xSemaphoreGive(_mutex_reboot);
 }
 

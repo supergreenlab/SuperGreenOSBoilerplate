@@ -118,12 +118,18 @@ void postinit_kv() {
   sync_ble_i(TIME, IDX_VALUE(TIME));
 
   // Initialize non-nvs keys
-  int default_wifi_status = DISCONNECTED;
-  set_wifi_status(default_wifi_status);
-  int default_ota_status = OTA_STATUS_IDLE;
-  set_ota_status(default_ota_status);
-  int default_reboot = 0;
-  set_reboot(default_reboot);
+  if (is_wifi_status_undefined()) {
+    int default_wifi_status = DISCONNECTED;
+    set_wifi_status(default_wifi_status);
+  }
+  if (is_ota_status_undefined()) {
+    int default_ota_status = OTA_STATUS_IDLE;
+    set_ota_status(default_ota_status);
+  }
+  if (is_reboot_undefined()) {
+    int default_reboot = 0;
+    set_reboot(default_reboot);
+  }
 
 
   /*
