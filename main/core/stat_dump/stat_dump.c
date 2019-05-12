@@ -109,6 +109,9 @@ static void stat_dump_task(void *param) {
     int value;
     char str[MAX_KVALUE_SIZE] = {0};
     if ((counter % 20) == 0 || is_wifi_status_changed()) {
+      value = get_wifi_status();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "WIFI_STATUS", value);
+      vTaskDelay(200 / portTICK_PERIOD_MS);
       reset_wifi_status_changed();
     }
     if ((counter % 20) == 0 || is_wifi_ssid_changed()) {
@@ -190,6 +193,9 @@ static void stat_dump_task(void *param) {
       reset_ota_basedir_changed();
     }
     if ((counter % 20) == 0 || is_ota_status_changed()) {
+      value = get_ota_status();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "OTA_STATUS", value);
+      vTaskDelay(200 / portTICK_PERIOD_MS);
       reset_ota_status_changed();
     }
     if ((counter % 20) == 0 || is_broker_url_changed()) {
@@ -247,6 +253,9 @@ static void stat_dump_task(void *param) {
       reset_i2c_1_enabled_changed();
     }
     if ((counter % 20) == 0 || is_reboot_changed()) {
+      value = get_reboot();
+      ESP_LOGI(SGO_LOG_METRIC, "@KV %s=%d", "REBOOT", value);
+      vTaskDelay(200 / portTICK_PERIOD_MS);
       reset_reboot_changed();
     }
 
