@@ -68,7 +68,6 @@ Describe all the keys that your system will require to work and communicate with
 - Websocket
 - Mesh network (TODO)
 - Bluetooth (non BLE)
-- Multibox (one controller for multiple boxes, multiple timers etc..)
 
 ## Philosophy
 
