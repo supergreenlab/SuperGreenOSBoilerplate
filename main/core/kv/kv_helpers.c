@@ -108,8 +108,6 @@ bool is_wifi_ssid_undefined() {
 void get_wifi_ssid(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(WIFI_SSID, dest, len);
-  xSemaphoreTake(_mutex_wifi_ssid, 0);
-  xSemaphoreGive(_mutex_wifi_ssid);
 }
 
 void set_wifi_ssid(const char *value) {
@@ -154,8 +152,6 @@ bool is_wifi_password_undefined() {
 void get_wifi_password(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(WIFI_PASSWORD, dest, len);
-  xSemaphoreTake(_mutex_wifi_password, 0);
-  xSemaphoreGive(_mutex_wifi_password);
 }
 
 void set_wifi_password(const char *value) {
@@ -199,8 +195,6 @@ bool is_wifi_ap_ssid_undefined() {
 void get_wifi_ap_ssid(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(WIFI_AP_SSID, dest, len);
-  xSemaphoreTake(_mutex_wifi_ap_ssid, 0);
-  xSemaphoreGive(_mutex_wifi_ap_ssid);
 }
 
 void set_wifi_ap_ssid(const char *value) {
@@ -244,8 +238,6 @@ bool is_wifi_ap_password_undefined() {
 void get_wifi_ap_password(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(WIFI_AP_PASSWORD, dest, len);
-  xSemaphoreTake(_mutex_wifi_ap_password, 0);
-  xSemaphoreGive(_mutex_wifi_ap_password);
 }
 
 void set_wifi_ap_password(const char *value) {
@@ -289,8 +281,6 @@ bool is_mdns_domain_undefined() {
 void get_mdns_domain(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(MDNS_DOMAIN, dest, len);
-  xSemaphoreTake(_mutex_mdns_domain, 0);
-  xSemaphoreGive(_mutex_mdns_domain);
 }
 
 void set_mdns_domain(const char *value) {
@@ -334,8 +324,6 @@ bool is_wifi_ip_undefined() {
 void get_wifi_ip(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(WIFI_IP, dest, len);
-  xSemaphoreTake(_mutex_wifi_ip, 0);
-  xSemaphoreGive(_mutex_wifi_ip);
 }
 
 void set_wifi_ip(const char *value) {
@@ -501,8 +489,6 @@ bool is_ota_server_ip_undefined() {
 void get_ota_server_ip(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(OTA_SERVER_IP, dest, len);
-  xSemaphoreTake(_mutex_ota_server_ip, 0);
-  xSemaphoreGive(_mutex_ota_server_ip);
 }
 
 void set_ota_server_ip(const char *value) {
@@ -546,8 +532,6 @@ bool is_ota_server_hostname_undefined() {
 void get_ota_server_hostname(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(OTA_SERVER_HOSTNAME, dest, len);
-  xSemaphoreTake(_mutex_ota_server_hostname, 0);
-  xSemaphoreGive(_mutex_ota_server_hostname);
 }
 
 void set_ota_server_hostname(const char *value) {
@@ -591,8 +575,6 @@ bool is_ota_server_port_undefined() {
 void get_ota_server_port(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(OTA_SERVER_PORT, dest, len);
-  xSemaphoreTake(_mutex_ota_server_port, 0);
-  xSemaphoreGive(_mutex_ota_server_port);
 }
 
 void set_ota_server_port(const char *value) {
@@ -636,8 +618,6 @@ bool is_ota_basedir_undefined() {
 void get_ota_basedir(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(OTA_BASEDIR, dest, len);
-  xSemaphoreTake(_mutex_ota_basedir, 0);
-  xSemaphoreGive(_mutex_ota_basedir);
 }
 
 void set_ota_basedir(const char *value) {
@@ -725,8 +705,6 @@ bool is_broker_url_undefined() {
 void get_broker_url(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(BROKER_URL, dest, len);
-  xSemaphoreTake(_mutex_broker_url, 0);
-  xSemaphoreGive(_mutex_broker_url);
 }
 
 void set_broker_url(const char *value) {
@@ -770,8 +748,6 @@ bool is_broker_channel_undefined() {
 void get_broker_channel(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(BROKER_CHANNEL, dest, len);
-  xSemaphoreTake(_mutex_broker_channel, 0);
-  xSemaphoreGive(_mutex_broker_channel);
 }
 
 void set_broker_channel(const char *value) {
@@ -815,8 +791,6 @@ bool is_broker_clientid_undefined() {
 void get_broker_clientid(char *dest, size_t len) {
   assert(len <= MAX_KVALUE_SIZE - 1);
   getstr(BROKER_CLIENTID, dest, len);
-  xSemaphoreTake(_mutex_broker_clientid, 0);
-  xSemaphoreGive(_mutex_broker_clientid);
 }
 
 void set_broker_clientid(const char *value) {

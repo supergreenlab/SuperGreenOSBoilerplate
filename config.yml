@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+name: SuperGreenDriver1.0
+
 core_modules:
 
   - wifi
@@ -111,7 +113,7 @@ keys:
       key: MDNSD
     http:
       write: true
-    default_var: DEFAULT_MDNS_DOMAIN
+    default: supergreenos
 
   - name: wifi_ip
     caps_name: WIFI_IP
@@ -237,7 +239,7 @@ keys:
       key: I2C_0_SDA
     http:
       write: true
-    default_var: DEFAULT_I2C_0_SDA
+    default: 26
 
   - name: i2c_0_scl
     caps_name: I2C_0_SCL
@@ -249,7 +251,7 @@ keys:
       key: I2C_0_SCL
     http:
       write: true
-    default_var: DEFAULT_I2C_0_SCL
+    default: 27
 
   - name: i2c_0_enabled
     caps_name: I2C_0_ENABLED
@@ -274,7 +276,7 @@ keys:
       key: I2C_1_SDA
     http:
       write: true
-    default_var: DEFAULT_I2C_1_SDA
+    default: 23
 
   - name: i2c_1_scl
     caps_name: I2C_1_SCL
@@ -286,7 +288,7 @@ keys:
       key: I2C_1_SCL
     http:
       write: true
-    default_var: DEFAULT_I2C_1_SCL
+    default: 24
 
   - name: i2c_1_enabled
     caps_name: I2C_1_ENABLED

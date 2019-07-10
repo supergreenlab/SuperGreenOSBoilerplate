@@ -1,4 +1,5 @@
 {
+  "name": "SuperGreenDriver1.0",
   "core_modules": [
     "wifi",
     "ble",
@@ -107,7 +108,7 @@
       "http": {
         "write": true
       },
-      "default_var": "DEFAULT_MDNS_DOMAIN"
+      "default": "supergreenos"
     },
     {
       "name": "wifi_ip",
@@ -216,6 +217,15 @@
       "default_var": "CONFIG_OTA_BASEDIR"
     },
     {
+      "name": "ota_status",
+      "caps_name": "OTA_STATUS",
+      "integer": true,
+      "http": {
+        "noop": true
+      },
+      "default_var": "OTA_STATUS_IDLE"
+    },
+    {
       "name": "broker_url",
       "caps_name": "BROKER_URL",
       "string": true,
@@ -265,7 +275,7 @@
       "http": {
         "write": true
       },
-      "default_var": "DEFAULT_I2C_0_SDA"
+      "default": 26
     },
     {
       "name": "i2c_0_scl",
@@ -281,7 +291,7 @@
       "http": {
         "write": true
       },
-      "default_var": "DEFAULT_I2C_0_SCL"
+      "default": 27
     },
     {
       "name": "i2c_0_enabled",
@@ -313,7 +323,7 @@
       "http": {
         "write": true
       },
-      "default_var": "DEFAULT_I2C_1_SDA"
+      "default": 23
     },
     {
       "name": "i2c_1_scl",
@@ -329,7 +339,7 @@
       "http": {
         "write": true
       },
-      "default_var": "DEFAULT_I2C_1_SCL"
+      "default": 24
     },
     {
       "name": "i2c_1_enabled",
