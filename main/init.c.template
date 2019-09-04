@@ -15,13 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+<%
+  const init = Object.keys(modules).filter(m => modules[m].init && !modules[m].core).map(m => modules[m])
+%>
 
-{{#custom_modules}}
-#include "{{.}}/{{.}}.h"
-{{/custom_modules}}
+<% init.forEach(m => { %>
+#include "<%= `${m.name}/${m.name}.h` %>"
+<% }) %>
 
 void init_app() {
-  {{#custom_modules}}
-  init_{{.}}();
-  {{/custom_modules}}
+<% init.forEach(m => { %>
+  init_<%= m.name %>();
+<% }) %>
 }

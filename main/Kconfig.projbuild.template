@@ -2,9 +2,8 @@ menu "SuperGreenOS Configuration"
 
 config VERSION
   string "A name to give to this version"
-  default "SuperGreenOSBoilerplate"
+  default "<%= name %>"
   help
     Version displayed in the logs
 
 endmenu
-
