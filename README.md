@@ -48,9 +48,21 @@ SuperGreenOSBoilerplate proposes a way to ease and accelerate esp32 firmware dev
 It allows to generate most of the code for ble/http/wifi/ota/etc.. from a configuration file.
 
 Built around the key/value and modules paradigm, it's quite close to what you'd find in a microservice architecture.
-It is also higly influenced by drone firmware architectures like Taulabs or Ardupilot.
 
-Describe all the keys that your system will require to work and communicate with the outside world, write your modules (Sort of arduino sketches) and you're good to go.
+Concretely it means you define modules and key/value pairs in a configuration file, and it will generate:
+
+- getters and setters method
+- http r/w access
+- ble r/w access with notifications
+- an admin interface available over http
+- periodic value update over MQTT
+- save to internal flash
+
+All these features can be disactivated or tuned (ie read-only access, no persistence etc..).
+
+From that all you have left to do is write the module's main loop and work with it's key/values.
+
+This architecture allows a modular approach, and with modules interacting through there respective key/values.
 
 ## Features
 
@@ -60,6 +72,7 @@ Describe all the keys that your system will require to work and communicate with
 - Bluetooth LE interface
 - HTTP interface
 - Tiny local file system and http file serving
+- Auto generated admin interface
 - All logs redirected to MQTT
 - Comes with a [cloud backend](http://github.com/supergreenlab/SuperGreenCloud/)
 
@@ -88,9 +101,9 @@ Only runs on esp32.
 I've mostly been woking with either:
 
 - [Espressif ESP32 Development Board - Developer Edition](https://www.adafruit.com/product/3269)  
-  Simple, but does not allow to flash the actual SuperGreenDriver.
+  Simple, but does not allow to flash other devices.
 - [Espressif ESP32 WROVER KIT - V3](https://www.adafruit.com/product/3384)  
-  this one allows to debug through xtensa-esp32-elf-gdb and to flash the actual SuperGreenDriver.
+  this one allows to debug through xtensa-esp32-elf-gdb and to flash other devices.
 
 ![ESP32 WROVER KIT](assets/esp32.png?raw=true "ESP32 WROVER KIT")
 
@@ -98,18 +111,9 @@ I've mostly been woking with either:
 
 Follow the [get-started guide from espressif](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/).
 
-Install the [mustache](https://mustache.github.io/) template engine (requires ruby):
+Install [cuelang getting started](https://cuelang.org/docs/install/)
 
-```sh
-
-gem install mustache
-
-```
-
-Might need to `sudo` that tho.
-
-For windows users struggling to install `ruby`, just type `pacman -Ss ruby`.
-Then when the warning ` You don't have [path to bin dir] in your PATH, gem executables will not run.` just type `PATH="$PATH:[path to bin dir]"`.
+Cue is a tool made to write JSON configurations in a much more efficient manner.
 
 # Quickstart
 
@@ -120,7 +124,7 @@ The sensor used here is the sht1x, I'll pass the detail because it's a weird one
 This will get us through the main features:
 - create a module
 - create an i2c device
-- intialize the key in the system
+- initialize the key in the system
 
 First thing first, clone this repo, and run `make` to see if the whole xtensa/esp-idf setup is working:
 
@@ -128,7 +132,13 @@ First thing first, clone this repo, and run `make` to see if the whole xtensa/es
 
 git clone git@github.com:supergreenlab/SuperGreenOSBoilerplate.git SuperGreenTemp
 cd SuperGreenTemp
-make
+mkdir config_gen/config/SuperGreenTemp
+cp config_gen/config/default/* config_gen/config/SuperGreenTemp/
+cd config_gen/config/SuperGreenTemp/
+cue export ./... > ../../../config.json
+./update_template.sh config.json
+./update_htmlapp.sh config.json
+./write_spiffs.sh && make -j4 flash monitor
 
 ```
 
