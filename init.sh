@@ -25,4 +25,4 @@ fi
 
 mkdir config_gen/config/$PROJECT_NAME
 cp config_gen/config/default/* config_gen/config/$PROJECT_NAME/
-./update_config.sh config_gen/config/$PROJECT_NAME config.json
+./update_config.sh config_gen/config/$PROJECT_NAME $CONFIG_FILE

@@ -138,9 +138,6 @@ cd SuperGreenTemp
 
 # create config directory
 ./init.sh SuperGreenTemp config.json
-mkdir config_gen/config/SuperGreenTemp
-cp config_gen/config/default/* config_gen/config/SuperGreenTemp/
-./update_config.sh config_gen/config/SuperGreenTemp config.json
 
 # generate code and admin app
 ./update_template.sh config.json
