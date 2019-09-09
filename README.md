@@ -23,6 +23,7 @@ Table of Contents
          * [Tool setup](#tool-setup)
          * [WIFI AP](#wifi-ap)
          * [BLE](#ble)
+         * [HTTP](#http)
       * [Create Led module](#create-led-module)
          * [Boilerplate](#boilerplate)
          * [Generated code](#generated-code-1)
@@ -190,7 +191,7 @@ So first step is to create the i2c device. There's a script for that, we'll call
 
 ```sh
 
-./templates.sh new_i2c_device shtx
+./templates.sh new_i2c_device sht21
 
 ```
 
@@ -353,7 +354,7 @@ modules sht21 fields "\(k)_temp": _INT8 & _HTTP & _BLE & {
 modules sht21 fields "\(k)_humi": _INT8 & _HTTP & _BLE & {
   default: 0
   humi_sensor: 0x1+k
-  ble uuid: "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}"
+  ble uuid: "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb3}"
   ble notify: true
   helper: "SHT21 humidity sensor on sensor port #\(k)"
 } for k, v in _i2c_conf
