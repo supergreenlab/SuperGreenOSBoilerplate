@@ -4,6 +4,8 @@ spiffs_fs/config.yml.gz
 releases/
 sdkconfig.old
 
+config.json
+
 main/component.mk
 main/Kconfig.projbuild
 main/init.c

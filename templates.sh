@@ -31,7 +31,6 @@ PROJECT_NAME=`basename $(pwd)` # TODO fix this
 CONFIG="$3"
 
 mkdir -p main/$MODULE_NAME
-mkdir -p config_gen/config/$PROJECT_NAME
 echo -e "Creating main/$MODULE_NAME: ${GREEN}Done${NC}"
 for i in $(find templates/$TEMPLATE_NAME/code/*)
 do
@@ -48,7 +47,9 @@ do
   echo -e "Call ejs-cli for $i to $FILE_PATH: ${GREEN}Done${NC}"
 done
 
-cue export config_gen/config/$PROJECT_NAME/... > $CONFIG
+pushd "config_gen/config/$PROJECT_NAME"
+cue export ./... > ../../../$CONFIG
+popd
 
 echo "==="
 echo "Running ./update_template.sh...."
