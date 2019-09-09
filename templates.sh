@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 if [ "$#" -ne 3 ]; then
-  echo "[Usage] $0 template_name module_name"
+  echo "[Usage] $0 template_name module_name config_file"
   exit
 fi
 
@@ -27,8 +27,8 @@ NC="\033[0m"
 
 TEMPLATE_NAME="$1"
 MODULE_NAME="$2"
-PROJECT_NAME=`basename $(pwd)` # TODO fix this
 CONFIG="$3"
+PROJECT_NAME=`basename $(pwd)` # TODO fix this
 
 mkdir -p main/$MODULE_NAME
 echo -e "Creating main/$MODULE_NAME: ${GREEN}Done${NC}"
@@ -47,10 +47,8 @@ do
   echo -e "Call ejs-cli for $i to $FILE_PATH: ${GREEN}Done${NC}"
 done
 
-pushd "config_gen/config/$PROJECT_NAME"
-cue export ./... > ../../../$CONFIG
-popd
+./update_config.sh config_gen/config/$PROJECT_NAME/ $CONFIG
 
 echo "==="
 echo "Running ./update_template.sh...."
-./update_template.sh $CONFIG
+./update_templates.sh $CONFIG

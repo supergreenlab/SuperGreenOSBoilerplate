@@ -176,12 +176,13 @@ For the 2 first step, we'll be using the script called `templates.sh`, which usa
 ```sh
 
 ./templates.sh
-[Usage] ./templates.sh template_name module_name
+[Usage] ./templates.sh template_name module_name config_file
 
 ```
 
 - `template_name` is either `new_module` or `new_i2c_device`.
 - `module_name` is the name of the module of i2c_device we're creating.
+- `config_file` the name of the generated config file
 
 ## Create sht21 i2c device
 
@@ -191,7 +192,7 @@ So first step is to create the i2c device. There's a script for that, we'll call
 
 ```sh
 
-./templates.sh new_i2c_device sht21
+./templates.sh new_i2c_device sht21 config.json
 
 ```
 
@@ -200,9 +201,8 @@ Output should look like this:
 ```sh
 
 Copying files to main/sht21
-Call mustache for templates/new_i2c_device/new_i2c_device.c.template to main/sht21/sht21.c
-Call mustache for templates/new_i2c_device/new_i2c_device.h.template to main/sht21/sht21.h
-Adding i2c device to i2c_devices in config.yml
+Call ejs-cli for templates/new_i2c_device/new_i2c_device.c.template to main/sht21/sht21.c
+Call ejs-cli for templates/new_i2c_device/new_i2c_device.h.template to main/sht21/sht21.h
 ===
 Done
 ===
@@ -258,14 +258,14 @@ Now we have a new directory under `main/sht21/` containing two files `sht21.c` a
 
 They look something like this:
 
-sth1x.h
+sht21.h
 ```c
 /*
  * GPL HEADER
  */
 
-#ifndef SHT1X_H_
-#define SHT1X_H_
+#ifndef SHT21_H_
+#define SHT21_H_
 
 void init_sht21(int i2cId);
 void loop_sht21(int i2cId);
@@ -286,10 +286,10 @@ sht21.c
 #include "../core/kv/kv.h"
 #include "../core/log/log.h"
 
-#define SHT1X_ADDR 0x42
+#define SHT21_ADDR 0x42
 
 void init_sht21(int i2cId) {
-  ESP_LOGI(SGO_LOG_EVENT, "@SHT1X Initializing sht21 i2c device\n");
+  ESP_LOGI(SGO_LOG_EVENT, "@SHT21 Initializing sht21 i2c device\n");
   // TODO: write you setup code here
 }
 
@@ -366,14 +366,14 @@ The `for k, v in _i2c_conf` code means one key for each available i2c ports, `\(
 This cue configuration will produce keys named:
 
 ```
-  SHT21_X_PRESENT
-  SHT21_X_TEMP
-  SHT21_X_HUMI
+SHT21_X_PRESENT
+SHT21_X_TEMP
+SHT21_X_HUMI
 ```
 
 `X` being replaced by the i2c port number, starting from 0.
 
-Now run the `update_config.sh SuperGreenTemp config.json && ./update_templates.sh config.json` command.
+Now run the `update_config.sh config_gen/config/SuperGreenTemp config.json && ./update_templates.sh config.json` command.
 And then `make` to see that everything's ok.
 
 Now that it's setup, you can access the humidity and temperature from the sensor from any modules with the generated functions `get_sht21_temp` and `get_sht21_humi`.

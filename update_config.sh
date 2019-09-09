@@ -18,7 +18,7 @@
 CONFIG_PATH="$1"
 CONFIG_FILE="$2"
 
-if [ -z "$CONFIG_PATH$CONFIG_FILE" ]; then
+if [ -z "$CONFIG_PATH" ] || [ -z "$CONFIG_FILE" ]; then
   echo "USAGE: $0 config_path config.json"
   exit
 fi
