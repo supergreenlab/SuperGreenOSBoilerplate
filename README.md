@@ -43,7 +43,7 @@ Table of Contents
 
 # SuperGreenOSBoilerplate
 
-tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from yml through mustache templates to remove the pain and focus on the fun.
+tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from cuelang-generated-json through ejs templates to remove the pain and focus on the fun.
 
 SuperGreenOSBoilerplate proposes a way to ease and accelerate esp32 firmware development. By making most widely used features free.
 It allows to generate most of the code for ble/http/wifi/ota/etc.. from a configuration file.
