@@ -18,7 +18,7 @@ Table of Contents
          * [I2C device boilerplate](#i2c-device-boilerplate)
          * [Generated code](#generated-code)
          * [Driver code](#driver-code)
-      * [Create sht21 keys in config.yml](#create-sht21-keys-in-configyml)
+      * [Create sht21 keys in config.json](#create-sht21-keys-in-configjson)
       * [First run](#first-run)
          * [Tool setup](#tool-setup)
          * [WIFI AP](#wifi-ap)
@@ -322,7 +322,7 @@ cf. main/core/i2c/i2c.h (these values can be changed through http)
 
 ```
 
-## Create sht21 keys in config.yml
+## Create sht21 keys in config.json
 
 Open `config_gen/config/SuperGreenTemp/sht21.cue`.
 We'll add a temperature and humidity keys, of type integer, accessible over ble and wifi, but read-only.
@@ -420,7 +420,7 @@ You should see a device named `🤖🍁`, select it. Now you're connected.
 
 In the characteristics list you should see a bunch of characteristics, those are the default ones, and at the very last, there's our temperature characteristic, it's name starts with `b2e0`, select it.
 
-Now you can press the `read` button, and it should display, `0`, which is the default value we provided in the config.yml file, under the `default` key, at the very last line.
+Now you can press the `read` button, and it should display, `0`, which is the default value we provided in the config.json file, under the `default` key, at the very last line.
 
 If you look in the logs of you esp32, you'll see it react when you press the `read` button.
 
@@ -559,7 +559,7 @@ Try a few times if it complains about unknown host resolution, the firmware broa
 
 ## HTTP API
 
-The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
+The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.json`, websocket change subscribing is underway.
 
 The HTTP interface has 2 routes for now `/i` and `/s`, they correspond to the type of the value, `i` for `integer`, and `s` for `string`.
 
