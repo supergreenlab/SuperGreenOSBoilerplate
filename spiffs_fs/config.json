@@ -1,371 +1,678 @@
 {
-  "name": "SuperGreenDriver1.0",
-  "core_modules": [
-    "wifi",
-    "ble",
-    "kv",
-    "ota",
-    "httpd",
-    "stat_dump",
-    "time",
-    "mqtt",
-    "i2c",
-    "reboot"
-  ],
-  "custom_modules": null,
-  "i2c_devices": null,
-  "i2c_params": [
-    "sda",
-    "scl",
-    "enabled"
-  ],
-  "i2c_loop_i": [
-    0,
-    1
-  ],
+  "name": "SuperGreenOSBoilerplate",
   "keys": [
-    {
-      "name": "wifi_status",
-      "caps_name": "WIFI_STATUS",
-      "integer": true,
-      "ble": {
-        "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x5c}",
-        "notify": true
-      },
-      "http": {
-        "noop": true
-      },
-      "default_var": "DISCONNECTED"
-    },
-    {
-      "name": "wifi_ssid",
-      "caps_name": "WIFI_SSID",
-      "string": true,
-      "nvs": {
-        "key": "WSSID"
-      },
-      "ble": {
-        "first": true,
-        "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x6c}",
-        "write": true
-      },
-      "http": {
-        "write": true
-      },
-      "write_cb": true,
-      "default": ""
-    },
-    {
-      "name": "wifi_password",
-      "caps_name": "WIFI_PASSWORD",
-      "string": true,
-      "nvs": {
-        "key": "WPASS"
-      },
-      "ble": {
-        "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x7c}",
-        "write": true,
-        "notify": true,
-        "no_sync": true
-      },
-      "http": {
-        "write": true
-      },
-      "write_cb": true,
-      "default": ""
-    },
-    {
-      "name": "wifi_ap_ssid",
-      "caps_name": "WIFI_AP_SSID",
-      "string": true,
-      "nvs": {
-        "key": "WAPSSID"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "DEFAULT_AP_SSID"
-    },
-    {
-      "name": "wifi_ap_password",
-      "caps_name": "WIFI_AP_PASSWORD",
-      "string": true,
-      "nvs": {
-        "key": "WAPPASS"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "DEFAULT_AP_PASSWORD"
-    },
-    {
-      "name": "mdns_domain",
-      "caps_name": "MDNS_DOMAIN",
-      "string": true,
-      "nvs": {
-        "key": "MDNSD"
-      },
-      "http": {
-        "write": true
-      },
-      "default": "supergreenos"
-    },
-    {
-      "name": "wifi_ip",
-      "caps_name": "WIFI_IP",
-      "string": true,
-      "nvs": {
-        "key": "WIP"
-      },
-      "ble": {
-        "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x8c}",
-        "notify": true
-      },
-      "http": {
-        "noop": true
-      },
-      "default": "0.0.0.0"
-    },
-    {
-      "name": "time",
-      "caps_name": "TIME",
-      "integer": true,
-      "nvs": {
-        "key": "TIME"
-      },
-      "ble": {
-        "uuid": "{0x9b,0x6a,0x3b,0xe2,0xaa,0xb4,0x33,0xaa,0x8a,0x4a,0x9e,0xe1,0x4f,0xee,0xf9,0x40}",
-        "write": true,
-        "notify": true
-      },
-      "http": {
-        "write": true
-      },
-      "write_cb": true,
-      "default": 0
-    },
-    {
-      "name": "n_restarts",
-      "caps_name": "N_RESTARTS",
-      "integer": true,
-      "nvs": {
-        "key": "N_RESTARTS"
-      },
-      "http": {
-        "noop": true
-      },
-      "default": 0
-    },
-    {
-      "name": "ota_timestamp",
-      "caps_name": "OTA_TIMESTAMP",
-      "integer": true,
-      "nvs": {
-        "key": "OTA_TMSTP"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "OTA_BUILD_TIMESTAMP"
-    },
-    {
-      "name": "ota_server_ip",
-      "caps_name": "OTA_SERVER_IP",
-      "string": true,
-      "nvs": {
-        "key": "OTA_SRV_IP"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "CONFIG_OTA_SERVER_IP"
-    },
-    {
-      "name": "ota_server_hostname",
-      "caps_name": "OTA_SERVER_HOSTNAME",
-      "string": true,
-      "nvs": {
-        "key": "OTA_SRV_HN"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "CONFIG_OTA_SERVER_HOSTNAME"
-    },
-    {
-      "name": "ota_server_port",
-      "caps_name": "OTA_SERVER_PORT",
-      "string": true,
-      "nvs": {
-        "key": "OTA_SRV_PRT"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "CONFIG_OTA_SERVER_PORT"
-    },
-    {
-      "name": "ota_basedir",
-      "caps_name": "OTA_BASEDIR",
-      "string": true,
-      "nvs": {
-        "key": "OTA_BASEDIR"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "CONFIG_OTA_BASEDIR"
-    },
-    {
-      "name": "ota_status",
-      "caps_name": "OTA_STATUS",
-      "integer": true,
-      "http": {
-        "noop": true
-      },
-      "default_var": "OTA_STATUS_IDLE"
-    },
-    {
-      "name": "broker_url",
-      "caps_name": "BROKER_URL",
-      "string": true,
-      "nvs": {
-        "key": "BRKR_URL"
-      },
-      "http": {
-        "write": true
-      },
-      "default_var": "CONFIG_BROKER_URL"
-    },
-    {
-      "name": "broker_channel",
-      "caps_name": "BROKER_CHANNEL",
-      "string": true,
-      "nvs": {
-        "key": "BRKR_CHN"
-      },
-      "http": {
-        "write": true
-      },
-      "default": ""
-    },
-    {
-      "name": "broker_clientid",
-      "caps_name": "BROKER_CLIENTID",
-      "string": true,
-      "nvs": {
-        "key": "BRKR_CLID"
-      },
-      "http": {
-        "write": true
-      },
-      "default": ""
-    },
-    {
-      "name": "i2c_0_sda",
-      "caps_name": "I2C_0_SDA",
-      "integer": true,
-      "i2c": {
-        "index": 0,
-        "param": "sda"
-      },
-      "nvs": {
-        "key": "I2C_0_SDA"
-      },
-      "http": {
-        "write": true
-      },
-      "default": 26
-    },
-    {
-      "name": "i2c_0_scl",
-      "caps_name": "I2C_0_SCL",
-      "integer": true,
-      "i2c": {
-        "index": 0,
-        "param": "sdc"
-      },
-      "nvs": {
-        "key": "I2C_0_SCL"
-      },
-      "http": {
-        "write": true
-      },
-      "default": 27
-    },
-    {
-      "name": "i2c_0_enabled",
-      "caps_name": "I2C_0_ENABLED",
-      "integer": true,
-      "i2c": {
-        "index": 0,
-        "param": "enabled"
-      },
-      "nvs": {
-        "key": "I2C_0_E"
-      },
-      "http": {
-        "write": true
-      },
-      "default": 1
-    },
-    {
-      "name": "i2c_1_sda",
-      "caps_name": "I2C_1_SDA",
-      "integer": true,
-      "i2c": {
-        "index": 1,
-        "param": "sda"
-      },
-      "nvs": {
-        "key": "I2C_1_SDA"
-      },
-      "http": {
-        "write": true
-      },
-      "default": 23
-    },
-    {
-      "name": "i2c_1_scl",
-      "caps_name": "I2C_1_SCL",
-      "integer": true,
-      "i2c": {
-        "index": 1,
-        "param": "scl"
-      },
-      "nvs": {
-        "key": "I2C_1_SCL"
-      },
-      "http": {
-        "write": true
-      },
-      "default": 24
-    },
-    {
-      "name": "i2c_1_enabled",
-      "caps_name": "I2C_1_ENABLED",
-      "integer": true,
-      "i2c": {
-        "index": 1,
-        "param": "enabled"
-      },
-      "nvs": {
-        "key": "I2C_1_E"
-      },
-      "http": {
-        "write": true
-      },
-      "default": 0
-    },
-    {
-      "name": "reboot",
-      "caps_name": "REBOOT",
-      "integer": true,
-      "http": {
-        "write": true
-      },
-      "write_cb": true,
-      "default": 0
-    }
+    
+            {
+              "core": true,
+              "name": "time",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "TIME",
+              "module": "time",
+              
+              
+                "ble": {
+                  "uuid": "{0x9b,0x6a,0x3b,0xe2,0xaa,0xb4,0x33,0xaa,0x8a,0x4a,0x9e,0xe1,0x4f,0xee,0xf9,0x40}",
+                  "write": true
+                },
+              
+              "write": true,
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
+              "name": "reboot",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "REBOOT",
+              "module": "reboot",
+              
+              
+              "write": true,
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
+              "name": "n_restarts",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "N_RESTARTS",
+              "module": "reboot",
+              
+              
+              "write": false,
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_0_sda",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_0_SDA",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 0,
+                  "param": "sda"
+                },
+              
+              
+              "default": 26
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_1_sda",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_1_SDA",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 1,
+                  "param": "sda"
+                },
+              
+              
+              "default": 21
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_0_scl",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_0_SCL",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 0,
+                  "param": "scl"
+                },
+              
+              
+              "default": 27
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_1_scl",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_1_SCL",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 1,
+                  "param": "scl"
+                },
+              
+              
+              "default": 19
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_0_enabled",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_0_ENABLED",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 0,
+                  "param": "enabled"
+                },
+              
+              
+              "default": 1
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_1_enabled",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_1_ENABLED",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 1,
+                  "param": "enabled"
+                },
+              
+              
+              "default": 1
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_0_port",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_0_PORT",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 0,
+                  "param": "port"
+                },
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
+              "name": "i2c_1_port",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "I2C_1_PORT",
+              "module": "i2c",
+              
+              
+              "write": true,
+              
+                "array": {
+                  "name": "i2c",
+                  "len": 2
+                },
+                "i2c": {
+                  "index": 1,
+                  "param": "port"
+                },
+              
+              
+              "default": 1
+            },
+          
+            {
+              "core": true,
+              "name": "broker_url",
+              "type": "string",
+              "integer": false,
+              "caps_name": "BROKER_URL",
+              "module": "mqtt",
+              
+              
+              "write": true,
+              
+              
+              "default": "mqtt://sink.supergreenlab.com:1883"
+            },
+          
+            {
+              "core": true,
+              "name": "broker_channel",
+              "type": "string",
+              "integer": false,
+              "caps_name": "BROKER_CHANNEL",
+              "module": "mqtt",
+              
+              
+              "write": true,
+              
+              
+              "default": ""
+            },
+          
+            {
+              "core": true,
+              "name": "broker_clientid",
+              "type": "string",
+              "integer": false,
+              "caps_name": "BROKER_CLIENTID",
+              "module": "mqtt",
+              
+              
+                "ble": {
+                  "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0x42,0x42}",
+                  "write": false
+                },
+              
+              "write": true,
+              
+              
+              "default": ""
+            },
+          
+            {
+              "core": true,
+              "name": "ota_status",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "OTA_STATUS",
+              "module": "ota",
+              
+              
+              "write": false,
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
+              "name": "ota_timestamp",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "OTA_TIMESTAMP",
+              "module": "ota",
+              
+              
+              "write": true,
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
+              "name": "ota_server_ip",
+              "type": "string",
+              "integer": false,
+              "caps_name": "OTA_SERVER_IP",
+              "module": "ota",
+              
+              
+              "write": true,
+              
+              
+              "default": "142.93.167.50"
+            },
+          
+            {
+              "core": true,
+              "name": "ota_server_hostname",
+              "type": "string",
+              "integer": false,
+              "caps_name": "OTA_SERVER_HOSTNAME",
+              "module": "ota",
+              
+              
+              "write": true,
+              
+              
+              "default": "update.supergreenlab.com"
+            },
+          
+            {
+              "core": true,
+              "name": "ota_server_port",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "OTA_SERVER_PORT",
+              "module": "ota",
+              
+              
+              "write": true,
+              
+              
+              "default": 80
+            },
+          
+            {
+              "core": true,
+              "name": "ota_basedir",
+              "type": "string",
+              "integer": false,
+              "caps_name": "OTA_BASEDIR",
+              "module": "ota",
+              
+              
+              "write": true,
+              
+              
+              "default": "/SuperGreenOSBoilerplate"
+            },
+          
+            {
+              "core": true,
+              "name": "wifi_status",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "WIFI_STATUS",
+              "module": "wifi",
+              
+              
+                "ble": {
+                  "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x5c}",
+                  "write": false
+                },
+              
+              "write": false,
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
+              "name": "wifi_ssid",
+              "type": "string",
+              "integer": false,
+              "caps_name": "WIFI_SSID",
+              "module": "wifi",
+              
+              
+                "ble": {
+                  "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x6c}",
+                  "write": true
+                },
+              
+              "write": true,
+              
+              
+              "default": ""
+            },
+          
+            {
+              "core": true,
+              "name": "wifi_password",
+              "type": "string",
+              "integer": false,
+              "caps_name": "WIFI_PASSWORD",
+              "module": "wifi",
+              
+              
+                "ble": {
+                  "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x7c}",
+                  "write": true
+                },
+              
+              "write": true,
+              
+              
+              "default": ""
+            },
+          
+            {
+              "core": true,
+              "name": "wifi_ap_ssid",
+              "type": "string",
+              "integer": false,
+              "caps_name": "WIFI_AP_SSID",
+              "module": "wifi",
+              
+              
+              "write": true,
+              
+              
+              "default": ""
+            },
+          
+            {
+              "core": true,
+              "name": "wifi_ap_password",
+              "type": "string",
+              "integer": false,
+              "caps_name": "WIFI_AP_PASSWORD",
+              "module": "wifi",
+              
+              
+              "write": true,
+              
+              
+              "default": ""
+            },
+          
+            {
+              "core": true,
+              "name": "mdns_domain",
+              "type": "string",
+              "integer": false,
+              "caps_name": "MDNS_DOMAIN",
+              "module": "wifi",
+              
+              
+              "write": true,
+              
+              
+              "default": "supergreendriver"
+            },
+          
+            {
+              "core": true,
+              "name": "wifi_ip",
+              "type": "string",
+              "integer": false,
+              "caps_name": "WIFI_IP",
+              "module": "wifi",
+              
+              
+                "ble": {
+                  "uuid": "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x8c}",
+                  "write": false
+                },
+              
+              "write": false,
+              
+              
+              "default": ""
+            },
+          
+            {
+              "core": false,
+              "name": "sht21_0_present",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "SHT21_0_PRESENT",
+              "module": "sht21",
+              
+              
+              "write": false,
+              
+                "array": {
+                  "name": "sht21",
+                  "len": 2
+                },
+                "sht21": {
+                  "index": 0,
+                  "param": "present"
+                },
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": false,
+              "name": "sht21_1_present",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "SHT21_1_PRESENT",
+              "module": "sht21",
+              
+              
+              "write": false,
+              
+                "array": {
+                  "name": "sht21",
+                  "len": 2
+                },
+                "sht21": {
+                  "index": 1,
+                  "param": "present"
+                },
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": false,
+              "name": "sht21_0_temp",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "SHT21_0_TEMP",
+              "module": "sht21",
+              "helper": "SHT21 temperature sensor on sensor port #0",
+              
+                "ble": {
+                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}",
+                  "write": false
+                },
+              
+              "write": false,
+              
+                "array": {
+                  "name": "sht21",
+                  "len": 2
+                },
+                "sht21": {
+                  "index": 0,
+                  "param": "temp"
+                },
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": false,
+              "name": "sht21_1_temp",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "SHT21_1_TEMP",
+              "module": "sht21",
+              "helper": "SHT21 temperature sensor on sensor port #1",
+              
+                "ble": {
+                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}",
+                  "write": false
+                },
+              
+              "write": false,
+              
+                "array": {
+                  "name": "sht21",
+                  "len": 2
+                },
+                "sht21": {
+                  "index": 1,
+                  "param": "temp"
+                },
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": false,
+              "name": "sht21_0_humi",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "SHT21_0_HUMI",
+              "module": "sht21",
+              "helper": "SHT21 humidity sensor on sensor port #0",
+              
+                "ble": {
+                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb3}",
+                  "write": false
+                },
+              
+              "write": false,
+              
+                "array": {
+                  "name": "sht21",
+                  "len": 2
+                },
+                "sht21": {
+                  "index": 0,
+                  "param": "humi"
+                },
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": false,
+              "name": "sht21_1_humi",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "SHT21_1_HUMI",
+              "module": "sht21",
+              "helper": "SHT21 humidity sensor on sensor port #1",
+              
+                "ble": {
+                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb3}",
+                  "write": false
+                },
+              
+              "write": false,
+              
+                "array": {
+                  "name": "sht21",
+                  "len": 2
+                },
+                "sht21": {
+                  "index": 1,
+                  "param": "humi"
+                },
+              
+              
+              "default": 0
+            }
+          
   ]
 }
+

@@ -14,11 +14,11 @@ Table of Contents
       * [Workstation setup](#workstation-setup)
    * [Quickstart](#quickstart)
       * [Creating modules and devices](#creating-modules-and-devices)
-      * [Create sht1x i2c device](#create-sht1x-i2c-device)
+      * [Create sht21 i2c device](#create-sht21-i2c-device)
          * [I2C device boilerplate](#i2c-device-boilerplate)
          * [Generated code](#generated-code)
          * [Driver code](#driver-code)
-      * [Create sht1x_temp key in config.yml](#create-sht1x_temp-key-in-configyml)
+      * [Create sht21 keys in config.json](#create-sht21-keys-in-configjson)
       * [First run](#first-run)
          * [Tool setup](#tool-setup)
          * [WIFI AP](#wifi-ap)
@@ -37,20 +37,33 @@ Table of Contents
          * [Monitoring](#monitoring)
          * [Alert](#alert)
       * [Over-The-Air (OTA) updates](#over-the-air-ota-updates)
+   * [Keys definition](#keys-definition)
    * [Troubleshoot](#troubleshoot)
    * [Contribute](#contribute)
 
 # SuperGreenOSBoilerplate
 
-tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from yml through mustache templates to remove the pain and focus on the fun.
+tl;dr configuring http/ws/ble/whatnot is a pain in the ass, this boilerplate generates C code from cuelang-generated-json through ejs templates to remove the pain and focus on the fun.
 
 SuperGreenOSBoilerplate proposes a way to ease and accelerate esp32 firmware development. By making most widely used features free.
 It allows to generate most of the code for ble/http/wifi/ota/etc.. from a configuration file.
 
 Built around the key/value and modules paradigm, it's quite close to what you'd find in a microservice architecture.
-It is also higly influenced by drone firmware architectures like Taulabs or Ardupilot.
 
-Describe all the keys that your system will require to work and communicate with the outside world, write your modules (Sort of arduino sketches) and you're good to go.
+Concretely it means you define modules and key/value pairs in a configuration file, and it will generate:
+
+- getters and setters method
+- http r/w access
+- ble r/w access with notifications
+- an admin interface available over http
+- periodic value update over MQTT
+- save to internal flash
+
+All these features can be disactivated or tuned (ie read-only access, no persistence etc..).
+
+From that all you have left to do is write the module's main loop and work with it's key/values.
+
+This architecture allows a modular approach, and with modules interacting through there respective key/values.
 
 ## Features
 
@@ -60,6 +73,7 @@ Describe all the keys that your system will require to work and communicate with
 - Bluetooth LE interface
 - HTTP interface
 - Tiny local file system and http file serving
+- Auto generated admin interface
 - All logs redirected to MQTT
 - Comes with a [cloud backend](http://github.com/supergreenlab/SuperGreenCloud/)
 
@@ -88,9 +102,9 @@ Only runs on esp32.
 I've mostly been woking with either:
 
 - [Espressif ESP32 Development Board - Developer Edition](https://www.adafruit.com/product/3269)  
-  Simple, but does not allow to flash the actual SuperGreenDriver.
+  Simple, but does not allow to flash other devices.
 - [Espressif ESP32 WROVER KIT - V3](https://www.adafruit.com/product/3384)  
-  this one allows to debug through xtensa-esp32-elf-gdb and to flash the actual SuperGreenDriver.
+  this one allows to debug through xtensa-esp32-elf-gdb and to flash other devices.
 
 ![ESP32 WROVER KIT](assets/esp32.png?raw=true "ESP32 WROVER KIT")
 
@@ -98,37 +112,40 @@ I've mostly been woking with either:
 
 Follow the [get-started guide from espressif](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/).
 
-Install the [mustache](https://mustache.github.io/) template engine (requires ruby):
+Install [cuelang getting started](https://cuelang.org/docs/install/)
 
-```sh
+Cue is a tool made to write JSON configurations in a much more efficient manner.
 
-gem install mustache
-
-```
-
-Might need to `sudo` that tho.
-
-For windows users struggling to install `ruby`, just type `pacman -Ss ruby`.
-Then when the warning ` You don't have [path to bin dir] in your PATH, gem executables will not run.` just type `PATH="$PATH:[path to bin dir]"`.
+And finally, install [ejs-cli](https://github.com/fnobi/ejs-cli).
 
 # Quickstart
 
 As an example we're just going to stream a temp sensor's values to a cloud, for monitoring and alerts.
 We'll also blink a led based on said sensor values (the hotter the faster it blinks).
-The sensor used here is the sht1x, I'll pass the detail because it's a weird one, but it's i2c compatible, and I have the code here.
+The sensor used here is the sht21, I'll pass the detail because it's a weird one, but it's i2c compatible, and I have the code here.
 
 This will get us through the main features:
 - create a module
 - create an i2c device
-- intialize the key in the system
+- initialize the key in the system
 
 First thing first, clone this repo, and run `make` to see if the whole xtensa/esp-idf setup is working:
 
 ```sh
 
+# clone repo
 git clone git@github.com:supergreenlab/SuperGreenOSBoilerplate.git SuperGreenTemp
 cd SuperGreenTemp
-make
+
+# create config directory
+./init.sh SuperGreenTemp config.json
+
+# generate code and admin app
+./update_template.sh config.json
+./update_htmlapp.sh config.json
+
+# make & flash
+./write_spiffs.sh && make -j4 flash monitor
 
 ```
 
@@ -159,14 +176,15 @@ For the 2 first step, we'll be using the script called `templates.sh`, which usa
 ```sh
 
 ./templates.sh
-[Usage] ./templates.sh template_name module_name
+[Usage] ./templates.sh template_name module_name config_file
 
 ```
 
 - `template_name` is either `new_module` or `new_i2c_device`.
 - `module_name` is the name of the module of i2c_device we're creating.
+- `config_file` the name of the generated config file
 
-## Create sht1x i2c device
+## Create sht21 i2c device
 
 So first step is to create the i2c device. There's a script for that, we'll call our device sth1x:
 
@@ -174,7 +192,7 @@ So first step is to create the i2c device. There's a script for that, we'll call
 
 ```sh
 
-./templates.sh new_i2c_device shtx
+./templates.sh new_i2c_device sht21 config.json
 
 ```
 
@@ -182,10 +200,9 @@ Output should look like this:
 
 ```sh
 
-Copying files to main/sht1x
-Call mustache for templates/new_i2c_device/new_i2c_device.c.template to main/sht1x/sht1x.c
-Call mustache for templates/new_i2c_device/new_i2c_device.h.template to main/sht1x/sht1x.h
-Adding i2c device to i2c_devices in config.yml
+Copying files to main/sht21
+Call ejs-cli for templates/new_i2c_device/new_i2c_device.c.template to main/sht21/sht21.c
+Call ejs-cli for templates/new_i2c_device/new_i2c_device.h.template to main/sht21/sht21.h
 ===
 Done
 ===
@@ -222,7 +239,7 @@ CC build/main/init.o
 
 [..... BLAH .....]
 
-CC build/main/sht1x/sht1x.o      <------ This is our new i2c_device
+CC build/main/sht21/sht21.o      <------ This is our new i2c_device
 AR build/main/libmain.a
 Generating libapp_update.a.sections_info
 Generating libmain.a.sections_info
@@ -237,65 +254,63 @@ Good.
 
 ### Generated code
 
-Now we have a new directory under `main/sht1x/` containing two files `sht1x.c` and `sht1x.h`, let's get there and open the files with your favorite code editor.
+Now we have a new directory under `main/sht21/` containing two files `sht21.c` and `sht21.h`, let's get there and open the files with your favorite code editor.
 
 They look something like this:
 
-sth1x.h
+sht21.h
 ```c
 /*
  * GPL HEADER
  */
 
-#ifndef SHT1X_H_
-#define SHT1X_H_
+#ifndef SHT21_H_
+#define SHT21_H_
 
-void init_sht1x(int sda, int sck);
-void loop_sht1x(int sda, int sck);
+void init_sht21(int i2cId);
+void loop_sht21(int i2cId);
 
 #endif
 ```
 
-sht1x.c
+sht21.c
 ```c
 /*
  * GPL HEADER
  */
 
 #include <stdlib.h>
-#include "sht1x.h"
+#include "sht21.h"
 #include "driver/i2c.h"
 
 #include "../core/kv/kv.h"
 #include "../core/log/log.h"
 
-#define SHT1X_ADDR 0x42
+#define SHT21_ADDR 0x42
 
-void init_sht1x(int sda, int sck) {
-  ESP_LOGI(SGO_LOG_EVENT, "@SHT1X Initializing sht1x i2c device\n");
+void init_sht21(int i2cId) {
+  ESP_LOGI(SGO_LOG_EVENT, "@SHT21 Initializing sht21 i2c device\n");
   // TODO: write you setup code here
 }
 
-void loop_sht1x(int sda, int sck) {
+void loop_sht21(int i2cId) {
   // start_i2c();
   // TODO: write you i2c device read code here
   // stop_i2c();
 }
 ```
 
-There are two functions defined, `init_sht1x` and `loop_sht1x`, `loop_sht1x` is called repeatedly every few seconds, depending on how many devices you have (only one i2c device can talk at a time).
-The `init_sht1x` method is called once at the very start of the program.
+There are two functions defined, `init_sht21` and `loop_sht21`, `loop_sht21` is called repeatedly every few seconds, depending on how many devices you have (only one i2c device can talk at a time).
+The `init_sht21` method is called once at the very start of the program.
 
 ### Driver code
 
-Let's get this straight, and copy those files in the `main/sht1x` directory:
+Let's get this straight, and copy those files in the `main/sht21` directory:
 
-- [sht1x.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht1x/sht1x.c)
-- [sht1x.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht1x/sht1x.h)
-- [sht1x_driver.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht1x/sht1x_driver.c)
-- [sht1x_driver.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht1x/sht1x_driver.h)
+- [sht21.c](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht21/sht21.c)
+- [sht21.h](https://raw.githubusercontent.com/supergreenlab/SuperGreenOS/master/main/sht21/sht21.h)
 
-Connect the sht1x sensor as follows:
+Connect the sht21 sensor as follows:
 
 ```
 
@@ -307,34 +322,61 @@ cf. main/core/i2c/i2c.h (these values can be changed through http)
 
 ```
 
-## Create sht1x_temp key in config.yml
+## Create sht21 keys in config.json
 
-Open `config.yml` and go all the way down the file.
-We'll add a temperature key, of type integer, accessible over ble and wifi, but read-only.
+Open `config_gen/config/SuperGreenTemp/sht21.cue`.
+We'll add a temperature and humidity keys, of type integer, accessible over ble and wifi, but read-only.
+We'll also add a key to indicate if it's present or not.
 And we want it to be automatically backed in the flash store. So the value stays there even after a reboot.
 
-The end of your `config.yml` should look like this:
+Your `sht21.cue` should look like this:
 
-```yml
-  #
-  # Custom keys
-  #
+```json
 
-  - name: sht1x
-    caps_name: SHT1X
-    integer: true
-    nvs:
-      key: SHT1X
-    ble:
-      uuid: "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}"
-      notify: true
-    http:
-      noop: true
-    default: 0
+package config
+
+modules sht21: _I2C_MODULE & {
+  array_len: len(_i2c_conf)
+}
+
+modules sht21 fields "\(k)_present": _INT8 & _HTTP & {
+  default: 0
+} for k, v in _i2c_conf
+
+modules sht21 fields "\(k)_temp": _INT8 & _HTTP & _BLE & {
+  default: 0
+  temp_sensor: 0x1+k
+  ble uuid: "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}"
+  ble notify: true
+  helper: "SHT21 temperature sensor on sensor port #\(k)"
+} for k, v in _i2c_conf
+
+modules sht21 fields "\(k)_humi": _INT8 & _HTTP & _BLE & {
+  default: 0
+  humi_sensor: 0x1+k
+  ble uuid: "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb3}"
+  ble notify: true
+  helper: "SHT21 humidity sensor on sensor port #\(k)"
+} for k, v in _i2c_conf
 
 ```
 
-Now run the `update.sh` command. And then `make` to see that everything's ok.
+The `for k, v in _i2c_conf` code means one key for each available i2c ports, `\(k)` is replaced by the port index.
+
+This cue configuration will produce keys named:
+
+```
+SHT21_X_PRESENT
+SHT21_X_TEMP
+SHT21_X_HUMI
+```
+
+`X` being replaced by the i2c port number, starting from 0.
+
+Now run the `update_config.sh config_gen/config/SuperGreenTemp config.json && ./update_templates.sh config.json` command.
+And then `make` to see that everything's ok.
+
+Now that it's setup, you can access the humidity and temperature from the sensor from any modules with the generated functions `get_sht21_temp` and `get_sht21_humi`.
 
 ## First run
 
@@ -364,7 +406,9 @@ Now there are two options to do the initial setup, by connecting either to its w
 
 In your wifi list, you'll see that the firmware has started its own wifi AP, it's called `🤖🍁`, and the default password is `multipass`.
 
-Once connected to it, the firmware is accessible as `supergreendriver.local`.
+Once connected to it, the firmware is accessible as `supergreenosboilerplate.local`.
+
+To see by yourself you can direct your browser to `http://supergreenosboilerplate.local/fs/app.html`, which will display the admin interface.
 
 The HTTP API is further explained [here](https://github.com/supergreenlab/SuperGreenOSBoilerplate#http-api)
 
@@ -376,7 +420,7 @@ You should see a device named `🤖🍁`, select it. Now you're connected.
 
 In the characteristics list you should see a bunch of characteristics, those are the default ones, and at the very last, there's our temperature characteristic, it's name starts with `b2e0`, select it.
 
-Now you can press the `read` button, and it should display, `0`, which is the default value we provided in the config.yml file, under the `default` key, at the very last line.
+Now you can press the `read` button, and it should display, `0`, which is the default value we provided in the config.json file, under the `default` key, at the very last line.
 
 If you look in the logs of you esp32, you'll see it react when you press the `read` button.
 
@@ -466,9 +510,7 @@ If you have already used arduino, it's like a sketch that can run with other ske
 
 ### Code the led blinking
 
-You know what ? I'm too lazy to do this part.
-
-Thus, this part shall be left as an exercise for the reader.
+This part shall be left as an exercise for the reader.
 
 Hint: [Espressif has done a great job with their examples](https://github.com/espressif/esp-idf/tree/master/examples/peripherals/gpio)
 
@@ -487,8 +529,8 @@ Once connected you can set the wifi credentials with the following commands:
 (Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.)
 ```sh
 
-curl -X POST http://supergreendriver.local/s?k=WIFI_SSID&v=[ Insert SSID here ]
-curl -X POST http://supergreendriver.local/s?k=WIFI_PASSWORD&v=[ Insert Wifi WPA password here ]
+curl -X POST http://supergreenosboilerplate.local/s?k=WIFI_SSID&v=[ Insert SSID here ]
+curl -X POST http://supergreenosboilerplate.local/s?k=WIFI_PASSWORD&v=[ Insert Wifi WPA password here ]
 
 ```
 
@@ -498,7 +540,7 @@ You can check the wifi connection status in the log or by repeatedly calling thi
 
 ```sh
 
-curl http://supergreendriver.local/i?k=WIFI_STATUS
+curl http://supergreenosboilerplate.local/i?k=WIFI_STATUS
 
 ```
 
@@ -512,12 +554,12 @@ Do the same for the `wifi_password`, it starts with `f7e4`.
 
 Now you should have notifications for the `wifi_status` characteristic changing value. You want it to be equal to `3`.
 
-Once it's done, your firmware will be available as supergreendriver.local, for example the url [http://supergreendriver.local/s?k=DEVICE_NAME](http://supergreendriver.local/s?k=DEVICE_NAME) will print it's name.
+Once it's done, your firmware will be available as supergreenosboilerplate.local, for example the url [http://supergreenosboilerplate.local/s?k=DEVICE_NAME](http://supergreenosboilerplate.local/s?k=DEVICE_NAME) will print it's name.
 Try a few times if it complains about unknown host resolution, the firmware broadcast every 10 seconds.
 
 ## HTTP API
 
-The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.yml`, websocket change subscribing is underway.
+The HTTP interface allows read and write on the firmware's keys that have a `write: true` attribute in `config.json`, websocket change subscribing is underway.
 
 The HTTP interface has 2 routes for now `/i` and `/s`, they correspond to the type of the value, `i` for `integer`, and `s` for `string`.
 
@@ -529,13 +571,13 @@ Query parameters are as follows:
 So to set a new DEVICE_NAME:
 
 ```sh
-curl -X POST http://supergreendriver.local/s?k=DEVICE_NAME&v=NewName
+curl -X POST http://supergreenosboilerplate.local/s?k=DEVICE_NAME&v=NewName
 ```
 
 And to get the DEVICE_NAME back:
 
 ```sh
-curl http://supergreendriver.local/s?k=DEV_NAME
+curl http://supergreenosboilerplate.local/s?k=DEV_NAME
 NewName
 ```
 
@@ -568,7 +610,7 @@ To change it's value:
 
 ```sh
 
-curl -X POST http://supergreendriver.local/s?k=BROKER_URL&v=[ Enter your URL here ]
+curl -X POST http://supergreenosboilerplate.local/s?k=BROKER_URL&v=[ Enter your URL here ]
 
 ```
 
@@ -582,8 +624,8 @@ Please follow the [SuperGreenCloud Quickstart guide](https://github.com/supergre
 
 Which will lead you to something like this:
 
-![Graphs 1](assets/sht1x-graphs.png?raw=true "Graphs 1")
-![Graphs 2](assets/sht1x-graphs2.png?raw=true "Grahs 2")
+![Graphs 1](assets/sht21-graphs.png?raw=true "Graphs 1")
+![Graphs 2](assets/sht21-graphs2.png?raw=true "Grahs 2")
 
 Let me know if you need a complete guide, because that's much more work than just typing text:P
 
@@ -607,28 +649,7 @@ Again there are a few keys that you can configure to set this up, and they're on
 
 # Keys definition
 
-The whole OS revolves around the key/value database embedded (KV) in the firmware.
-KV is the center of trust, it sits in the middle. All modules can add more keys to work with.
-All keys are defined in the file [config.yml](https://github.com/supergreenlab/SuperGreenOS/blob/master/config.yml).
-
-Each keys have a set of avaiable configs:
-
-- *name*: lowercase name, ex: wifi_ssid
-- *caps_name*: uppcase name, ex: WIFI_SSID
-- *string* or *integer*: should have the value true, determines the datatype used for the value (string is a char[512] and integer is int)
-- *nvs*: if absent the key is not persistent between reboots (ie. not stored in flash)
-  - *key*: name of the key in the flash, limited to 15 characters, ex: WSSID
-- *ble*: if absent, the key will not be available over ble, watchout ble only supports a limited number of available keys.
-  - *first*: needs to be set to true if it's the first on the list, that's a mustache template limitation:( 
-  - *uuid*: BLE UUID, in the form: "{0x17,0xfe,0xc3,0xc1,0x6b,0xe1,0x15,0x54,0xa5,0x74,0x55,0x9c,0x81,0x69,0xa3,0x6c}" see [here](http://yupana-engineering.com/online-uuid-to-c-array-converter)
-  - *write*: Set this to true if the key is writable
-  - *notify*: Set this to true to tell the generated to produce a ble notification on value internally changed.
-- *http*: if absent, the key is not be available over http
-  - *write*: Set this to true if the key is writable
-  - *noop*: Set this to true, just to avoid have an empty 'http' configuration (when `write` is absent)
-- *write_cb*: This determines if you want a callback to be called when the key is changed, either set it to `true` and it'll call a function called `on_set_[name]`, or directly enter the name of a function you have. prototype of the function is as: `const char *on_set_name(const char *ssid)` for a string or `int on_set_name(int boxId, int value)` for integer values.
-- *default*: This is the default value for the key, if the value is in a variable or macro in you code, skip this and use `default_var` instead.
-- *default_var*: allows to use a variable or macro name for the default value.
+WIP
 
 # Troubleshoot
 
@@ -636,7 +657,8 @@ Right now SuperGreenLab does not have an official support hotline.
 But here's a bunch of places where we'll respond:
 
 - [towelie@supergreenlab.com](mailto:towelie@supergreenlab.com)
-- [r/supergreenlab](https://www.reddit.com/r/supergreenlab), maybe the chat is the right place for quick questions
+- [r/supergreenlab](https://www.reddit.com/r/supergreenlab)
+- [Discord](https://www.supergreenlab.com/discord)
 - [Github issues](https://github.com/supergreenlab/SuperGreenOSBoilerplate/issues)
 
 # Contribute

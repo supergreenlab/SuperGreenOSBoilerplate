@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-if [ "$#" -ne 2 ]; then
-  echo "[Usage] $0 template_name module_name"
+if [ "$#" -ne 3 ]; then
+  echo "[Usage] $0 template_name module_name config_file"
   exit
 fi
 
@@ -27,36 +27,28 @@ NC="\033[0m"
 
 TEMPLATE_NAME="$1"
 MODULE_NAME="$2"
+CONFIG="$3"
+PROJECT_NAME=`basename $(pwd)` # TODO fix this
 
 mkdir -p main/$MODULE_NAME
-echo -e "Copying files to main/$MODULE_NAME: ${GREEN}Done${NC}"
-echo -e "$(sed "s/CAPS_NAME/${MODULE_NAME^^}/g;s/NAME/$MODULE_NAME/g"  templates/$TEMPLATE_NAME.yml)" > /tmp/$TEMPLATE_NAME
-for i in $(find templates/$TEMPLATE_NAME/*)
+echo -e "Creating main/$MODULE_NAME: ${GREEN}Done${NC}"
+for i in $(find templates/$TEMPLATE_NAME/code/*)
 do
   FILE="$(basename ${i/.template/})"
   FILE_PATH="main/$MODULE_NAME/${FILE/$TEMPLATE_NAME/$MODULE_NAME}"
-  if [[ "$i" == *".template" ]]; then
-    mustache /tmp/$TEMPLATE_NAME $i > "$FILE_PATH"
-    echo -e "Call mustache for $i to $FILE_PATH: ${GREEN}Done${NC}"
-  else
-    cp $i $FILE_PATH
-    echo -e "Copying file $i to $FILE_PATH: ${GREEN}Done${NC}"
-  fi
+  ejs-cli -O "{\"name\": \"$MODULE_NAME\"}" $i > "$FILE_PATH"
+  echo -e "Call ejs-cli for $i to $FILE_PATH: ${GREEN}Done${NC}"
+done
+for i in $(find templates/$TEMPLATE_NAME/config/*)
+do
+  FILE="$(basename ${i/.template/})"
+  FILE_PATH="config_gen/config/$PROJECT_NAME/${FILE/$TEMPLATE_NAME/$MODULE_NAME}"
+  ejs-cli -O "{\"name\": \"$MODULE_NAME\"}" $i > "$FILE_PATH"
+  echo -e "Call ejs-cli for $i to $FILE_PATH: ${GREEN}Done${NC}"
 done
 
+./update_config.sh config_gen/config/$PROJECT_NAME/ $CONFIG
 
-if ! grep -q -- "- $MODULE_NAME" config.yml; then
-
-  if [ "$TEMPLATE_NAME" == "new_module" ]; then
-    sed -i "/custom_modules:/ a \  - $MODULE_NAME" config.yml
-    echo -e "Adding module to custom_modules in config.yml: ${GREEN}Done${NC}"
-  elif [ "$TEMPLATE_NAME" == "new_i2c_device" ]; then
-    sed -i "/i2c_devices:/ a \  - $MODULE_NAME" config.yml
-    echo -e "Adding i2c device to i2c_devices in config.yml: ${GREEN}Done${NC}"
-  fi
-
-  echo "==="
-  echo "Running ./update_template.sh...."
-  ./update_template.sh
-
-fi
+echo "==="
+echo "Running ./update_template.sh...."
+./update_templates.sh $CONFIG
