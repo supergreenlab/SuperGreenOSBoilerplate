@@ -29,7 +29,6 @@
 #include "nvs.h"
 
 #include "kv.h"
-#include "kv_ble.h"
 #include "../include_modules.h"
 
 void init_helpers();
@@ -52,7 +51,7 @@ void open_kv() {
   }
 }
 
-void preinit_kv() {
+void init_kv() {
   /*
    * [GENERATED]
    */
@@ -70,30 +69,12 @@ void preinit_kv() {
     <% } %>
   <% })}) %>
 
-  /*
-   * [/GENERATED]
-   */
-}
-
-void postinit_kv() {
-  /*
-   * [GENERATED]
-   */
-  <% Object.keys(modules).forEach(m => {
-    Object.keys(modules[m].fields).filter(f => modules[m].fields[f].nvs.enable && modules[m].fields[f].ble.enable && !modules[m].fields[f].ble.no_sync).forEach(f => { f = modules[m].fields[f]%>
-    <% if (f.type == 'integer') { %>
-        sync_ble_i<%= f.intlen %>(<%= f.caps_name %>, IDX_VALUE(<%= f.caps_name %>));
-    <% } else {%>
-        sync_ble_str(<%= f.caps_name %>, IDX_VALUE(<%= f.caps_name %>));
-    <% } %>
-  <% })}) %>
-
   // Initialize non-nvs keys
   <% Object.keys(modules).forEach(m => {
     Object.keys(modules[m].fields).filter(f => !modules[m].fields[f].nvs.enable && !modules[m].fields[f].indir.enable).forEach(f => { f = modules[m].fields[f]%>
     if (is_<%= f.name %>_undefined()) {
       <% if(f.type == 'integer') { %>
-        int default_<%= f.name %> = <% if (f.default_var) { %><%= f.default_var %><% } else { %><%= f.default %><% } %>;
+        int<%= f.intlen %>_t default_<%= f.name %> = <% if (f.default_var) { %><%= f.default_var %><% } else { %><%= f.default %><% } %>;
       <% } else { %>
         const char *default_<%= f.name %> = <% if (f.default_var) { %><%= f.default_var %><% } else { %>"<%= f.default %>"<% } %>;
       <% } %>

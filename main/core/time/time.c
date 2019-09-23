@@ -29,9 +29,6 @@
 #include "time.h"
 #include "utils.h"
 #include "../kv/kv.h"
-#include "../kv/kv_ble.h"
-#include "../ble/ble.h"
-#include "../ble/ble_db.h"
 #include "../wifi/wifi.h"
 
 static void time_task(void *param);
@@ -39,7 +36,10 @@ static void ntp_task(void *param);
 static void setup(void);
 
 void init_time() {
-  xTaskCreate(time_task, "TIME", 4096, NULL, 10, NULL);
+  BaseType_t ret = xTaskCreatePinnedToCore(time_task, "TIME", 4096, NULL, 10, NULL, 1);
+  if (ret != pdPASS) {
+    ESP_LOGE(SGO_LOG_EVENT, "@TIME Failed to create task");
+  }
 }
 
 static void time_task(void *param) {
@@ -47,7 +47,10 @@ static void time_task(void *param) {
     time_t now = (time_t)get_time();
     struct timeval tv = { .tv_sec = now, .tv_usec = 0 };
     settimeofday(&tv, NULL);
-    xTaskCreate(ntp_task, "NTP", 4096, NULL, 10, NULL);
+    BaseType_t ret = xTaskCreatePinnedToCore(ntp_task, "NTP", 4096, NULL, 10, NULL, 1);
+    if (ret != pdPASS) {
+      ESP_LOGE(SGO_LOG_EVENT, "@TIME Failed to create NTP task");
+    }
   } else {
     wait_connected();
     setup();
@@ -79,7 +82,7 @@ static void setup(void) {
 /* ble callbacks */
 
 int on_set_time(int value) {
-  ESP_LOGI(SGO_LOG_EVENT, "@TIMER on_set_time = %d", (int)value);
+  //ESP_LOGI(SGO_LOG_EVENT, "@TIMER on_set_time = %d", (int)value);
   struct timeval tv = { .tv_sec = value, .tv_usec = 0 };
   settimeofday(&tv, NULL);
   return value;

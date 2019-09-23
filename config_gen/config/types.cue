@@ -7,6 +7,7 @@ import (
 _MODULE: {
   field_prefix: string
   init: bool | *true
+  init_priority: int | *0
   core: bool | *false
   i2c: bool | *false
   array_len: int | *0
@@ -19,11 +20,13 @@ _CORE_MODULE: _MODULE & {
 
 _I2C_MODULE: _MODULE & {
   i2c: true
+  init: false
 }
 
 _FIELD: {
   type: "string" | "integer"
   nosend: bool | *false
+  helper: string | *""
   nvs: {
     enable: bool | *false
     key: string if enable == true

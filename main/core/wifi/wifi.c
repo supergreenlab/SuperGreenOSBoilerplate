@@ -33,10 +33,7 @@
 
 #include "wifi.h"
 #include "../log/log.h"
-#include "../ble/ble.h"
-#include "../ble/ble_db.h"
 #include "../kv/kv.h"
-#include "../kv/kv_ble.h"
 
 typedef const unsigned int wifi_cmd;
 static wifi_cmd CMD_SSID_CHANGED = 1;
@@ -47,6 +44,7 @@ static wifi_cmd CMD_STA_CONNECTION_FAILED = 5;
 static wifi_cmd CMD_AP_STACONNECTED = 6;
 static wifi_cmd CMD_AP_STADISCONNECTED = 7;
 static wifi_cmd CMD_AP_START = 8;
+static wifi_cmd CMD_MDNS_CHANGED = 9;
 
 static QueueHandle_t cmd;
 
@@ -77,7 +75,10 @@ void init_wifi() {
     ESP_LOGE(SGO_LOG_EVENT, "@WIFI Failed to create queue");
   }
 
-  xTaskCreate(wifi_task, "WIFI", 4096, NULL, tskIDLE_PRIORITY, NULL);
+  BaseType_t ret = xTaskCreatePinnedToCore(wifi_task, "WIFI", 4096, NULL, tskIDLE_PRIORITY, NULL, 0);
+  if (ret != pdPASS) {
+    ESP_LOGE(SGO_LOG_EVENT, "@WIFI Failed to create task");
+  }
 
   if (is_valid()) {
     start_sta();
@@ -91,8 +92,7 @@ void wait_connected() {
       false, true, portMAX_DELAY);
 }
 
-static void init_mdns_service()
-{
+static void init_mdns_service() {
 	esp_err_t err = mdns_init();
 	if (err) {
 		ESP_LOGE(SGO_LOG_EVENT, "@WIFI MDNS Init failed: %d\n", err);
@@ -106,6 +106,11 @@ static void init_mdns_service()
   mdns_service_add(NULL, "_http", "_tcp", 80, NULL, 0);
 
   ESP_LOGI(SGO_LOG_EVENT, "@WIFI Started MDNS advertising as %s.local", domain);
+}
+
+static void restart_mdns() {
+  mdns_free();
+  init_mdns_service();
 }
 
 static void start_ap() {
@@ -219,9 +224,9 @@ static bool try_sta_connection() {
     /*} else {
       ESP_LOGI(SGO_LOG_EVENT, "@WIFI unable to esp_wifi_ap_get_sta_list");
     }*/
-  } else {
+  }/* else {
     ESP_LOGI(SGO_LOG_EVENT, "@WIFI unable to get_mode");
-  }
+  }*/
   return false;
 }
 
@@ -234,7 +239,6 @@ static void wifi_task(void *param) {
 
   for (;;) {
     if (xQueueReceive(cmd, &c, 20000 / portTICK_PERIOD_MS)) {
-      ESP_LOGI(SGO_LOG_EVENT, "@WIFI xQueueReceive %d", c);
 
       // Wifi STA conf change
       if ((c == CMD_SSID_CHANGED || c == CMD_PASS_CHANGED)) {
@@ -253,6 +257,7 @@ static void wifi_task(void *param) {
         n_connected_sta = 0;
       } else if (c == CMD_STA_CONNECTED) {
         ESP_LOGI(SGO_LOG_EVENT, "@WIFI CMD_STA_CONNECTED");
+        restart_mdns();
       } else if (c == CMD_AP_STACONNECTED) {
         ESP_LOGI(SGO_LOG_EVENT, "@WIFI CMD_AP_STACONNECTED");
         ++n_connected_sta;
@@ -272,7 +277,9 @@ static void wifi_task(void *param) {
           n_connection_failed = 0;
           start_ap();
         }
-      }
+      } else if (c == CMD_MDNS_CHANGED) {
+        restart_mdns();
+      } 
     } else {
       // if AP mode and noone's watching, try STA mode.
       ++counter;
@@ -294,6 +301,11 @@ const char *on_set_wifi_ssid(const char *ssid) {
 const char *on_set_wifi_password(const char *pass) {
   xQueueSend(cmd, &CMD_PASS_CHANGED, 0);
   return pass;
+}
+
+const char *on_set_mdns_domain(const char *mdns) {
+  xQueueSend(cmd, &CMD_MDNS_CHANGED, 0);
+  return mdns;
 }
 
 // utils

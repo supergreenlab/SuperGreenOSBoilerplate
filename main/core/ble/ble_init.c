@@ -35,7 +35,6 @@
 #include "ble_private.h"
 #include "ble_db.h"
 #include "../kv/kv.h"
-#include "../kv/kv_ble.h"
 
 #define ESP_APP_ID          0x55
 #define BLE_DEVICE_NAME "🤖🍁"
@@ -115,8 +114,8 @@ const uint8_t char_prop_read_write         = ESP_GATT_CHAR_PROP_BIT_READ | ESP_G
 const uint8_t char_prop_read_write_notify   = ESP_GATT_CHAR_PROP_BIT_WRITE | ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_NOTIFY;
 const uint8_t char_prop_read_notify   = ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_NOTIFY;
 const uint8_t client_configuration[2]    = {0x01, 0x00};
-const uint8_t i_char_value[4]         = {0x00, 0x0, 0x0, 0x0};
-const uint8_t str_char_value[1]         = {0};
+const uint8_t i_char_value[4]         = {0x0, 0x0, 0x0, 0x0};
+const uint8_t str_char_value[1]         = "";
 
 /* Full Database Description - Used to add attributes into the database */
 static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param)
@@ -221,6 +220,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
       break;
     case ESP_GATTS_START_EVT:
       ESP_LOGI(SGO_LOG_EVENT, "@BLE SERVICE_START_EVT, status = %d, service_handle = %d", param->start.status, param->start.service_handle);
+      init_ble_characteristics();
       break;
     case ESP_GATTS_CONNECT_EVT:
       ESP_LOGI(SGO_LOG_EVENT, "@BLE ESP_GATTS_CONNECT_EVT, conn_id = %d", param->write.conn_id);
@@ -298,11 +298,32 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
   } while (0);
 }
 
-void init_ble()
+static void stop_ble() {
+  if (get_ble_enabled() == 0) return;
+  esp_bluedroid_disable();
+  esp_bluedroid_deinit();
+  esp_bt_controller_disable();
+  esp_bt_controller_deinit();
+}
+
+static void stop_ble_after_delay_task(void* param) {
+  vTaskDelay(30 * 1000 / portTICK_RATE_MS);
+  ESP_LOGI(SGO_LOG_NOSEND, "@BLE_STOP stopping ble");
+  set_ble_enabled(0);
+  stop_ble();
+  vTaskDelete(NULL);
+}
+
+static void start_ble()
 {
+  if (get_ble_enabled() == 1) return;
+  static int8_t already_enabled_once = false;
   esp_err_t ret;
 
-  ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
+  if (already_enabled_once == false) {
+    ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
+  }
+  already_enabled_once = true;
 
   esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
   ret = esp_bt_controller_init(&bt_cfg);
@@ -346,4 +367,21 @@ void init_ble()
     ESP_LOGE(SGO_LOG_EVENT, "@BLE Gatts app register error, error code = %x", ret);
     return;
   }
+
+  BaseType_t tret = xTaskCreatePinnedToCore(stop_ble_after_delay_task, "BLE_STOP", 2048, NULL, 10, NULL, 0);
+  if (tret != pdPASS) {
+    ESP_LOGE(SGO_LOG_EVENT, "@BLE_STOP Failed to create task");
+  }
+}
+
+int8_t on_set_ble_enabled(int8_t enabled) {
+  if (get_ble_enabled() == enabled) {
+    return enabled;
+  }
+  if (enabled) {
+    start_ble();
+  } else {
+    stop_ble();
+  }
+  return enabled;
 }

@@ -54,6 +54,21 @@
           
             {
               "core": true,
+              "name": "ble_enabled",
+              "type": "integer",
+              "integer": true,
+              "caps_name": "BLE_ENABLED",
+              "module": "ble",
+              
+              
+              "write": true,
+              
+              
+              "default": 0
+            },
+          
+            {
+              "core": true,
               "name": "i2c_0_sda",
               "type": "integer",
               "integer": true,
@@ -507,170 +522,6 @@
               
               
               "default": ""
-            },
-          
-            {
-              "core": false,
-              "name": "sht21_0_present",
-              "type": "integer",
-              "integer": true,
-              "caps_name": "SHT21_0_PRESENT",
-              "module": "sht21",
-              
-              
-              "write": false,
-              
-                "array": {
-                  "name": "sht21",
-                  "len": 2
-                },
-                "sht21": {
-                  "index": 0,
-                  "param": "present"
-                },
-              
-              
-              "default": 0
-            },
-          
-            {
-              "core": false,
-              "name": "sht21_1_present",
-              "type": "integer",
-              "integer": true,
-              "caps_name": "SHT21_1_PRESENT",
-              "module": "sht21",
-              
-              
-              "write": false,
-              
-                "array": {
-                  "name": "sht21",
-                  "len": 2
-                },
-                "sht21": {
-                  "index": 1,
-                  "param": "present"
-                },
-              
-              
-              "default": 0
-            },
-          
-            {
-              "core": false,
-              "name": "sht21_0_temp",
-              "type": "integer",
-              "integer": true,
-              "caps_name": "SHT21_0_TEMP",
-              "module": "sht21",
-              "helper": "SHT21 temperature sensor on sensor port #0",
-              
-                "ble": {
-                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}",
-                  "write": false
-                },
-              
-              "write": false,
-              
-                "array": {
-                  "name": "sht21",
-                  "len": 2
-                },
-                "sht21": {
-                  "index": 0,
-                  "param": "temp"
-                },
-              
-              
-              "default": 0
-            },
-          
-            {
-              "core": false,
-              "name": "sht21_1_temp",
-              "type": "integer",
-              "integer": true,
-              "caps_name": "SHT21_1_TEMP",
-              "module": "sht21",
-              "helper": "SHT21 temperature sensor on sensor port #1",
-              
-                "ble": {
-                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb2}",
-                  "write": false
-                },
-              
-              "write": false,
-              
-                "array": {
-                  "name": "sht21",
-                  "len": 2
-                },
-                "sht21": {
-                  "index": 1,
-                  "param": "temp"
-                },
-              
-              
-              "default": 0
-            },
-          
-            {
-              "core": false,
-              "name": "sht21_0_humi",
-              "type": "integer",
-              "integer": true,
-              "caps_name": "SHT21_0_HUMI",
-              "module": "sht21",
-              "helper": "SHT21 humidity sensor on sensor port #0",
-              
-                "ble": {
-                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb3}",
-                  "write": false
-                },
-              
-              "write": false,
-              
-                "array": {
-                  "name": "sht21",
-                  "len": 2
-                },
-                "sht21": {
-                  "index": 0,
-                  "param": "humi"
-                },
-              
-              
-              "default": 0
-            },
-          
-            {
-              "core": false,
-              "name": "sht21_1_humi",
-              "type": "integer",
-              "integer": true,
-              "caps_name": "SHT21_1_HUMI",
-              "module": "sht21",
-              "helper": "SHT21 humidity sensor on sensor port #1",
-              
-                "ble": {
-                  "uuid": "{0x91,0xb6,0x64,0x14,0xa9,0xba,0x6a,0x30,0x80,0xc1,0x67,0x62,0x25,0xef,0xe0,0xb3}",
-                  "write": false
-                },
-              
-              "write": false,
-              
-                "array": {
-                  "name": "sht21",
-                  "len": 2
-                },
-                "sht21": {
-                  "index": 1,
-                  "param": "humi"
-                },
-              
-              
-              "default": 0
             }
           
   ]

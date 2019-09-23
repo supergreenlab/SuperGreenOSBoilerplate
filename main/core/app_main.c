@@ -41,16 +41,12 @@ void app_main() {
   open_kv();
   init_reboot();
 
-  init_stat_dump_queues();
   mqtt_intercept_log();
 
-  preinit_kv();
+  init_kv();
   set_n_restarts(get_n_restarts()+1);
 
-  init_ble();
   init_wifi();
-
-  postinit_kv();
 
   init_mqtt();
   init_ota();
