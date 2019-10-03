@@ -80,7 +80,7 @@ static esp_err_t http_resp_dir_html(httpd_req_t *req)
             ESP_LOGE(SGO_LOG_NOSEND, "Failed to stat %s : %s", entrytype, entry->d_name);
             continue;
         }
-        sprintf(entrysize, "%ld", entry_stat.st_size);
+        snprintf(entrysize, sizeof(entrysize)-1, "%ld", entry_stat.st_size);
         ESP_LOGI(SGO_LOG_NOSEND, "Found %s : %s (%s bytes)", entrytype, entry->d_name, entrysize);
 
         /* Send chunk of HTML file containing table entries with file name and size */
@@ -255,6 +255,7 @@ esp_err_t upload_post_handler(httpd_req_t *req)
 		return ESP_FAIL;
 	}
 
+  httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
 	ESP_LOGI(SGO_LOG_EVENT, "Receiving file : %s...", filename);
 
 	/* Retrieve the pointer to scratch buffer for temporary storage */

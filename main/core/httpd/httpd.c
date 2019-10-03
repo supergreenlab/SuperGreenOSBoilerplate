@@ -126,7 +126,7 @@ static esp_err_t geti_handler(httpd_req_t *req) {
     v = hi32->getter();
   }
   char ret[12] = {0};
-  sprintf(ret, "%d", v);
+  snprintf(ret, sizeof(ret) - 1, "%d", v);
 
   httpd_resp_set_hdr(req, "Access-Control-Allow-Origin", "*");
   httpd_resp_send(req, ret, strlen(ret));
@@ -224,7 +224,7 @@ static esp_err_t get_ip_handler(httpd_req_t *req) {
   }
   char ip[16] = {0};
   uint8_t *iphex = (uint8_t *)&(destAddr.sin6_addr.un.u32_addr[3]);
-  sprintf(ip, "%d.%d.%d.%d", iphex[0], iphex[1], iphex[2], iphex[3]);
+  snprintf(ip, sizeof(ip)-1, "%d.%d.%d.%d", iphex[0], iphex[1], iphex[2], iphex[3]);
   httpd_resp_send(req, ip, strlen(ip));
   return ESP_OK;
 }
