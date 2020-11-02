@@ -4,8 +4,6 @@ spiffs_fs/config.json
 releases/
 sdkconfig.old
 
-config.json
-
 main/core/httpd/httpd_kv_handlers.c
 main/core/include_modules.h
 main/core/stat_dump/stat_dump.c
