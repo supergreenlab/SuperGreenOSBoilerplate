@@ -69,6 +69,7 @@ void init_wifi() {
   wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
   ESP_ERROR_CHECK( esp_wifi_init(&cfg) );
   ESP_ERROR_CHECK( esp_wifi_set_storage(WIFI_STORAGE_RAM) );
+  ESP_ERROR_CHECK( esp_wifi_set_ps(WIFI_PS_NONE) );
 
   cmd = xQueueCreate(5, sizeof(wifi_cmd));
   if (cmd == NULL) {
@@ -247,10 +248,10 @@ static void wifi_task(void *param) {
         if (_is_valid != was_valid) {
           was_valid = _is_valid;
           if (_is_valid) {
+            // little wait to allow http response to go through
+            vTaskDelay(300 / portTICK_PERIOD_MS);
             start_sta();
-          }/* else {
-            start_ap();
-          }*/
+          }
         }
       } else if (c == CMD_AP_START) {
         ESP_LOGI(SGO_LOG_EVENT, "@WIFI CMD_AP_START");

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2020  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,26 +16,57 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KV_HELPERS_INTERNAL_H_
-#define KV_HELPERS_INTERNAL_H_
+#ifndef MODULE_H_
+#define MODULE_H_
 
-#include <stdint.h>
 
-/*
- * [GENERATED]
- */
 
-<% Object.keys(modules).filter(m => modules[m].enabled).forEach(m => {
-  Object.keys(modules[m].fields).forEach(f => { f = modules[m].fields[f]%>
-  <% if (f.type == 'integer') { %>
-    void internal_set_<%= f.name %>(<%= f.signedness %>int<%= f.intlen %>_t value);
-  <% } else { %>
-    void internal_set_<%= f.name %>(const char *value);
-  <% } %>
-<% })}) %>
+#define MODULE_TIME 1
 
-/*
- * [/GENERATED]
- */
+#define MODULE_WIFI 1
+
+#define MODULE_STAT_DUMP 1
+
+#define MODULE_REBOOT 1
+
+#define MODULE_OTA 1
+
+#define MODULE_MQTT 1
+
+#define MODULE_KV 1
+
+#define MODULE_I2C 1
+
+#define MODULE_HTTPD 1
+
+#define MODULE_MANUAL 1
+
+#define MODULE_BLOWER 1
+
+#define MODULE_SHT21 1
+
+#define MODULE_MIXER 1
+
+#define MODULE_MOTORS 1
+
+#define MODULE_MOTOR 1
+
+#define MODULE_BOX 1
+
+#define MODULE_STATE 1
+
+#define MODULE_STATUS_LED 1
+
+#define MODULE_LEDS 1
+
+#define MODULE_LED 1
+
+#define MODULE_TIMER 1
+
+#define MODULE_WATERING 1
+
+#define MODULE_ONOFF 1
+
 
 #endif
+

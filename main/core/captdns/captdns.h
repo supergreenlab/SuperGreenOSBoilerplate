@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019  SuperGreenLab <towelie@supergreenlab.com>
+ * Copyright (C) 2020  SuperGreenLab <towelie@supergreenlab.com>
  * Author: Constantin Clauzel <constantin.clauzel@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,26 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KV_HELPERS_INTERNAL_H_
-#define KV_HELPERS_INTERNAL_H_
+#ifndef CAPTDNS_H
+#define CAPTDNS_H
 
-#include <stdint.h>
-
-/*
- * [GENERATED]
- */
-
-<% Object.keys(modules).filter(m => modules[m].enabled).forEach(m => {
-  Object.keys(modules[m].fields).forEach(f => { f = modules[m].fields[f]%>
-  <% if (f.type == 'integer') { %>
-    void internal_set_<%= f.name %>(<%= f.signedness %>int<%= f.intlen %>_t value);
-  <% } else { %>
-    void internal_set_<%= f.name %>(const char *value);
-  <% } %>
-<% })}) %>
-
-/*
- * [/GENERATED]
- */
+void init_captdns(void);
 
 #endif

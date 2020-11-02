@@ -21,7 +21,7 @@
 
 #include <stdint.h>
 
-<% Object.keys(modules).filter(m => modules[m].array_len).forEach(m => {
+<% Object.keys(modules).filter((m) => modules[m].enabled).filter(m => modules[m].array_len).forEach(m => {
   m = modules[m]
   Object.keys(m.fields).forEach(f => { 
     f = m.fields[f]
@@ -32,7 +32,7 @@
 <% })}) %>
 
 <% 
-  const arrays = Object.keys(modules)
+  const arrays = Object.keys(modules).filter((m) => modules[m].enabled)
                        .filter(m => modules[m].array_len > 0)
                        .reduce((acc, m) => {
                           const name = modules[m].field_prefix
@@ -44,7 +44,7 @@
                                   p = f.name.split('_')
                                   p.splice(0, 2)
                                   p = p.join('_')
-                                  acc[name].fields[p] = {name: p, intlen: f.intlen}
+                                  acc[name].fields[p] = {name: p, intlen: f.intlen, signedness: f.signedness}
                                 })
                           return acc
                        }, {})
@@ -54,8 +54,8 @@
   #define N_<%= a.name.toUpperCase() %> <%= a.array_len %>
 <%    Object.keys(a.fields).forEach(f => { f = a.fields[f]
 %>
-  int<%= f.intlen %>_t get_<%= a.name %>_<%= f.name %>(int i);
-  void set_<%= a.name %>_<%= f.name %>(int i, int<%= f.intlen %>_t v);
+  <%= f.signedness %>int<%= f.intlen %>_t get_<%= a.name %>_<%= f.name %>(int i);
+  void set_<%= a.name %>_<%= f.name %>(int i, <%= f.signedness %>int<%= f.intlen %>_t v);
 <% })}) %>
 
 #endif

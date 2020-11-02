@@ -5,8 +5,10 @@ import (
 )
 
 _MODULE: {
+  enabled: bool | *true
   field_prefix: string
   init: bool | *true
+  code: bool | *true
   init_priority: int | *0
   core: bool | *false
   i2c: bool | *false
@@ -27,6 +29,7 @@ _FIELD: {
   type: "string" | "integer"
   nosend: bool | *false
   helper: string | *""
+  dump_freq: int | *60
   nvs: {
     enable: bool | *false
     key: string if enable == true
@@ -58,6 +61,7 @@ _STRING: _FIELD & {
 
 _INT: _FIELD & {
   type: "integer"
+  signedness: string | *""
   intlen: int
   default: int if _default_var == null
 }
@@ -66,11 +70,26 @@ _INT8: _INT & {
   intlen: 8
 }
 
+_UINT8: _INT & {
+  signedness: "u"
+  intlen: 8
+}
+
 _INT16: _INT & {
   intlen: 16
 }
 
+_UINT16: _INT & {
+  signedness: "u"
+  intlen: 16
+}
+
 _INT32: _INT & {
+  intlen: 32
+}
+
+_UINT32: _INT & {
+  signedness: "u"
   intlen: 32
 }
 

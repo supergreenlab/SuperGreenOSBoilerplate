@@ -69,6 +69,9 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
     case MQTT_EVENT_ERROR:
       ESP_LOGI(SGO_LOG_EVENT, "MQTT_EVENT_ERROR");
       break;
+    case MQTT_EVENT_ANY:
+      ESP_LOGI(SGO_LOG_EVENT, "MQTT_EVENT_ANY");
+      break;
   }
   return ESP_OK;
 }
@@ -134,6 +137,12 @@ static void mqtt_task(void *param) {
 }
 
 static int mqtt_logging_vprintf(const char *str, va_list l) {
+  if (strlen(str) <= 9+7 ||
+      (strncmp("I (%d) %s", &(str[7]), 9) != 0 &&
+       strncmp("W (%d) %s", &(str[7]), 9) != 0 &&
+       strncmp("E (%d) %s", &(str[7]), 9) != 0)) {
+    return vprintf(str, l); 
+  }
   int totalsize = vsnprintf(NULL, 0, str, l);
   if (totalsize >= MAX_LOG_QUEUE_ITEM_SIZE - 1) {
     return vprintf(str, l);
